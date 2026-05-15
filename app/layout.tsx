@@ -1,17 +1,6 @@
-import { Geist, Geist_Mono, Noto_Sans, Playfair_Display } from "next/font/google"
-
 import "@/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
-
-const playfairDisplayHeading = Playfair_Display({subsets:['latin'],variable:'--font-heading'});
-
-const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'})
-
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
 
 export default function RootLayout({
   children,
@@ -20,10 +9,13 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="pt-BR"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", notoSans.variable, playfairDisplayHeading.variable)}
+      className={cn("antialiased")}
     >
+      <head>
+        <title>Sina</title>
+      </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
