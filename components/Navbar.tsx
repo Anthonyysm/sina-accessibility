@@ -43,9 +43,9 @@ export default function Navbar() {
         {/* Links */}
         <ul className="hidden md:flex items-center gap-8 list-none">
           {[
+            { label: "Por que Sina", href: "#problema" },
             { label: "Recursos", href: "#recursos" },
             { label: "Como funciona", href: "#como-funciona" },
-            { label: "Por que Sina", href: "#problema" },
           ].map((link) => (
             <li key={link.href}>
               <a
