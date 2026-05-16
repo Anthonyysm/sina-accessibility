@@ -10,7 +10,6 @@ import {
   MdPersonOutline,
 } from "react-icons/md";
 
-
 export default function Sidebar() {
   const [activeNav, setActiveNav] = useState(0);
   const navItems = [
@@ -21,7 +20,6 @@ export default function Sidebar() {
   ];
   return (
     <aside className="w-[300px] shrink-0 bg-[#1e3a5f] flex flex-col text-white">
-      
       {/* Logo */}
       <div className="px-6 pt-7 pb-5 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
@@ -32,9 +30,7 @@ export default function Sidebar() {
           <p className="text-xs text-white/50 mt-0.5">Mediação Pedagógica</p>
         </div>
       </div>
-
       <Separator className="bg-white/10 mx-4 w-auto" />
-
       {/* Nav */}
       <nav className="flex-1 px-4 py-5 flex flex-col gap-0.5">
         {navItems.map((item: any, i: any) => {
