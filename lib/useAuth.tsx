@@ -1,17 +1,10 @@
 "use client";
 
 import { useState, useEffect, createContext, useContext } from "react";
-import {
-  User,
-  onAuthStateChanged,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  signOut,
-  GoogleAuthProvider,
-  AuthError,
-} from "firebase/auth";
+import { User, onAuthStateChanged, signInWithEmailAndPassword, signOut, AuthError } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
+import { signInWithGoogle } from "@/service/auth";
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 interface AuthContextValue {
@@ -68,9 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // ── Login com Google ──────────────────────────────────────────────────────
   async function loginWithGoogle(): Promise<void> {
-    const provider = new GoogleAuthProvider();
-    const credential = await signInWithPopup(auth, provider);
-    await createSession(credential.user);
+    const user = await signInWithGoogle();
+    await createSession(user);
     router.push("/Dashboard");
   }
 
