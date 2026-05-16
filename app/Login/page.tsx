@@ -48,7 +48,7 @@ export default function NotLoggedPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f0f4f9] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f0f4f9] flex items-center justify-center p-4 montserrat">
       <div className="w-full max-w-md">
 
         {/* Logo */}

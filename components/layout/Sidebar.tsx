@@ -18,7 +18,6 @@ interface SidebarProps {
 export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
-    { icon: MdRateReview, label: "Revisão (IA)" },
     { icon: MdLibraryBooks, label: "Publicações" },
     { icon: MdPersonOutline, label: "Visão do Aluno" },
   ];
