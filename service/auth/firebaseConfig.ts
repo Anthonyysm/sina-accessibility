@@ -1,5 +1,6 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp, FirebaseApp } from "firebase/app";
+import { getAnalytics, Analytics } from "firebase/analytics";
+
 
 interface FirebaseConfig {
   apiKey: string;
@@ -11,6 +12,7 @@ interface FirebaseConfig {
   measurementId?: string;
 }
 
+
 const firebaseConfig: FirebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
@@ -21,9 +23,9 @@ const firebaseConfig: FirebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || ""
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const app: FirebaseApp = initializeApp(firebaseConfig);
 
-let analytics;
+let analytics: Analytics | undefined;
 if (typeof window !== "undefined") {
   analytics = getAnalytics(app);
 }
