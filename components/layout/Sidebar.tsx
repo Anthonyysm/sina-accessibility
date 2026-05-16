@@ -10,8 +10,12 @@ import {
   MdPersonOutline,
 } from "react-icons/md";
 
-export default function Sidebar() {
-  const [activeNav, setActiveNav] = useState(0);
+interface SidebarProps {
+  activeNav: number;
+  setActiveNav: (index: number) => void;
+}
+
+export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
     { icon: MdRateReview, label: "Revisão (IA)" },
@@ -33,7 +37,7 @@ export default function Sidebar() {
       <Separator className="bg-white/10 mx-4 w-auto" />
       {/* Nav */}
       <nav className="flex-1 px-4 py-5 flex flex-col gap-0.5">
-        {navItems.map((item: any, i: any) => {
+        {navItems.map((item, i) => {
           const Icon = item.icon;
           const isActive = activeNav === i;
           return (
