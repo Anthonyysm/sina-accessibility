@@ -51,7 +51,7 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f0f4f9]">
+    <div className="min-h-screen bg-[#f0f4f9] montserrat">
       <Topbar
         filter={filter}
         onFilterChange={setFilter}

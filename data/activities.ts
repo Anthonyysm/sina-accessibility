@@ -25,7 +25,7 @@ export const initialActivities: Activity[] = [
   },
   {
     id: 2,
-    title: "Funções de 2º Grau — Apostila Unidade III",
+    title: "Funções de 2º Grau Apostila Unidade III",
     description:
       "Exercícios de fixação sobre funções quadráticas. Resolva os exercícios 1 ao 10 da apostila. Dúvidas podem ser comentadas aqui.",
     subject: "Matemática",
@@ -59,7 +59,7 @@ export const initialActivities: Activity[] = [
   },
   {
     id: 4,
-    title: "Sistema Circulatório — Resumo Pedagógico",
+    title: "Sistema Circulatório Resumo Pedagógico",
     description:
       "Material de revisão sobre o sistema circulatório humano. Estude o resumo antes da avaliação.",
     subject: "Biologia",

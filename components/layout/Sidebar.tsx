@@ -14,7 +14,6 @@ export default function Sidebar() {
   const [activeNav, setActiveNav] = useState(0);
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
-    { icon: MdRateReview, label: "Revisão (IA)" },
     { icon: MdLibraryBooks, label: "Publicações" },
     { icon: MdPersonOutline, label: "Visão do Aluno" },
   ];
