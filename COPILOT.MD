@@ -1,4 +1,4 @@
-# SINA — Sistema Inclusivo de Apoio ao Ensino Bilíngue para Pessoas Surdas
+# SINA — Sistema Inclusivo de Apoio ao Ensino Bilíngue para Pessoas Surdas.
 
 ## Visão Geral
 
