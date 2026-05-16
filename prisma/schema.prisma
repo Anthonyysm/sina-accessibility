@@ -20,5 +20,20 @@ model Usuario {
   criado_em    DateTime @default(now()) @db.Timestamp(6)
   tipo_usuario Boolean
 
+  atividades Atividade[]
   @@map("usuarios")
+}
+
+model Atividade {
+  id_atividade        Int       @id @default(autoincrement())
+  titulo              String
+  texto_original      String    @db.Text
+  texto_adaptado      String?   @db.Text
+  status              String    @default("pending")
+  criado_em           DateTime  @default(now())
+
+  // Chave estrangeira
+  criado_por          Int
+  usuario             Usuario   @relation(fields: [criado_por], references: [id])
+  @@map("atividades")
 }
