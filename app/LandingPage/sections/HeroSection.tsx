@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import AvatarIllustration from "@/public/LearningBoy_homepage.png"
-import { MdArrowForward } from "react-icons/md";
 import Image from "next/image";
 
 export default function HeroSection() {
@@ -79,16 +78,7 @@ export default function HeroSection() {
           </Button>
           <Button
             asChild
-            className="bg-[#1a3a5c] hover:bg-[#0f2440] text-white rounded-full px-7 py-5 font-semibold gap-2 text-sm"
-          >
-            <a href="#cta">
-              Sou Intérprete
-            </a>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="rounded-full px-7 py-5 font-semibold text-sm border-[#a8d8ee] bg-[#ceeaf5] text-[#1a3a5c] hover:bg-[#a8d8ee] hover:border-[#a8d8ee]"
+            className="rounded-full px-7 py-5 font-semibold text-sm border-[#a8d8ee] bg-[#CBECFA] text-[#1a3a5c] hover:bg-[#88CBE8] hover:border-[#a8d8ee]"
           >
             <a href="#cta">Sou Estudante</a>
           </Button>

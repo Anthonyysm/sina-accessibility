@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { MdAccessibility, MdEmail, MdLocationOn } from "react-icons/md";
+import logo_sina from "@/public/LogoSina.png";
 
 const platformLinks = [
   { label: "Recursos", href: "#recursos" },
@@ -15,14 +17,14 @@ export default function Footer() {
           <div>
             <a href="#hero" className="flex items-center gap-2.5 mb-4 group w-fit">
               <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
-                <MdAccessibility className="text-white text-lg" />
+                <Image src={logo_sina} height={1000} width={1000} alt="logo da aplicação" className="invert object-cover"/>
               </div>
               <span className="font-bold text-lg text-white tracking-tight">
                 Sina
               </span>
             </a>
             <p className="text-sm text-white/60 leading-relaxed max-w-xs">
-              Educação acessível em Libras para professores, famílias e
+              Educação acessível em Libras para professores, intérpretes e
               estudantes surdos em todo o Brasil.
             </p>
           </div>
