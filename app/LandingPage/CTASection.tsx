@@ -54,14 +54,14 @@ export default function CTASection() {
               onClick={() => setInterpreteDialogOpen(true)}
               className="bg-[#1a3a5c] hover:bg-[#0f2440] text-white rounded-full px-8 py-5 font-semibold text-sm"
             >
-              Sou Professor
+              Sou Intérprete
             </Button>
             <Button
               onClick={() => setEstudanteDialogOpen(true)}
               variant="outline"
               className="rounded-full px-8 py-5 font-semibold text-sm border-[#a8d8ee] bg-[#ceeaf5] text-[#1a3a5c] hover:bg-[#a8d8ee] hover:border-[#a8d8ee]"
             >
-              Sou Família
+              Sou Aluno
             </Button>
           </div>
         </div>

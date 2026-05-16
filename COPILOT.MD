@@ -5,7 +5,6 @@
 O SINA é uma plataforma web focada em apoiar a educação bilíngue de pessoas surdas no Brasil.
 
 O sistema atua como uma ferramenta de mediação pedagógica entre:
-- professores;
 - intérpretes de Libras;
 - alunos surdos.
 
@@ -41,7 +40,7 @@ O SINA busca reduzir esse problema.
 # Objetivo do MVP
 
 Criar uma plataforma simples onde:
-1. O professor envia um conteúdo didático;
+1. O interprete envia um conteúdo didático;
 2. A IA adapta esse conteúdo para português L2;
 3. O intérprete revisa e adiciona observações;
 4. O aluno acessa uma versão mais acessível.
@@ -66,9 +65,6 @@ Ele deve conseguir:
 
 # Usuários Secundários
 
-## Professor
-Responsável apenas por enviar materiais didáticos.
-
 ## Aluno
 Consumidor final do conteúdo adaptado.
 
@@ -81,7 +77,7 @@ O aluno NÃO terá funcionalidades complexas no MVP.
 ## Funcionalidades obrigatórias
 
 ### Upload de conteúdo
-O professor poderá:
+O interprete poderá:
 - colar texto;
 - enviar PDF simples.
 
@@ -169,7 +165,7 @@ NÃO implementar:
 
 ## Fluxo resumido
 
-Professor
+Interprete
 → envia conteúdo
 → IA adapta material
 → intérprete revisa
@@ -328,7 +324,7 @@ Ela deve:
 
 ## Entrada
 
-Texto original enviado pelo professor.
+Texto original enviado pelo intrepete.
 
 ---
 
