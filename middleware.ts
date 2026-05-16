@@ -9,7 +9,7 @@ const GUEST_ONLY_PATHS = ["/Login"];
 // Prefixos de rotas privadas — qualquer rota dentro de /(private)
 // que o Next.js expõe sem o parêntese no pathname.
 // Ex: app/(private)/Dashboard → pathname "/Dashboard"
-const PRIVATE_PREFIXES = ["/Dashboard"];
+const PRIVATE_PREFIXES = ["/Dashboard","/StudentDashboard"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
 
   // ── Rota privada sem sessão → /NotLogged ──────────────────────────────────
   if (isPrivate && !session) {
-    return NextResponse.redirect(new URL("/NotLogged", request.url));
+    return NextResponse.redirect(new URL("/Login", request.url));
   }
 
   // ── Rota guest-only com sessão → /Dashboard ───────────────────────────────

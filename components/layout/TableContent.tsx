@@ -105,7 +105,6 @@ function StatusBadge({ status }: { status: Status }) {
   );
 }
 
-// ─── Avatar with Tooltip ──────────────────────────────────────────────────────
 function UserAvatar({
   initials,
   color,
