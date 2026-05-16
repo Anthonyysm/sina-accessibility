@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/app/LandingPage/sections/HeroSection";
-import ProblemSection from "./sections/ProblemSection";
+import ProblemSection from "@/app/LandingPage/sections/ProblemSection";
 import Footer from "@/components/Footer";
 import LibrasFAB from "@/components/LibrasFAB";
-import FeaturesSection from "./sections/FeaturesSection";
-import HowItWorksSection from "./sections/HowItWorksSection";
-import CTASection from "./CTASection";
+import FeaturesSection from "@/app/LandingPage/sections/FeaturesSection";
+import HowItWorksSection from "@/app/LandingPage/sections/HowItWorksSection";
+import CTASection from "@/app/LandingPage/sections/CTASection";
 
 export default function Homepage() {
   return (

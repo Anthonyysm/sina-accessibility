@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import { MdAccessibility } from "react-icons/md";
+import logo_sina from "@/public/LogoSina.png"
+import Image from "next/image";
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
@@ -33,7 +35,7 @@ export default function Navbar() {
         {/* Logo */}
         <a href="#hero" className="flex items-center gap-2.5 group">
           <div className="w-9 h-9 rounded-full bg-[#1a3a5c] flex items-center justify-center">
-            <MdAccessibility className="text-white text-lg" />
+            <Image src={logo_sina} height={1000} width={1000} alt="logo da aplicação" className="invert object-cover"/>
           </div>
           <span className="font-bold text-[17px] text-[#1a3a5c] tracking-tight">
             Sina

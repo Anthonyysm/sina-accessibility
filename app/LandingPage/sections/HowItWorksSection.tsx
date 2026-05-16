@@ -11,19 +11,19 @@ const steps = [
     number: "1",
     title: "Crie sua conta",
     description:
-      "Escolha seu perfil — professor, família ou estudante — e personalize seu espaço.",
+      "Escolha seu perfil professor, intérprete ou estudante e personalize seu espaço.",
   },
   {
     number: "2",
     title: "Traduza e ensine",
     description:
-      "Envie textos, áudios ou aulas e receba traduções em Libras instantaneamente.",
+      "Envie textos ou PDF's e receba traduções em Libras instantaneamente.",
   },
   {
     number: "3",
-    title: "Acompanhe o progresso",
+    title: "",
     description:
-      "Visualize a evolução em tempo real e celebre cada conquista junto com a família.",
+      "",
   },
 ];
 

@@ -5,7 +5,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   MdPsychology,
-  MdShowChart,
   MdForum,
   MdMenuBook,
 } from "react-icons/md";
@@ -17,25 +16,19 @@ const features = [
     icon: MdPsychology,
     title: "Tradução Inteligente",
     description:
-      "Converta texto e fala em Libras com IA contextual treinada por intérpretes.",
-  },
-  {
-    icon: MdShowChart,
-    title: "Painel de Progresso",
-    description:
-      "Acompanhe a evolução do aluno com indicadores claros e relatórios visuais.",
+      "Converta texto e PDF em Libras com IA contextual treinada por intérpretes.",
   },
   {
     icon: MdForum,
-    title: "Chat Acessível",
+    title: "Fórum Acessível",
     description:
-      "Conversa bidirecional Português ↔ Libras entre escola e família, em tempo real.",
+      "Conversa bidirecional entre Estudantes e professores.",
   },
   {
     icon: MdMenuBook,
-    title: "Repositório de Sinais",
+    title: "",
     description:
-      "Biblioteca curada de vídeos e sinais regionais, sempre crescente e gratuita.",
+      "",
   },
 ];
 
@@ -98,7 +91,7 @@ export default function FeaturesSection() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((item) => {
             const Icon = item.icon;
             return (
