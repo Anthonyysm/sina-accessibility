@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -47,6 +48,11 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
     if (formData.password.length < 6) {
       setError("A senha deve ter pelo menos 6 caracteres");
+      return;
+    }
+
+    if (!/A-Z/.test(formData.password) || !/0-9/.test(formData.password)) {
+      setError("A senha deve conter pelo menos uma letra maiúscula e um número");
       return;
     }
 
@@ -172,7 +178,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="João Silva"
+                  placeholder="Digite seu nome"
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#1a3a5c] focus:outline-none"
                 />
               </div>
