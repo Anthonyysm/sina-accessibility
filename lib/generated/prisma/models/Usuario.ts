@@ -27,33 +27,33 @@ export type AggregateUsuario = {
 }
 
 export type UsuarioAvgAggregateOutputType = {
-  id: number | null
+  id_usuario: number | null
 }
 
 export type UsuarioSumAggregateOutputType = {
-  id: number | null
+  id_usuario: number | null
 }
 
 export type UsuarioMinAggregateOutputType = {
-  id: number | null
+  id_usuario: number | null
   nome: string | null
   email: string | null
   senha: string | null
   criado_em: Date | null
-  tipo_usuario: boolean | null
+  tipo_usuario: string | null
 }
 
 export type UsuarioMaxAggregateOutputType = {
-  id: number | null
+  id_usuario: number | null
   nome: string | null
   email: string | null
   senha: string | null
   criado_em: Date | null
-  tipo_usuario: boolean | null
+  tipo_usuario: string | null
 }
 
 export type UsuarioCountAggregateOutputType = {
-  id: number
+  id_usuario: number
   nome: number
   email: number
   senha: number
@@ -64,15 +64,15 @@ export type UsuarioCountAggregateOutputType = {
 
 
 export type UsuarioAvgAggregateInputType = {
-  id?: true
+  id_usuario?: true
 }
 
 export type UsuarioSumAggregateInputType = {
-  id?: true
+  id_usuario?: true
 }
 
 export type UsuarioMinAggregateInputType = {
-  id?: true
+  id_usuario?: true
   nome?: true
   email?: true
   senha?: true
@@ -81,7 +81,7 @@ export type UsuarioMinAggregateInputType = {
 }
 
 export type UsuarioMaxAggregateInputType = {
-  id?: true
+  id_usuario?: true
   nome?: true
   email?: true
   senha?: true
@@ -90,7 +90,7 @@ export type UsuarioMaxAggregateInputType = {
 }
 
 export type UsuarioCountAggregateInputType = {
-  id?: true
+  id_usuario?: true
   nome?: true
   email?: true
   senha?: true
@@ -186,12 +186,12 @@ export type UsuarioGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type UsuarioGroupByOutputType = {
-  id: number
+  id_usuario: number
   nome: string
   email: string
   senha: string
   criado_em: Date
-  tipo_usuario: boolean
+  tipo_usuario: string
   _count: UsuarioCountAggregateOutputType | null
   _avg: UsuarioAvgAggregateOutputType | null
   _sum: UsuarioSumAggregateOutputType | null
@@ -218,25 +218,33 @@ export type UsuarioWhereInput = {
   AND?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
   OR?: Prisma.UsuarioWhereInput[]
   NOT?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
-  id?: Prisma.IntFilter<"Usuario"> | number
+  id_usuario?: Prisma.IntFilter<"Usuario"> | number
   nome?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   senha?: Prisma.StringFilter<"Usuario"> | string
   criado_em?: Prisma.DateTimeFilter<"Usuario"> | Date | string
-  tipo_usuario?: Prisma.BoolFilter<"Usuario"> | boolean
+  tipo_usuario?: Prisma.StringFilter<"Usuario"> | string
+  atividades?: Prisma.AtividadeListRelationFilter
+  comentarios?: Prisma.EstudanteListRelationFilter
+  estudantesVinculados?: Prisma.ProfessorEstudanteListRelationFilter
+  professoresVinculados?: Prisma.ProfessorEstudanteListRelationFilter
 }
 
 export type UsuarioOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
+  atividades?: Prisma.AtividadeOrderByRelationAggregateInput
+  comentarios?: Prisma.EstudanteOrderByRelationAggregateInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteOrderByRelationAggregateInput
+  professoresVinculados?: Prisma.ProfessorEstudanteOrderByRelationAggregateInput
 }
 
 export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id_usuario?: number
   email?: string
   AND?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
   OR?: Prisma.UsuarioWhereInput[]
@@ -244,11 +252,15 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   nome?: Prisma.StringFilter<"Usuario"> | string
   senha?: Prisma.StringFilter<"Usuario"> | string
   criado_em?: Prisma.DateTimeFilter<"Usuario"> | Date | string
-  tipo_usuario?: Prisma.BoolFilter<"Usuario"> | boolean
-}, "id" | "email">
+  tipo_usuario?: Prisma.StringFilter<"Usuario"> | string
+  atividades?: Prisma.AtividadeListRelationFilter
+  comentarios?: Prisma.EstudanteListRelationFilter
+  estudantesVinculados?: Prisma.ProfessorEstudanteListRelationFilter
+  professoresVinculados?: Prisma.ProfessorEstudanteListRelationFilter
+}, "id_usuario" | "email">
 
 export type UsuarioOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
@@ -265,12 +277,12 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   AND?: Prisma.UsuarioScalarWhereWithAggregatesInput | Prisma.UsuarioScalarWhereWithAggregatesInput[]
   OR?: Prisma.UsuarioScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UsuarioScalarWhereWithAggregatesInput | Prisma.UsuarioScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
+  id_usuario?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
   nome?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   email?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   senha?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   criado_em?: Prisma.DateTimeWithAggregatesFilter<"Usuario"> | Date | string
-  tipo_usuario?: Prisma.BoolWithAggregatesFilter<"Usuario"> | boolean
+  tipo_usuario?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
 }
 
 export type UsuarioCreateInput = {
@@ -278,16 +290,24 @@ export type UsuarioCreateInput = {
   email: string
   senha: string
   criado_em?: Date | string
-  tipo_usuario: boolean
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
 }
 
 export type UsuarioUncheckedCreateInput = {
-  id?: number
+  id_usuario?: number
   nome: string
   email: string
   senha: string
   criado_em?: Date | string
-  tipo_usuario: boolean
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
 }
 
 export type UsuarioUpdateInput = {
@@ -295,25 +315,33 @@ export type UsuarioUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tipo_usuario?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
 }
 
 export type UsuarioUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tipo_usuario?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
 }
 
 export type UsuarioCreateManyInput = {
-  id?: number
+  id_usuario?: number
   nome: string
   email: string
   senha: string
   criado_em?: Date | string
-  tipo_usuario: boolean
+  tipo_usuario: string
 }
 
 export type UsuarioUpdateManyMutationInput = {
@@ -321,20 +349,20 @@ export type UsuarioUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tipo_usuario?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UsuarioUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tipo_usuario?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UsuarioCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
@@ -343,11 +371,11 @@ export type UsuarioCountOrderByAggregateInput = {
 }
 
 export type UsuarioAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
 }
 
 export type UsuarioMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
@@ -356,7 +384,7 @@ export type UsuarioMaxOrderByAggregateInput = {
 }
 
 export type UsuarioMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
@@ -365,7 +393,12 @@ export type UsuarioMinOrderByAggregateInput = {
 }
 
 export type UsuarioSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  id_usuario?: Prisma.SortOrder
+}
+
+export type UsuarioScalarRelationFilter = {
+  is?: Prisma.UsuarioWhereInput
+  isNot?: Prisma.UsuarioWhereInput
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -376,10 +409,6 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -388,19 +417,384 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UsuarioCreateNestedOneWithoutAtividadesInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAtividadesInput, Prisma.UsuarioUncheckedCreateWithoutAtividadesInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAtividadesInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutAtividadesNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAtividadesInput, Prisma.UsuarioUncheckedCreateWithoutAtividadesInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAtividadesInput
+  upsert?: Prisma.UsuarioUpsertWithoutAtividadesInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutAtividadesInput, Prisma.UsuarioUpdateWithoutAtividadesInput>, Prisma.UsuarioUncheckedUpdateWithoutAtividadesInput>
+}
+
+export type UsuarioCreateNestedOneWithoutComentariosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutComentariosInput, Prisma.UsuarioUncheckedCreateWithoutComentariosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutComentariosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutComentariosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutComentariosInput, Prisma.UsuarioUncheckedCreateWithoutComentariosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutComentariosInput
+  upsert?: Prisma.UsuarioUpsertWithoutComentariosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutComentariosInput, Prisma.UsuarioUpdateWithoutComentariosInput>, Prisma.UsuarioUncheckedUpdateWithoutComentariosInput>
+}
+
+export type UsuarioCreateNestedOneWithoutEstudantesVinculadosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutEstudantesVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutEstudantesVinculadosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutEstudantesVinculadosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioCreateNestedOneWithoutProfessoresVinculadosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutProfessoresVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutProfessoresVinculadosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutProfessoresVinculadosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutEstudantesVinculadosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutEstudantesVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutEstudantesVinculadosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutEstudantesVinculadosInput
+  upsert?: Prisma.UsuarioUpsertWithoutEstudantesVinculadosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutEstudantesVinculadosInput, Prisma.UsuarioUpdateWithoutEstudantesVinculadosInput>, Prisma.UsuarioUncheckedUpdateWithoutEstudantesVinculadosInput>
+}
+
+export type UsuarioUpdateOneRequiredWithoutProfessoresVinculadosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutProfessoresVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutProfessoresVinculadosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutProfessoresVinculadosInput
+  upsert?: Prisma.UsuarioUpsertWithoutProfessoresVinculadosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutProfessoresVinculadosInput, Prisma.UsuarioUpdateWithoutProfessoresVinculadosInput>, Prisma.UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput>
+}
+
+export type UsuarioCreateWithoutAtividadesInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+}
+
+export type UsuarioUncheckedCreateWithoutAtividadesInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+}
+
+export type UsuarioCreateOrConnectWithoutAtividadesInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAtividadesInput, Prisma.UsuarioUncheckedCreateWithoutAtividadesInput>
+}
+
+export type UsuarioUpsertWithoutAtividadesInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutAtividadesInput, Prisma.UsuarioUncheckedUpdateWithoutAtividadesInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAtividadesInput, Prisma.UsuarioUncheckedCreateWithoutAtividadesInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutAtividadesInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutAtividadesInput, Prisma.UsuarioUncheckedUpdateWithoutAtividadesInput>
+}
+
+export type UsuarioUpdateWithoutAtividadesInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutAtividadesInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+}
+
+export type UsuarioCreateWithoutComentariosInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+}
+
+export type UsuarioUncheckedCreateWithoutComentariosInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+}
+
+export type UsuarioCreateOrConnectWithoutComentariosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutComentariosInput, Prisma.UsuarioUncheckedCreateWithoutComentariosInput>
+}
+
+export type UsuarioUpsertWithoutComentariosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutComentariosInput, Prisma.UsuarioUncheckedUpdateWithoutComentariosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutComentariosInput, Prisma.UsuarioUncheckedCreateWithoutComentariosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutComentariosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutComentariosInput, Prisma.UsuarioUncheckedUpdateWithoutComentariosInput>
+}
+
+export type UsuarioUpdateWithoutComentariosInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutComentariosInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+}
+
+export type UsuarioCreateWithoutEstudantesVinculadosInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+}
+
+export type UsuarioUncheckedCreateWithoutEstudantesVinculadosInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+}
+
+export type UsuarioCreateOrConnectWithoutEstudantesVinculadosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutEstudantesVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutEstudantesVinculadosInput>
+}
+
+export type UsuarioCreateWithoutProfessoresVinculadosInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+}
+
+export type UsuarioUncheckedCreateWithoutProfessoresVinculadosInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+}
+
+export type UsuarioCreateOrConnectWithoutProfessoresVinculadosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutProfessoresVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutProfessoresVinculadosInput>
+}
+
+export type UsuarioUpsertWithoutEstudantesVinculadosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutEstudantesVinculadosInput, Prisma.UsuarioUncheckedUpdateWithoutEstudantesVinculadosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutEstudantesVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutEstudantesVinculadosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutEstudantesVinculadosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutEstudantesVinculadosInput, Prisma.UsuarioUncheckedUpdateWithoutEstudantesVinculadosInput>
+}
+
+export type UsuarioUpdateWithoutEstudantesVinculadosInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutEstudantesVinculadosInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+}
+
+export type UsuarioUpsertWithoutProfessoresVinculadosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutProfessoresVinculadosInput, Prisma.UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutProfessoresVinculadosInput, Prisma.UsuarioUncheckedCreateWithoutProfessoresVinculadosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutProfessoresVinculadosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutProfessoresVinculadosInput, Prisma.UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput>
+}
+
+export type UsuarioUpdateWithoutProfessoresVinculadosInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+}
+
+
+/**
+ * Count Type UsuarioCountOutputType
+ */
+
+export type UsuarioCountOutputType = {
+  atividades: number
+  comentarios: number
+  estudantesVinculados: number
+  professoresVinculados: number
+}
+
+export type UsuarioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  atividades?: boolean | UsuarioCountOutputTypeCountAtividadesArgs
+  comentarios?: boolean | UsuarioCountOutputTypeCountComentariosArgs
+  estudantesVinculados?: boolean | UsuarioCountOutputTypeCountEstudantesVinculadosArgs
+  professoresVinculados?: boolean | UsuarioCountOutputTypeCountProfessoresVinculadosArgs
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UsuarioCountOutputType
+   */
+  select?: Prisma.UsuarioCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountAtividadesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AtividadeWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountComentariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EstudanteWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountEstudantesVinculadosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProfessorEstudanteWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountProfessoresVinculadosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProfessorEstudanteWhereInput
+}
 
 
 export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  id_usuario?: boolean
   nome?: boolean
   email?: boolean
   senha?: boolean
   criado_em?: boolean
   tipo_usuario?: boolean
+  atividades?: boolean | Prisma.Usuario$atividadesArgs<ExtArgs>
+  comentarios?: boolean | Prisma.Usuario$comentariosArgs<ExtArgs>
+  estudantesVinculados?: boolean | Prisma.Usuario$estudantesVinculadosArgs<ExtArgs>
+  professoresVinculados?: boolean | Prisma.Usuario$professoresVinculadosArgs<ExtArgs>
+  _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
 export type UsuarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  id_usuario?: boolean
   nome?: boolean
   email?: boolean
   senha?: boolean
@@ -409,7 +803,7 @@ export type UsuarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 }, ExtArgs["result"]["usuario"]>
 
 export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  id_usuario?: boolean
   nome?: boolean
   email?: boolean
   senha?: boolean
@@ -418,7 +812,7 @@ export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 }, ExtArgs["result"]["usuario"]>
 
 export type UsuarioSelectScalar = {
-  id?: boolean
+  id_usuario?: boolean
   nome?: boolean
   email?: boolean
   senha?: boolean
@@ -426,18 +820,32 @@ export type UsuarioSelectScalar = {
   tipo_usuario?: boolean
 }
 
-export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "email" | "senha" | "criado_em" | "tipo_usuario", ExtArgs["result"]["usuario"]>
+export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_usuario" | "nome" | "email" | "senha" | "criado_em" | "tipo_usuario", ExtArgs["result"]["usuario"]>
+export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  atividades?: boolean | Prisma.Usuario$atividadesArgs<ExtArgs>
+  comentarios?: boolean | Prisma.Usuario$comentariosArgs<ExtArgs>
+  estudantesVinculados?: boolean | Prisma.Usuario$estudantesVinculadosArgs<ExtArgs>
+  professoresVinculados?: boolean | Prisma.Usuario$professoresVinculadosArgs<ExtArgs>
+  _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UsuarioIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Usuario"
-  objects: {}
+  objects: {
+    atividades: Prisma.$AtividadePayload<ExtArgs>[]
+    comentarios: Prisma.$EstudantePayload<ExtArgs>[]
+    estudantesVinculados: Prisma.$ProfessorEstudantePayload<ExtArgs>[]
+    professoresVinculados: Prisma.$ProfessorEstudantePayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id_usuario: number
     nome: string
     email: string
     senha: string
     criado_em: Date
-    tipo_usuario: boolean
+    tipo_usuario: string
   }, ExtArgs["result"]["usuario"]>
   composites: {}
 }
@@ -521,8 +929,8 @@ export interface UsuarioDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * // Get first 10 Usuarios
    * const usuarios = await prisma.usuario.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const usuarioWithIdOnly = await prisma.usuario.findMany({ select: { id: true } })
+   * // Only select the `id_usuario`
+   * const usuarioWithId_usuarioOnly = await prisma.usuario.findMany({ select: { id_usuario: true } })
    * 
    */
   findMany<T extends UsuarioFindManyArgs>(args?: Prisma.SelectSubset<T, UsuarioFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -566,9 +974,9 @@ export interface UsuarioDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    * 
-   * // Create many Usuarios and only return the `id`
-   * const usuarioWithIdOnly = await prisma.usuario.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Usuarios and only return the `id_usuario`
+   * const usuarioWithId_usuarioOnly = await prisma.usuario.createManyAndReturn({
+   *   select: { id_usuario: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -657,9 +1065,9 @@ export interface UsuarioDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    * 
-   * // Update zero or more Usuarios and only return the `id`
-   * const usuarioWithIdOnly = await prisma.usuario.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Usuarios and only return the `id_usuario`
+   * const usuarioWithId_usuarioOnly = await prisma.usuario.updateManyAndReturn({
+   *   select: { id_usuario: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -832,6 +1240,10 @@ readonly fields: UsuarioFieldRefs;
  */
 export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  atividades<T extends Prisma.Usuario$atividadesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$atividadesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AtividadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comentarios<T extends Prisma.Usuario$comentariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$comentariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  estudantesVinculados<T extends Prisma.Usuario$estudantesVinculadosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$estudantesVinculadosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfessorEstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  professoresVinculados<T extends Prisma.Usuario$professoresVinculadosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$professoresVinculadosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfessorEstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -861,12 +1273,12 @@ export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Usuario model
  */
 export interface UsuarioFieldRefs {
-  readonly id: Prisma.FieldRef<"Usuario", 'Int'>
+  readonly id_usuario: Prisma.FieldRef<"Usuario", 'Int'>
   readonly nome: Prisma.FieldRef<"Usuario", 'String'>
   readonly email: Prisma.FieldRef<"Usuario", 'String'>
   readonly senha: Prisma.FieldRef<"Usuario", 'String'>
   readonly criado_em: Prisma.FieldRef<"Usuario", 'DateTime'>
-  readonly tipo_usuario: Prisma.FieldRef<"Usuario", 'Boolean'>
+  readonly tipo_usuario: Prisma.FieldRef<"Usuario", 'String'>
 }
     
 
@@ -883,6 +1295,10 @@ export type UsuarioFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * Filter, which Usuario to fetch.
    */
@@ -902,6 +1318,10 @@ export type UsuarioFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter, which Usuario to fetch.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -919,6 +1339,10 @@ export type UsuarioFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * Filter, which Usuario to fetch.
    */
@@ -968,6 +1392,10 @@ export type UsuarioFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter, which Usuario to fetch.
    */
   where?: Prisma.UsuarioWhereInput
@@ -1015,6 +1443,10 @@ export type UsuarioFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * Filter, which Usuarios to fetch.
    */
@@ -1064,6 +1496,10 @@ export type UsuarioCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * The data needed to create a Usuario.
    */
   data: Prisma.XOR<Prisma.UsuarioCreateInput, Prisma.UsuarioUncheckedCreateInput>
@@ -1111,6 +1547,10 @@ export type UsuarioUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * The data needed to update a Usuario.
    */
@@ -1178,6 +1618,10 @@ export type UsuarioUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * The filter to search for the Usuario to update in case it exists.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -1204,6 +1648,10 @@ export type UsuarioDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter which Usuario to delete.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -1224,6 +1672,102 @@ export type UsuarioDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Usuario.atividades
+ */
+export type Usuario$atividadesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Atividade
+   */
+  select?: Prisma.AtividadeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Atividade
+   */
+  omit?: Prisma.AtividadeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AtividadeInclude<ExtArgs> | null
+  where?: Prisma.AtividadeWhereInput
+  orderBy?: Prisma.AtividadeOrderByWithRelationInput | Prisma.AtividadeOrderByWithRelationInput[]
+  cursor?: Prisma.AtividadeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AtividadeScalarFieldEnum | Prisma.AtividadeScalarFieldEnum[]
+}
+
+/**
+ * Usuario.comentarios
+ */
+export type Usuario$comentariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Estudante
+   */
+  select?: Prisma.EstudanteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Estudante
+   */
+  omit?: Prisma.EstudanteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EstudanteInclude<ExtArgs> | null
+  where?: Prisma.EstudanteWhereInput
+  orderBy?: Prisma.EstudanteOrderByWithRelationInput | Prisma.EstudanteOrderByWithRelationInput[]
+  cursor?: Prisma.EstudanteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EstudanteScalarFieldEnum | Prisma.EstudanteScalarFieldEnum[]
+}
+
+/**
+ * Usuario.estudantesVinculados
+ */
+export type Usuario$estudantesVinculadosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProfessorEstudante
+   */
+  select?: Prisma.ProfessorEstudanteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProfessorEstudante
+   */
+  omit?: Prisma.ProfessorEstudanteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProfessorEstudanteInclude<ExtArgs> | null
+  where?: Prisma.ProfessorEstudanteWhereInput
+  orderBy?: Prisma.ProfessorEstudanteOrderByWithRelationInput | Prisma.ProfessorEstudanteOrderByWithRelationInput[]
+  cursor?: Prisma.ProfessorEstudanteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProfessorEstudanteScalarFieldEnum | Prisma.ProfessorEstudanteScalarFieldEnum[]
+}
+
+/**
+ * Usuario.professoresVinculados
+ */
+export type Usuario$professoresVinculadosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProfessorEstudante
+   */
+  select?: Prisma.ProfessorEstudanteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProfessorEstudante
+   */
+  omit?: Prisma.ProfessorEstudanteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProfessorEstudanteInclude<ExtArgs> | null
+  where?: Prisma.ProfessorEstudanteWhereInput
+  orderBy?: Prisma.ProfessorEstudanteOrderByWithRelationInput | Prisma.ProfessorEstudanteOrderByWithRelationInput[]
+  cursor?: Prisma.ProfessorEstudanteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProfessorEstudanteScalarFieldEnum | Prisma.ProfessorEstudanteScalarFieldEnum[]
+}
+
+/**
  * Usuario without action
  */
 export type UsuarioDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1235,4 +1779,8 @@ export type UsuarioDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
 }

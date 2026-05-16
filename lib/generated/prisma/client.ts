@@ -46,3 +46,18 @@ export { Prisma }
  * 
  */
 export type Usuario = Prisma.UsuarioModel
+/**
+ * Model Atividade
+ * 
+ */
+export type Atividade = Prisma.AtividadeModel
+/**
+ * Model Estudante
+ * 
+ */
+export type Estudante = Prisma.EstudanteModel
+/**
+ * Model ProfessorEstudante
+ * 
+ */
+export type ProfessorEstudante = Prisma.ProfessorEstudanteModel

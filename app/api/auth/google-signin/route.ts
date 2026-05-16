@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         email,
         nome: trimmedName,
         senha: "",
-        tipo_usuario: false,
+        tipo_usuario: ""
       },
     });
 
@@ -35,7 +35,11 @@ export async function POST(request: NextRequest) {
       {
         ok: true,
         user: {
+<<<<<<< Updated upstream
           id: usuario.id,
+=======
+          id: usuario.id_usuario,
+>>>>>>> Stashed changes
           email: usuario.email,
           nome: usuario.nome,
         },
