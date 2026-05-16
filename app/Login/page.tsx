@@ -15,10 +15,12 @@ export default function NotLoggedPage() {
   const [tab, setTab] = useState<Tab>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState<"interprete" | "estudante">("interprete");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { loginWithGoogle, loginWithEmail } = useAuth();
+  const { loginWithGoogle, loginWithEmail, signUpWithEmail } = useAuth();
   const router = useRouter();
 
   async function handleEmailSubmit(e: React.FormEvent) {
@@ -26,9 +28,13 @@ export default function NotLoggedPage() {
     setError("");
     setLoading(true);
     try {
-      await loginWithEmail(email, password);
-      // useAuth já redireciona para /Dashboard
-    } catch (err) {
+      if (tab === "login") {
+        await loginWithEmail(email, password);
+      } else {
+        if (!name) throw new Error("O nome é obrigatório para o cadastro.");
+        await signUpWithEmail(email, password, name, role);
+      }
+    } catch (err: any) {
       setError(firebaseErrorMessage(err));
     } finally {
       setLoading(false);
@@ -40,7 +46,7 @@ export default function NotLoggedPage() {
     setLoading(true);
     try {
       await loginWithGoogle();
-    } catch (err) {
+    } catch (err: any) {
       setError(firebaseErrorMessage(err));
     } finally {
       setLoading(false);
@@ -111,6 +117,48 @@ export default function NotLoggedPage() {
 
           {/* Form */}
           <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
+            {tab === "cadastro" && (
+              <>
+                <Input
+                  type="text"
+                  placeholder="Nome Completo"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
+                />
+                
+                <div className="flex flex-col gap-1.5 mb-2">
+                  <label className="text-xs font-semibold text-[#1e3a5f] px-1">Eu sou:</label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setRole("interprete")}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all ${
+                        role === "interprete" 
+                        ? "bg-[#1e3a5f] text-white border-[#1e3a5f]" 
+                        : "bg-white text-[#6b7fa3] border-[#dde5f0] hover:bg-[#f8fafc]"
+                      }`}
+                    >
+                      Intérprete
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRole("estudante")}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all ${
+                        role === "estudante" 
+                        ? "bg-[#1e3a5f] text-white border-[#1e3a5f]" 
+                        : "bg-white text-[#6b7fa3] border-[#dde5f0] hover:bg-[#f8fafc]"
+                      }`}
+                    >
+                      Aluno
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
             <Input
               type="email"
               placeholder="E-mail"

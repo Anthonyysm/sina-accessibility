@@ -12,6 +12,7 @@ interface AuthContextValue {
   loading: boolean;
   loginWithGoogle: () => Promise<void>;
   loginWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string, name: string, role: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -36,26 +37,37 @@ async function destroySession(): Promise<void> {
   await fetch("/api/auth/session", { method: "DELETE" });
 }
 
+// Função auxiliar para buscar o papel e redirecionar
+async function redirectBasedOnRole(email: string, router: any) {
+  try {
+    const res = await fetch(`/api/auth/profile?email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    
+    if (data.role === "estudante") {
+      router.push("/StudentDashboard");
+    } else {
+      router.push("/Dashboard");
+    }
+  } catch (error) {
+    console.error("Erro ao redirecionar:", error);
+    router.push("/Dashboard"); // Fallback
+  }
+}
+
 // ─── Provider ────────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Sincroniza estado Firebase → cookie a cada carregamento da aplicação.
-  // Se o Firebase já tem sessão ativa (ex: token persistido no IndexedDB),
-  // recria o cookie para garantir que o middleware vai reconhecê-la.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
-
       if (firebaseUser) {
         await createSession(firebaseUser).catch(console.error);
       }
-
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -63,27 +75,51 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function loginWithGoogle(): Promise<void> {
     const user = await signInWithGoogle();
     await createSession(user);
-    router.push("/Dashboard");
+    await redirectBasedOnRole(user.email!, router);
   }
 
   // ── Login com e-mail/senha ────────────────────────────────────────────────
   async function loginWithEmail(email: string, password: string): Promise<void> {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     await createSession(credential.user);
-    router.push("/Dashboard");
+    await redirectBasedOnRole(email, router);
+  }
+
+  // ── Cadastro com e-mail/senha ─────────────────────────────────────────────
+  async function signUpWithEmail(email: string, password: string, name: string, role: string): Promise<void> {
+    // 1. Criar no Firebase (importamos do service/auth/firebaseAuth)
+    const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
+    const { auth } = await import("@/lib/firebase");
+    
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(credential.user, { displayName: name });
+    
+    // 2. Registrar no nosso Banco de Dados
+    await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, nome: name, role }),
+    });
+
+    // 3. Criar sessão e redirecionar
+    await createSession(credential.user);
+    if (role === "estudante") {
+      router.push("/StudentDashboard");
+    } else {
+      router.push("/Dashboard");
+    }
   }
 
   // ── Logout ────────────────────────────────────────────────────────────────
   async function logout(): Promise<void> {
     await signOut(auth);
     await destroySession();
-    // Volta para a landing page — o modal de login está em "/"
     router.push("/");
   }
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, loginWithGoogle, loginWithEmail, logout }}
+      value={{ user, loading, loginWithGoogle, loginWithEmail, signUpWithEmail, logout }}
     >
       {children}
     </AuthContext.Provider>

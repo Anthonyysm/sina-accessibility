@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -13,55 +8,52 @@ datasource db {
 }
 
 model Usuario {
-  id_usuario   Int      @id @default(autoincrement())
-  nome         String   @db.VarChar(100)
-  email        String   @unique @db.VarChar(30)
-  senha        String   @db.VarChar(30)
-  criado_em    DateTime @default(now()) @db.Timestamp(6)
-  tipo_usuario String
-
-  atividades Atividade[]
-  comentarios Estudante[]
-
-  estudantesVinculados ProfessorEstudante[] @relation("ProfessorToEstudante")
+  nome                  String               @db.VarChar(100)
+  email                 String               @unique @db.VarChar(100)
+  senha                 String               @db.VarChar(100)
+  criado_em             DateTime             @default(now()) @db.Timestamp(6)
+  tipo_usuario          String
+  id_usuario            Int                  @id @default(autoincrement())
+  atividades            Atividade[]
+  comentarios           Estudante[]
   professoresVinculados ProfessorEstudante[] @relation("EstudanteToProfessor")
+  estudantesVinculados  ProfessorEstudante[] @relation("ProfessorToEstudante")
+
   @@map("usuarios")
 }
 
 model Atividade {
-  id_atividade        Int       @id @default(autoincrement())
-  titulo              String
-  texto_original      String    @db.Text
-  texto_adaptado      String?   @db.Text
-  status              String    @default("pending")
-  criado_em           DateTime  @default(now())
-
-  criado_por          Int
-  usuario             Usuario   @relation(fields: [criado_por], references: [id_usuario])
+  id_atividade   Int         @id @default(autoincrement())
+  titulo         String
+  texto_original String
+  texto_adaptado String?
+  status         String      @default("pending")
+  criado_em      DateTime    @default(now())
+  criado_por     Int
+  usuario        Usuario     @relation(fields: [criado_por], references: [id_usuario])
   comentarios    Estudante[]
+
   @@map("atividades")
 }
 
 model Estudante {
-  id_comentario Int      @id @default(autoincrement())
-  id_atividade  Int      @map("id_atividade")
-  id_usuario    Int      @map("id_usuario") 
+  id_comentario Int       @id @default(autoincrement())
+  id_atividade  Int       @map("id_atividade")
+  id_usuario    Int       @map("id_usuario")
   comentario    String?
-  criado_em     DateTime @default(now()) @map("criado_em")
-
-  atividade Atividade @relation(fields: [id_atividade], references: [id_atividade], onDelete: Cascade)
-  usuario   Usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade) 
+  criado_em     DateTime  @default(now()) @map("criado_em")
+  atividade     Atividade @relation(fields: [id_atividade], references: [id_atividade], onDelete: Cascade)
+  usuario       Usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
 
   @@map("estudante_comentario")
 }
 
 model ProfessorEstudante {
-  id_professor  Int      @map("id_professor") // Corrigido erro de digitação (profesor)
-  id_estudante  Int      @map("id_estudante")
-  vinculado_em  DateTime @default(now()) @map("vinculado_em")
-
-  professor Usuario @relation("ProfessorToEstudante", fields: [id_professor], references: [id_usuario], onDelete: Cascade)
-  estudante Usuario @relation("EstudanteToProfessor", fields: [id_estudante], references: [id_usuario], onDelete: Cascade)
+  id_professor Int      @map("id_professor")
+  id_estudante Int      @map("id_estudante")
+  vinculado_em DateTime @default(now()) @map("vinculado_em")
+  estudante    Usuario  @relation("EstudanteToProfessor", fields: [id_estudante], references: [id_usuario], onDelete: Cascade)
+  professor    Usuario  @relation("ProfessorToEstudante", fields: [id_professor], references: [id_usuario], onDelete: Cascade)
 
   @@id([id_professor, id_estudante])
   @@map("professor_estudante")

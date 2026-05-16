@@ -51,7 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Usuario: 'Usuario'
+  Usuario: 'Usuario',
+  Atividade: 'Atividade',
+  Estudante: 'Estudante',
+  ProfessorEstudante: 'ProfessorEstudante'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -71,15 +74,48 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 
 export const UsuarioScalarFieldEnum = {
-  id: 'id',
   nome: 'nome',
   email: 'email',
   senha: 'senha',
   criado_em: 'criado_em',
-  tipo_usuario: 'tipo_usuario'
+  tipo_usuario: 'tipo_usuario',
+  id_usuario: 'id_usuario'
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+
+
+export const AtividadeScalarFieldEnum = {
+  id_atividade: 'id_atividade',
+  titulo: 'titulo',
+  texto_original: 'texto_original',
+  texto_adaptado: 'texto_adaptado',
+  status: 'status',
+  criado_em: 'criado_em',
+  criado_por: 'criado_por'
+} as const
+
+export type AtividadeScalarFieldEnum = (typeof AtividadeScalarFieldEnum)[keyof typeof AtividadeScalarFieldEnum]
+
+
+export const EstudanteScalarFieldEnum = {
+  id_comentario: 'id_comentario',
+  id_atividade: 'id_atividade',
+  id_usuario: 'id_usuario',
+  comentario: 'comentario',
+  criado_em: 'criado_em'
+} as const
+
+export type EstudanteScalarFieldEnum = (typeof EstudanteScalarFieldEnum)[keyof typeof EstudanteScalarFieldEnum]
+
+
+export const ProfessorEstudanteScalarFieldEnum = {
+  id_professor: 'id_professor',
+  id_estudante: 'id_estudante',
+  vinculado_em: 'vinculado_em'
+} as const
+
+export type ProfessorEstudanteScalarFieldEnum = (typeof ProfessorEstudanteScalarFieldEnum)[keyof typeof ProfessorEstudanteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -96,4 +132,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
