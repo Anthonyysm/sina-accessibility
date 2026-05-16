@@ -3,14 +3,14 @@
 // Para adicionar um novo agente, basta inserir uma nova entrada aqui.
 
 export const agentsRegistry = {
-  agentpl2: {
-    promptFile: "prompt_pl2_adapter.txt",
+  agentglosa: {
+    promptFile: "prompt_glosa_adapter.txt",
   },
 
   // Adicione novos agentes abaixo:
   // agentSummarizer: {
   //   promptFile: "prompt_summarizer.txt",
   // },
-} as const;
+} as const
 
-export type AgentType = keyof typeof agentsRegistry;
+export type AgentType = keyof typeof agentsRegistry
