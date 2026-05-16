@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
-import { MdAccessibility } from "react-icons/md";
 import logo_sina from "@/public/LogoSina.png"
 import Image from "next/image";
 
