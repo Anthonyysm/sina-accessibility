@@ -225,7 +225,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#1a3a5c] hover:bg-[#0f2440] text-white"
+              className="w-full bg-[#1a3a5c] hover:bg-[#0f2440] text-white rounded-lg"
             >
               {loading ? (authMode === "signup" ? "Criando..." : "Entrando...") : (authMode === "signup" ? "Cadastrar" : "Entrar")}
             </Button>
@@ -243,8 +243,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
           <Button
             onClick={handleGoogleAuth}
             disabled={loading}
-            variant="outline"
-            className="w-full text-sm"
+            className="w-full text-sm text-[#2B5784] bg-[#CBECFA] rounded-lg hover:bg-[#88cbe8]"
           >
             {authMode === "signup" ? "Cadastrar" : "Entrar"} com Google
           </Button>

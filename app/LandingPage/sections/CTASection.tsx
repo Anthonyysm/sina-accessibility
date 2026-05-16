@@ -58,10 +58,9 @@ export default function CTASection() {
             </Button>
             <Button
               onClick={() => setEstudanteDialogOpen(true)}
-              variant="outline"
-              className="rounded-full px-8 py-5 font-semibold text-sm border-[#a8d8ee] bg-[#ceeaf5] text-[#1a3a5c] hover:bg-[#a8d8ee] hover:border-[#a8d8ee]"
+              className="rounded-full px-7 py-5 font-semibold text-sm border-[#a8d8ee] bg-[#CBECFA] text-[#1a3a5c] hover:bg-[#88CBE8] hover:border-[#a8d8ee]"
             >
-              Sou Aluno
+              Sou Estudante
             </Button>
           </div>
         </div>
