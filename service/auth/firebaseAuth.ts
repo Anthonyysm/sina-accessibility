@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -27,11 +28,19 @@ export interface SignInData {
   password: string;
 }
 
+function validatePassword(password: string) {
+  if (!password || password.length < 6) {
+    throw new Error("A senha deve ter pelo menos 6 caracteres.");
+  }
+}
+
 // ============= SIGN UP =============
 
 export const signUpWithEmail = async (data: SignUpData) => {
   try {
     const { email, password, name, role } = data;
+
+    validatePassword(password);
 
     // Criar usuário com email e senha
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
