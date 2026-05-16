@@ -1,47 +1,33 @@
 // app/api/agents/[agentType]/route.ts
-import { NextResponse } from 'next/server';
-import { executarAgenteTexto } from '@/service/agents/executor'; // Certifique-se se é 'service' ou 'services'
-import { agentsRegistry, AgentType } from '@/service/agents/configs';
+import { executarAgenteTexto, agentsRegistry, AgentType } from "@/service/agents";
+import { AppError, handleApiError } from "@/lib/errors";
 
-export const maxDuration = 30; 
+export const maxDuration = 30;
 
 export async function POST(
   req: Request,
-  // Correção aqui: params agora precisa ser tratado como um objeto que contém uma Promise ou ser resolvido de forma estrita
-  { params }: { params: Promise<{ agentType: string }> } | any
+  { params }: { params: Promise<{ agentType: string }> }
 ) {
   try {
-    // Resolve os parâmetros da URL para garantir que não venha 'undefined'
-    const resolvedParams = await params;
-    const agentType = resolvedParams?.agentType;
-
+    const { agentType } = await params;
     const { texto } = await req.json();
 
-    // Validação de segurança
     if (!agentType || !(agentType in agentsRegistry)) {
-      return NextResponse.json(
-        { error: `Agente '${agentType}' não configurado no catálogo.` },
-        { status: 404 }
-      );
+      throw new AppError(`Agente '${agentType}' não configurado no catálogo.`, 404);
     }
 
     if (!texto) {
-      return NextResponse.json(
-        { error: "O campo 'texto' é obrigatório no corpo da requisição." },
-        { status: 400 }
-      );
+      throw new AppError("O campo 'texto' é obrigatório no corpo da requisição.", 400);
     }
 
-    // Executa o motor passando os parâmetros recebidos
-    const respostaDoGemini = await executarAgenteTexto({
+    const resultado = await executarAgenteTexto({
       agentType: agentType as AgentType,
       entrada: texto,
     });
 
-    return NextResponse.json({ resultado: respostaDoGemini });
+    return Response.json({ resultado });
 
-  } catch (error: any) {
-    console.error("Erro na rota do agente:", error);
-    return NextResponse.json({ error: error.message || "Erro interno" }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

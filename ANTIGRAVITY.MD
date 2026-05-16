@@ -147,7 +147,7 @@ NÃO implementar:
 ---
 
 ## Banco de Dados
-- Firebase Firestore
+- postgresql
 
 ---
 
