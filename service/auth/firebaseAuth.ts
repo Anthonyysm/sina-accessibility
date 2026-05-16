@@ -16,6 +16,28 @@ const googleProvider = new GoogleAuthProvider();
 
 export type UserRole = "interprete" | "estudante";
 
+async function saveGoogleUserToDb(user: any) {
+  const email = user?.email;
+  const name = user?.displayName ?? "";
+
+  if (!email || typeof email !== "string") {
+    throw new Error("Não foi possível obter o e-mail do usuário Google.");
+  }
+
+  const response = await fetch("/api/auth/google-signin", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, name }),
+  });
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    throw new Error(
+      payload?.error ?? "Falha ao salvar usuário Google no banco de dados."
+    );
+  }
+}
+
 export interface SignUpData {
   email: string;
   password: string;
@@ -80,7 +102,11 @@ export const signInWithEmail = async (data: SignInData) => {
 export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
+    const { user } = result;
+
+    await saveGoogleUserToDb(user);
+
+    return user;
   } catch (error: any) {
     console.error("Erro ao fazer login com Google:", error);
     throw error;
