@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Rotas que exigem autenticação (prefixo do grupo de rotas privadas)
-const PRIVATE_PREFIX = "/dashboard"; // ajuste conforme seus grupos ex: /dashboard, /app, etc.
-
-// Rotas públicas que nunca devem ser protegidas
-const PUBLIC_PATHS = ["/", "/login", "/cadastro"];
-
-// Nome do cookie que armazena o session token do Firebase
 const SESSION_COOKIE = "sina_session";
+
+// Rotas que só podem ser acessadas por usuários NÃO autenticados.
+// Se já tiver sessão, redireciona para o Dashboard.
+const GUEST_ONLY_PATHS = ["/Login"];
+
+// Prefixos de rotas privadas — qualquer rota dentro de /(private)
+// que o Next.js expõe sem o parêntese no pathname.
+// Ex: app/(private)/Dashboard → pathname "/Dashboard"
+const PRIVATE_PREFIXES = ["/Dashboard"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Ignora arquivos estáticos e internos do Next.js
+  // Ignora arquivos estáticos e rotas internas do Next.js
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -21,27 +23,29 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
-  const isPublicPath = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
-  const isPrivatePath = pathname.startsWith(PRIVATE_PREFIX);
+  const session = request.cookies.get(SESSION_COOKIE)?.value;
 
-  // Rota privada sem sessão → redireciona para login
-  if (isPrivatePath && !sessionCookie) {
-    const loginUrl = new URL("/login", request.url);
-    // Guarda a URL de destino para redirecionar após o login
-    loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+  const isPrivate = PRIVATE_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(prefix + "/")
+  );
+
+  const isGuestOnly = GUEST_ONLY_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(p + "/")
+  );
+
+  // ── Rota privada sem sessão → /NotLogged ──────────────────────────────────
+  if (isPrivate && !session) {
+    return NextResponse.redirect(new URL("/NotLogged", request.url));
   }
 
-  // Já autenticado tentando acessar login → redireciona para dashboard
-  if (isPublicPath && sessionCookie && pathname === "/login") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  // ── Rota guest-only com sessão → /Dashboard ───────────────────────────────
+  if (isGuestOnly && session) {
+    return NextResponse.redirect(new URL("/Dashboard", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  // Aplica o middleware em todas as rotas exceto as do Next.js internamente
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

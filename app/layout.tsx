@@ -1,5 +1,6 @@
 import "@/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/lib/useAuth";
 import { cn } from "@/lib/utils";
 
 export default function RootLayout({
@@ -20,7 +21,11 @@ export default function RootLayout({
         <title>Sina</title>
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

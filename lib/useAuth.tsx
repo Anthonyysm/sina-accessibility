@@ -11,7 +11,7 @@ import {
   AuthError,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase"; // seu arquivo de inicialização do Firebase
+import { auth } from "@/lib/firebase";
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 interface AuthContextValue {
@@ -27,7 +27,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 
-/** Envia o idToken para a API Route que cria o cookie de sessão. */
+/** Envia o idToken para a API Route que cria o cookie httpOnly de sessão. */
 async function createSession(user: User): Promise<void> {
   const idToken = await user.getIdToken();
   const res = await fetch("/api/auth/session", {
@@ -49,13 +49,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Sincroniza estado Firebase com cookie ao carregar
+  // Sincroniza estado Firebase → cookie a cada carregamento da aplicação.
+  // Se o Firebase já tem sessão ativa (ex: token persistido no IndexedDB),
+  // recria o cookie para garantir que o middleware vai reconhecê-la.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
 
       if (firebaseUser) {
-        // Renova o cookie com um token atualizado a cada load
         await createSession(firebaseUser).catch(console.error);
       }
 
@@ -66,25 +67,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // ── Login com Google ──────────────────────────────────────────────────────
-  async function loginWithGoogle() {
+  async function loginWithGoogle(): Promise<void> {
     const provider = new GoogleAuthProvider();
     const credential = await signInWithPopup(auth, provider);
     await createSession(credential.user);
-    router.push("/dashboard");
+    router.push("/Dashboard");
   }
 
   // ── Login com e-mail/senha ────────────────────────────────────────────────
-  async function loginWithEmail(email: string, password: string) {
+  async function loginWithEmail(email: string, password: string): Promise<void> {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     await createSession(credential.user);
-    router.push("/dashboard");
+    router.push("/Dashboard");
   }
 
   // ── Logout ────────────────────────────────────────────────────────────────
-  async function logout() {
+  async function logout(): Promise<void> {
     await signOut(auth);
     await destroySession();
-    router.push("/login");
+    // Volta para a landing page — o modal de login está em "/"
+    router.push("/");
   }
 
   return (
@@ -103,18 +105,18 @@ export function useAuth(): AuthContextValue {
   return ctx;
 }
 
-// ─── Tipagem de erros Firebase para mensagens amigáveis ───────────────────────
+// ─── Mensagens de erro amigáveis ─────────────────────────────────────────────
 export function firebaseErrorMessage(error: unknown): string {
   const code = (error as AuthError)?.code;
   const messages: Record<string, string> = {
-    "auth/user-not-found": "Usuário não encontrado.",
-    "auth/wrong-password": "Senha incorreta.",
-    "auth/invalid-email": "E-mail inválido.",
-    "auth/invalid-credential": "Credenciais inválidas.",
-    "auth/email-already-in-use": "Este e-mail já está em uso.",
-    "auth/too-many-requests": "Muitas tentativas. Tente novamente em breve.",
-    "auth/popup-closed-by-user": "Login cancelado.",
-    "auth/network-request-failed": "Erro de conexão. Verifique sua internet.",
+    "auth/user-not-found":        "Usuário não encontrado.",
+    "auth/wrong-password":        "Senha incorreta.",
+    "auth/invalid-email":         "E-mail inválido.",
+    "auth/invalid-credential":    "Credenciais inválidas.",
+    "auth/email-already-in-use":  "Este e-mail já está em uso.",
+    "auth/too-many-requests":     "Muitas tentativas. Tente novamente em breve.",
+    "auth/popup-closed-by-user":  "Login cancelado.",
+    "auth/network-request-failed":"Erro de conexão. Verifique sua internet.",
   };
   return messages[code] ?? "Ocorreu um erro. Tente novamente.";
 }
