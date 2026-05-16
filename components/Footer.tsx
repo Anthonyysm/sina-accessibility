@@ -56,11 +56,11 @@ export default function Footer() {
             <ul className="flex flex-col gap-2.5">
               <li>
                 <a
-                  href="mailto:ola@sina.edu.br"
+                  href="mailto:segundohackathon@gmail.com"
                   className="text-sm text-white/70 hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <MdEmail className="text-base shrink-0" />
-                  ola@sina.edu.br
+                  segundohackathon@gmail.com
                 </a>
               </li>
               <li className="text-sm text-white/70 flex items-center gap-1.5">

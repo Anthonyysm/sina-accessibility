@@ -73,7 +73,7 @@ export default function HeroSection() {
             className="bg-[#1a3a5c] hover:bg-[#0f2440] text-white rounded-full px-7 py-5 font-semibold gap-2 text-sm"
           >
             <a href="#cta">
-              Sou Professor
+              Sou Intérprete
             </a>
           </Button>
           <Button
