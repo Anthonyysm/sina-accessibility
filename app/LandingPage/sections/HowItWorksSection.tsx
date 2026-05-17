@@ -11,7 +11,7 @@ const steps = [
     number: "1",
     title: "Crie sua conta",
     description:
-      "Escolha seu perfil professor, intérprete ou estudante e personalize seu espaço.",
+      "Escolha seu perfil de intérprete ou estudante e personalize seu espaço.",
   },
   {
     number: "2",
@@ -21,9 +21,9 @@ const steps = [
   },
   {
     number: "3",
-    title: "",
+    title: "Conclua seus Estudos",
     description:
-      "",
+      "Marque suas atividades como feitas e organize suas pendências.",
   },
 ];
 

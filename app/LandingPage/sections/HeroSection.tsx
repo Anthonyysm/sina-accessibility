@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import AvatarIllustration from "@/public/LearningBoy_homepage.png"
 import Image from "next/image";
+import { AuthDialog } from "@/components/auth/AuthDialog";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [interpreteDialogOpen, setInterpreteDialogOpen] = useState(false);
+  const [estudanteDialogOpen, setEstudanteDialogOpen] = useState(false);
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -69,18 +73,16 @@ export default function HeroSection() {
 
         <div className="hero-item flex flex-wrap gap-3 mb-10">
           <Button
-            asChild
-            className="bg-[#1a3a5c] hover:bg-[#0f2440] text-white rounded-full px-7 py-5 font-semibold gap-2 text-sm"
+            onClick={() => setInterpreteDialogOpen(true)}
+            className="bg-[#1a3a5c] hover:bg-[#0f2440] text-white rounded-full px-8 py-5 font-semibold text-sm"
           >
-            <a href="#cta">
-              Sou Intérprete
-            </a>
+            Sou Intérprete
           </Button>
           <Button
-            asChild
+            onClick={() => setEstudanteDialogOpen(true)}
             className="rounded-full px-7 py-5 font-semibold text-sm border-[#a8d8ee] bg-[#CBECFA] text-[#1a3a5c] hover:bg-[#88CBE8] hover:border-[#a8d8ee]"
           >
-            <a href="#cta">Sou Estudante</a>
+            Sou Estudante
           </Button>
         </div>
       </div>
@@ -93,6 +95,19 @@ export default function HeroSection() {
           <Image src={AvatarIllustration} height={1000} width={1000} className="object-cover w-full h-full" alt="Garoto estudando desenho" />
         </div>
       </div>
+      <AuthDialog
+        open={interpreteDialogOpen}
+        onOpenChange={setInterpreteDialogOpen}
+        role="interprete"
+        roleLabel="Intérprete"
+      />
+
+      <AuthDialog
+        open={estudanteDialogOpen}
+        onOpenChange={setEstudanteDialogOpen}
+        role="estudante"
+        roleLabel="Estudante"
+      />
     </section>
   );
 }

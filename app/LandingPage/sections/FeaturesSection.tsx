@@ -26,9 +26,9 @@ const features = [
   },
   {
     icon: MdMenuBook,
-    title: "",
+    title: "Acompanhe seu progresso",
     description:
-      "",
+      "Veja suas atividades concluidas e finalize as pendentes.",
   },
 ];
 
