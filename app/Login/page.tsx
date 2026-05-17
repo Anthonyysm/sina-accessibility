@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdAccessibility, MdArrowBack } from "react-icons/md";
+import { MdArrowBack } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth, authErrorMessage } from "@/lib/useAuth";
+import Image from "next/image";
+import logo_sina from "@/public/LogoSina.png"
 
 type Tab = "login" | "cadastro";
 
@@ -76,7 +78,7 @@ export default function NotLoggedPage() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <div className="w-10 h-10 rounded-xl bg-[#1e3a5f] flex items-center justify-center">
-            <MdAccessibility className="text-white text-xl" />
+            <Image src={logo_sina} height={1000} width={1000} alt="logo da aplicação" className="invert object-cover"/>
           </div>
           <span className="font-bold text-xl text-[#1e3a5f] tracking-tight">SINA</span>
         </div>
@@ -140,7 +142,7 @@ export default function NotLoggedPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
-              className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
+              className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8] pl-2"
             />
             <Input
               type="password"
@@ -149,7 +151,7 @@ export default function NotLoggedPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}
-              className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
+              className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8] pl-2"
             />
             {tab === "cadastro" && (
               <Input
@@ -159,7 +161,7 @@ export default function NotLoggedPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={loading}
-                className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
+                className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8] pl-2"
               />
             )}
 

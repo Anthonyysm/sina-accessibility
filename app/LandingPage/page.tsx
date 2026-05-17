@@ -2,7 +2,6 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/app/LandingPage/sections/HeroSection";
 import ProblemSection from "@/app/LandingPage/sections/ProblemSection";
 import Footer from "@/components/Footer";
-import LibrasFAB from "@/components/LibrasFAB";
 import FeaturesSection from "@/app/LandingPage/sections/FeaturesSection";
 import HowItWorksSection from "@/app/LandingPage/sections/HowItWorksSection";
 import BeforeAfterSection from "@/app/LandingPage/sections/BeforeAfter";
