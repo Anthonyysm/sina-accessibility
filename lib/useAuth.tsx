@@ -107,26 +107,32 @@ export function useAuth(): AuthContextValue {
 }
 
 export function authErrorMessage(error: unknown): string {
-  if (typeof error === "string") {
-    return error;
-  }
-
-  if (error instanceof Error) {
-    return error.message;
-  }
-
   const code = (error as { code?: string })?.code;
-  if (!code) return "Ocorreu um erro. Tente novamente.";
-  const messages: Record<string, string> = {
-    "auth/user-not-found": "Usuário não encontrado.",
-    "auth/wrong-password": "Senha incorreta.",
-    "auth/invalid-email": "E-mail inválido.",
-    "auth/invalid-credential": "Credenciais inválidas.",
-    "auth/email-already-in-use": "Este e-mail já está em uso.",
-    "auth/too-many-requests": "Muitas tentativas. Tente novamente em breve.",
-    "auth/popup-closed-by-user": "Login cancelado.",
-    "auth/network-request-failed": "Erro de conexão. Verifique sua internet.",
-  };
+  if (code) {
+    const messages: Record<string, string> = {
+      "auth/user-not-found": "Usuário não encontrado.",
+      "auth/wrong-password": "Senha incorreta.",
+      "auth/invalid-email": "E-mail inválido.",
+      "auth/invalid-credential": "Credenciais inválidas.",
+      "auth/email-already-in-use": "Este e-mail já está em uso.",
+      "auth/too-many-requests": "Muitas tentativas. Tente novamente em breve.",
+      "auth/popup-closed-by-user": "Login cancelado pelo usuário.",
+      "auth/network-request-failed": "Erro de conexão. Verifique sua internet.",
+      "auth/weak-password": "Senha muito fraca. Use pelo menos 6 caracteres.",
+      "auth/user-disabled": "Esta conta foi desativada.",
+      "auth/operation-not-allowed": "Operação não permitida.",
+      "auth/account-exists-with-different-credential":
+        "Já existe uma conta com este e-mail usando outro método de login.",
+      "auth/requires-recent-login":
+        "Por segurança, faça login novamente para continuar.",
+      "auth/expired-action-code": "O link expirou. Solicite um novo.",
+      "auth/invalid-action-code": "O link é inválido ou já foi utilizado.",
+    };
 
-  return messages[code] ?? "Ocorreu um erro. Tente novamente.";
+    return messages[code] ?? "Ocorreu um erro. Tente novamente.";
+  }
+
+  if (typeof error === "string") return error;
+
+  return "Ocorreu um erro. Tente novamente.";
 }
