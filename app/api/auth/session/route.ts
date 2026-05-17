@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const role = await authDbService.obterCargoPorEmail(email);
 
     const response = NextResponse.json({ ok: true, role }, { status: 200 });
-    setSessionCookie(response, idToken);
+    setSessionCookie(response, idToken, role);
 
     return response;
   } catch (error) {
