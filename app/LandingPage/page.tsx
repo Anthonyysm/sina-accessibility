@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import LibrasFAB from "@/components/LibrasFAB";
 import FeaturesSection from "@/app/LandingPage/sections/FeaturesSection";
 import HowItWorksSection from "@/app/LandingPage/sections/HowItWorksSection";
+import BeforeAfterSection from "@/app/LandingPage/sections/BeforeAfter";
 import CTASection from "@/app/LandingPage/sections/CTASection";
 
 export default function Homepage() {
@@ -16,6 +17,7 @@ export default function Homepage() {
         <ProblemSection />
         <FeaturesSection />
         <HowItWorksSection />
+        <BeforeAfterSection />
         <CTASection />
       </div>
       <Footer />
