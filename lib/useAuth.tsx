@@ -7,6 +7,8 @@ import {
   signUpWithEmail,
   signInWithGoogle,
 } from "@/service/auth";
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, deleteUser } from "firebase/auth";
+import { app } from "@/service/firebaseConfig";
 
 export interface UserProfile {
   id_usuario: number;
@@ -14,13 +16,17 @@ export interface UserProfile {
   email: string;
   tipo_usuario: string;
   criado_em: Date;
+  disciplinas?: string[];
+  turmas?: string[];
 }
 
 interface AuthContextValue {
   loading: boolean;
   user: UserProfile | null;
   refreshUser: () => Promise<void>;
-  updateUser: (data: Partial<Pick<UserProfile, "nome" | "email" | "tipo_usuario">>) => Promise<void>;
+  updateUser: (data: Partial<Pick<UserProfile, "nome" | "email" | "tipo_usuario" | "disciplinas" | "turmas">>) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  deleteAccount: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginWithEmail: (email: string, password: string) => Promise<void>;
   registerWithEmail: (email: string, password: string, name?: string, role?: string) => Promise<void>;
@@ -41,7 +47,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function refreshUser() {
     fetch("/api/usuarios/me")
       .then((res) => (res.ok ? res.json() : null))
-      .then((data) => setUser(data))
+      .then((data) => {
+        if (data) {
+          setUser({
+            ...data,
+            disciplinas: data.disciplinas ?? [],
+            turmas: data.turmas ?? [],
+          });
+        }
+      })
       .finally(() => setLoading(false));
   }
 
@@ -49,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshUser();
   }, []);
 
-  async function updateUser(data: Partial<Pick<UserProfile, "nome" | "email" | "tipo_usuario">>) {
+  async function updateUser(data: Partial<Pick<UserProfile, "nome" | "email" | "tipo_usuario" | "disciplinas" | "turmas">>) {
     const res = await fetch("/api/usuarios/me", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -91,9 +105,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/");
   }
 
+  async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const auth = getAuth(app);
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser || !firebaseUser.email) {
+      throw new Error("Usuário não autenticado.");
+    }
+    const credential = EmailAuthProvider.credential(firebaseUser.email, currentPassword);
+    await reauthenticateWithCredential(firebaseUser, credential);
+    await updatePassword(firebaseUser, newPassword);
+  }
+
+  async function deleteAccount(): Promise<void> {
+    const res = await fetch("/api/usuarios/me", { method: "DELETE" });
+    if (!res.ok) throw new Error("Erro ao excluir conta.");
+
+    const auth = getAuth(app);
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser) {
+      await deleteUser(firebaseUser).catch(() => {});
+    }
+
+    setUser(null);
+    await fetch("/api/auth/session", { method: "DELETE" });
+    window.location.href = "/";
+  }
+
   return (
     <AuthContext.Provider
-      value={{ loading, user, refreshUser, updateUser, loginWithGoogle, loginWithEmail, registerWithEmail, logout }}
+      value={{ loading, user, refreshUser, updateUser, changePassword, deleteAccount, loginWithGoogle, loginWithEmail, registerWithEmail, logout }}
     >
       {children}
     </AuthContext.Provider>

@@ -16,6 +16,8 @@ export async function GET() {
       email: true,
       tipo_usuario: true,
       criado_em: true,
+      disciplinas: true,
+      turmas: true,
     },
   })
 
@@ -33,12 +35,14 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json()
-  const { nome, email, tipo_usuario } = body
+  const { nome, email, tipo_usuario, disciplinas, turmas } = body
 
   const updateData: Record<string, unknown> = {}
   if (nome !== undefined) updateData.nome = nome
   if (email !== undefined) updateData.email = email
   if (tipo_usuario !== undefined) updateData.tipo_usuario = tipo_usuario
+  if (disciplinas !== undefined) updateData.disciplinas = disciplinas
+  if (turmas !== undefined) updateData.turmas = turmas
 
   if (Object.keys(updateData).length === 0) {
     return NextResponse.json({ error: 'Nenhum dado para atualizar' }, { status: 400 })
@@ -53,8 +57,32 @@ export async function PUT(req: NextRequest) {
       email: true,
       tipo_usuario: true,
       criado_em: true,
+      disciplinas: true,
+      turmas: true,
     },
   })
 
   return NextResponse.json(updated)
+}
+
+export async function DELETE() {
+  const session = await getSecureSession()
+  if (!session?.userId) {
+    return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
+  }
+
+  await prisma.usuario.delete({
+    where: { id_usuario: Number(session.userId) },
+  })
+
+  const response = NextResponse.json({ success: true })
+  response.cookies.set('sina_session', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  })
+
+  return response
 }
