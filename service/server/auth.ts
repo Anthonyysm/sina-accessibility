@@ -1,4 +1,9 @@
+import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
+
+function hashPassword(password: string) {
+  return createHash("sha1").update(password).digest("base64");
+}
 
 export const authDbService = {
   async registrarUsuario(email: string, name: string, role: string) {
@@ -13,10 +18,27 @@ export const authDbService = {
       create: {
         email,
         nome: name,
-        senha: "", // Gerenciado pelo Firebase
+        senha: "",
         tipo_usuario: tipoUsuario,
       },
     });
+  },
+
+  async autenticarUsuario(email: string, password: string) {
+    const senhaHash = hashPassword(password);
+    const usuario = await prisma.usuario.findUnique({
+      where: { email },
+    });
+
+    if (!usuario || !usuario.senha) {
+      return null;
+    }
+
+    if (usuario.senha !== senhaHash) {
+      return null;
+    }
+
+    return usuario;
   },
 
   async registrarOuLogarGoogle(email: string, name: string, role?: string) {

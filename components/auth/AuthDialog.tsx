@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { signUpWithEmail, signInWithEmail, signInWithGoogle } from "@/service/auth";
+import { authErrorMessage } from "@/lib/useAuth";
 
 type UserRole = "interprete" | "estudante";
 type AuthMode = "signup" | "signin";
@@ -53,7 +54,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       return;
     }
 
-    if (!/A-Z/.test(formData.password) || !/0-9/.test(formData.password)) {
+    if (!/[A-Z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
       setError("A senha deve conter pelo menos uma letra maiúscula e um número");
       return;
     }
@@ -81,9 +82,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
         router.push("/StudentDashboard");
       }
     } catch (err: any) {
-      setError(err.code === "auth/email-already-in-use" 
-        ? "Email já cadastrado" 
-        : err.message || "Erro ao criar conta");
+      setError(authErrorMessage(err) || err.message || "Erro ao criar conta");
     } finally {
       setLoading(false);
     }
@@ -114,9 +113,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
         router.push("/StudentDashboard");
       }
     } catch (err: any) {
-      setError(err.code === "auth/invalid-credential"
-        ? "Email ou senha incorretos"
-        : err.message || "Erro ao fazer login");
+      setError(authErrorMessage(err) || err.message || "Erro ao fazer login");
     } finally {
       setLoading(false);
     }
