@@ -2,44 +2,34 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export const SESSION_COOKIE = "sina_session";
-export const ROLE_COOKIE = "sina_role";
-export const USERID_COOKIE = "sina_userid";
 
 // Duração da sessão: 5 dias (em segundos)
 const SESSION_MAX_AGE = 60 * 60 * 24 * 5;
 
 /**
- * Salva o token de sessão Firebase em um cookie httpOnly seguro.
- * Chame isso após o login bem-sucedido na API Route.
+ * Define um único cookie assinado contendo userId + role.
+ * Limpa o cookie existente antes para evitar dados stale.
  */
-export function setSessionCookie(response: NextResponse, token: string, role?: string, userId?: string) {
-  response.cookies.set(SESSION_COOKIE, token, {
+export function setSessionCookie(response: NextResponse, signedToken: string) {
+  const clearOpts = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "lax" as const,
+    maxAge: 0,
+    path: "/",
+  };
+
+  response.cookies.set(SESSION_COOKIE, "", clearOpts);
+
+  const setOpts = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
     maxAge: SESSION_MAX_AGE,
     path: "/",
-  });
+  };
 
-  if (role) {
-    response.cookies.set(ROLE_COOKIE, role, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: SESSION_MAX_AGE,
-      path: "/",
-    });
-  }
-
-  if (userId) {
-    response.cookies.set(USERID_COOKIE, userId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: SESSION_MAX_AGE,
-      path: "/",
-    });
-  }
+  response.cookies.set(SESSION_COOKIE, signedToken, setOpts);
 
   return response;
 }
@@ -55,18 +45,16 @@ export function clearSessionCookie(response: NextResponse) {
     maxAge: 0,
     path: "/",
   };
-  
+
   response.cookies.set(SESSION_COOKIE, "", options);
-  response.cookies.set(ROLE_COOKIE, "", options);
-  response.cookies.set(USERID_COOKIE, "", options);
-  
+
   return response;
 }
 
 /**
- * Lê o token de sessão a partir dos cookies (uso em Server Components).
+ * Lê o cookie bruto (uso em Server Components).
  */
-export async function getSessionToken(): Promise<string | undefined> {
+export async function getSessionCookie(): Promise<string | undefined> {
   const cookieStore = await cookies();
   return cookieStore.get(SESSION_COOKIE)?.value;
 }
@@ -74,11 +62,11 @@ export async function getSessionToken(): Promise<string | undefined> {
 import { verifySessionToken } from "./jwt";
 
 /**
- * Lê e verifica o token de sessão seguro.
- * Retorna o payload contendo { userId, role, idToken } se válido, senão null.
+ * Lê e verifica o token assinado.
+ * Retorna { userId, role, idToken? } se válido, senão null.
  */
 export async function getSecureSession() {
-  const token = await getSessionToken();
+  const token = await getSessionCookie();
   if (!token) return null;
   return await verifySessionToken(token);
 }

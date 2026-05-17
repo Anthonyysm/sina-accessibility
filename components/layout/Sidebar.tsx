@@ -5,6 +5,7 @@ import logo_sina from "@/public/LogoSina.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/useAuth";
 import {
   MdDashboard,
   MdLibraryBooks,
@@ -19,6 +20,18 @@ interface SidebarProps {
   setMobileMenuOpen?: (open: boolean) => void;
 }
 
+const AVATAR_COLORS = ["#3b5fa0", "#5db5d8", "#6b8e6b", "#c47a4a", "#8b6baa"];
+const DB_TO_LABEL: Record<string, string> = {
+  INTERPRETE: "Intérprete · Libras",
+  PROFESSOR: "Professor",
+  ESTUDANTE: "Estudante",
+  COORDENADOR: "Coordenador",
+};
+
+function getInitials(n: string) {
+  return n.trim().split(" ").filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase() || "?";
+}
+
 export default function Sidebar({
   activeNav,
   setActiveNav,
@@ -26,12 +39,19 @@ export default function Sidebar({
   setMobileMenuOpen,
 }: SidebarProps) {
   const router = useRouter();
+  const { user } = useAuth();
 
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
     { icon: MdLibraryBooks, label: "Publicações" },
     { icon: MdPersonOutline, label: "Visão do Aluno" },
   ];
+
+  const userName = user?.nome ?? "";
+  const userLabel = user ? (DB_TO_LABEL[user.tipo_usuario] ?? user.tipo_usuario) : "";
+  const avatarColor = user
+    ? AVATAR_COLORS[user.id_usuario % AVATAR_COLORS.length]
+    : "#3b5fa0";
 
   return (
     <>
@@ -105,12 +125,14 @@ export default function Sidebar({
           }}
           className="px-5 py-4 flex items-center gap-3 hover:bg-white/[0.06] transition-colors group w-full text-left"
         >
-          <div className="w-9 h-9 rounded-full bg-[#3b5fa0] flex items-center justify-center text-xs font-bold text-white shrink-0">
-            MR
+          <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+            style={{ backgroundColor: avatarColor }}
+          >
+            {getInitials(userName)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold leading-tight truncate">Marina Rocha</p>
-            <p className="text-xs text-white/45 mt-0.5">Intérprete · Libras</p>
+            <p className="text-sm font-semibold leading-tight truncate">{userName}</p>
+            <p className="text-xs text-white/45 mt-0.5">{userLabel}</p>
           </div>
           <MdEdit className="text-white/30 group-hover:text-white/60 text-base shrink-0 transition-colors" />
         </button>

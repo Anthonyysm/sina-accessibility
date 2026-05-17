@@ -74,7 +74,7 @@ export async function PUT(req: Request, { params }: Params) {
     const parsedData = atualizarAtividadeSchema.safeParse(body);
     if (!parsedData.success) {
       return NextResponse.json(
-        { error: "Dados inválidos", details: parsedData.error.errors },
+        { error: "Dados inválidos", details: parsedData.error.issues },
         { status: 400 }
       );
     }

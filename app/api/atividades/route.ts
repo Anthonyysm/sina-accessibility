@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const parsedData = atividadeSchema.safeParse(body);
     if (!parsedData.success) {
       return NextResponse.json(
-        { error: "Dados inválidos", details: parsedData.error.errors },
+        { error: "Dados inválidos", details: parsedData.error.issues },
         { status: 400 }
       );
     }
