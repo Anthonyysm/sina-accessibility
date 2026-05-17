@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setSessionCookie } from "@/lib/session";
 import { authDbService } from "@/service/server/auth";
+import { signSessionToken } from "@/lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +23,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const secureToken = await signSessionToken({
+      userId: String(usuario.id_usuario),
+      role: usuario.tipo_usuario,
+    });
+
     const response = NextResponse.json(
       {
         ok: true,
@@ -34,12 +40,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
 
-    setSessionCookie(
-      response,
-      String(usuario.id_usuario),
-      usuario.tipo_usuario,
-      String(usuario.id_usuario)
-    );
+    setSessionCookie(response, secureToken);
 
     return response;
   } catch (error) {

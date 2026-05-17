@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setSessionCookie, clearSessionCookie } from "@/lib/session";
 import { authDbService } from "@/service/server/auth";
+import { signSessionToken } from "@/lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,8 +18,15 @@ export async function POST(request: NextRequest) {
     const role = usuarioDb?.tipo_usuario || "ESTUDANTE";
     const userId = usuarioDb?.id_usuario ? String(usuarioDb.id_usuario) : undefined;
 
+    // Criar um token assinado seguro
+    const secureToken = await signSessionToken({
+      idToken, // Mantém o token do firebase caso precise validar algo
+      userId,
+      role
+    });
+
     const response = NextResponse.json({ ok: true, role }, { status: 200 });
-    setSessionCookie(response, idToken, role, userId);
+    setSessionCookie(response, secureToken);
 
     return response;
   } catch (error) {

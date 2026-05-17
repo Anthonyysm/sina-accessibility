@@ -119,6 +119,8 @@ npm start
 
 ## Diagrama do modelo lógico do banco de dados
 
+![Diagrama do modelo lógico do banco de dados](./diagrama-sina.png)
+
 > Banco de dados: **PostgreSQL (Relacional) com Prisma ORM**
 
 A estrutura do banco de dados foi migrada para um modelo relacional robusto no PostgreSQL para garantir integridade referencial, consultas complexas eficientes e uma melhor separação entre a persistência dos dados e a autenticação do Firebase.

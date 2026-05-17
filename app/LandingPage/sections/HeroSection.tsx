@@ -14,7 +14,6 @@ export default function HeroSection() {
   const [interpreteDialogOpen, setInterpreteDialogOpen] = useState(false);
   const [estudanteDialogOpen, setEstudanteDialogOpen] = useState(false);
 
-
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.3 });
@@ -109,5 +108,6 @@ export default function HeroSection() {
         roleLabel="Estudante"
       />
     </section>
+
   );
 }

@@ -1,15 +1,25 @@
 "use client";
 
 import { useState, useEffect, createContext, useContext } from "react";
-import { useRouter } from "next/navigation";
 import {
   signInWithEmail,
   signUpWithEmail,
   signInWithGoogle,
 } from "@/service/auth";
 
+export interface UserProfile {
+  id_usuario: number;
+  nome: string;
+  email: string;
+  tipo_usuario: string;
+  criado_em: Date;
+}
+
 interface AuthContextValue {
   loading: boolean;
+  user: UserProfile | null;
+  refreshUser: () => Promise<void>;
+  updateUser: (data: Partial<Pick<UserProfile, "nome" | "email" | "tipo_usuario">>) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginWithEmail: (email: string, password: string) => Promise<void>;
   registerWithEmail: (email: string, password: string, name?: string, role?: string) => Promise<void>;
@@ -20,19 +30,37 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  async function refreshUser() {
+    fetch("/api/usuarios/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setUser(data))
+      .finally(() => setLoading(false));
+  }
 
   useEffect(() => {
-    setLoading(false);
+    refreshUser();
   }, []);
+
+  async function updateUser(data: Partial<Pick<UserProfile, "nome" | "email" | "tipo_usuario">>) {
+    const res = await fetch("/api/usuarios/me", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Erro ao atualizar perfil");
+    const updated = await res.json();
+    setUser(updated);
+  }
 
   async function loginWithGoogle(): Promise<void> {
     const result = await signInWithGoogle();
 
     if (result.role === "INTERPRETE") {
-      router.push("/Dashboard");
+      window.location.href = "/Dashboard";
     } else {
-      router.push("/StudentDashboard");
+      window.location.href = "/StudentDashboard";
     }
   }
 
@@ -40,9 +68,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const result = await signInWithEmail({ email, password });
 
     if (result.role === "INTERPRETE") {
-      router.push("/Dashboard");
+      window.location.href = "/Dashboard";
     } else {
-      router.push("/StudentDashboard");
+      window.location.href = "/StudentDashboard";
     }
   }
 
@@ -60,20 +88,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     if (result.role === "INTERPRETE") {
-      router.push("/Dashboard");
+      window.location.href = "/Dashboard";
     } else {
-      router.push("/StudentDashboard");
+      window.location.href = "/StudentDashboard";
     }
   }
 
   async function logout(): Promise<void> {
+    setUser(null);
     await fetch("/api/auth/session", { method: "DELETE" });
-    router.push("/");
+    window.location.href = "/";
   }
 
   return (
     <AuthContext.Provider
-      value={{ loading, loginWithGoogle, loginWithEmail, registerWithEmail, logout }}
+      value={{ loading, user, refreshUser, updateUser, loginWithGoogle, loginWithEmail, registerWithEmail, logout }}
     >
       {children}
     </AuthContext.Provider>
@@ -96,6 +125,7 @@ export function authErrorMessage(error: unknown): string {
   }
 
   const code = (error as { code?: string })?.code;
+  if (!code) return "Ocorreu um erro. Tente novamente.";
   const messages: Record<string, string> = {
     "auth/user-not-found": "Usuário não encontrado.",
     "auth/wrong-password": "Senha incorreta.",

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { atividadeDbService } from "@/service/server/atividades";
-import { SESSION_COOKIE, USERID_COOKIE } from "@/lib/session";
+import { getSecureSession } from "@/lib/session";
 
 const atividadeSchema = z.object({
   titulo: z.string().min(3).max(200),
@@ -12,13 +12,19 @@ const atividadeSchema = z.object({
 // GET /api/atividades
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    if (!cookieStore.get(SESSION_COOKIE)?.value) {
+    const session = await getSecureSession();
+    if (!session || !session.userId) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
 
+    const { userId, role } = session;
+
     const atividades = await atividadeDbService.listar();
-    return NextResponse.json(atividades);
+    
+    // Filtro contra IDOR na listagem
+    const atividadesFiltradas = atividades.filter(a => a.criado_por === parseInt(String(userId), 10) || role === "ADMIN");
+
+    return NextResponse.json(atividadesFiltradas);
   } catch (error) {
     console.error("[API Atividades GET]", error);
     return NextResponse.json(
@@ -31,13 +37,13 @@ export async function GET() {
 // POST /api/atividades
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const session = cookieStore.get(SESSION_COOKIE)?.value;
-    const userId = cookieStore.get(USERID_COOKIE)?.value;
+    const session = await getSecureSession();
 
-    if (!session || !userId) {
+    if (!session || !session.userId) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
+    
+    const userId = session.userId;
 
     const body = await request.json();
     
@@ -45,7 +51,7 @@ export async function POST(request: Request) {
     const parsedData = atividadeSchema.safeParse(body);
     if (!parsedData.success) {
       return NextResponse.json(
-        { error: "Dados inválidos", details: parsedData.error.errors },
+        { error: "Dados inválidos", details: parsedData.error.issues },
         { status: 400 }
       );
     }

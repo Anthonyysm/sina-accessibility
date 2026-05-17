@@ -26,7 +26,7 @@ const features = [
   },
   {
     icon: MdMenuBook,
-    title: "Acompanhe seu progresso",
+    title: "Acompanhe o seu progresso",
     description:
       "Veja suas atividades concluidas e finalize as pendentes.",
   },
@@ -82,7 +82,7 @@ export default function FeaturesSection() {
         {/* Header */}
         <div className="features-header mb-14">
           <h2 className="font-extrabold text-[#1a3a5c] text-3xl md:text-4xl lg:text-[42px] leading-tight tracking-tight mb-4">
-            Tudo que sua sala de aula precisa
+            Tudo que a sua sala de aula precisa
           </h2>
           <p className="text-[#4a6a8a] text-lg leading-relaxed max-w-lg">
             Recursos pensados para professores, famílias e estudantes em uma

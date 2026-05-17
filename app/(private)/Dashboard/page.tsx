@@ -10,28 +10,24 @@ import TranslatorContainer from "@/components/Translator/Translator";
 
 export default function DashboardPage() {
   const [activeNav, setActiveNav] = useState(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const titulos = ["Dashboard", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
 
   return (
     <div className="flex h-screen bg-[#f0f4f9] overflow-hidden montserrat">
-      <Sidebar
-        activeNav={activeNav}
-        setActiveNav={setActiveNav}
-        mobileOpen={mobileOpen}
-        onMobileClose={() => setMobileOpen(false)}
+      <Sidebar 
+        activeNav={activeNav} 
+        setActiveNav={setActiveNav} 
+        mobileMenuOpen={mobileMenuOpen} 
+        setMobileMenuOpen={setMobileMenuOpen} 
       />
-
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <Topbar
-          tituloPag={tituloPag}
-          onMenuClick={() => setMobileOpen(true)}
-          onNewMaterial={activeNav === 0 ? () => setActiveNav(2) : undefined}
-        />
-
-        <main className="flex-1 overflow-y-auto px-4 sm:px-8 py-5 sm:py-7 flex flex-col gap-5 sm:gap-6">
+      <div className="flex-1 flex flex-col overflow-hidden w-full relative">
+        {/* Topbar */}
+        <Topbar tituloPag={tituloPag} onMenuClick={() => setMobileMenuOpen(true)} />
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7 flex flex-col gap-6">
           {activeNav === 0 && (
             <>
               {/* Welcome banner */}
@@ -47,13 +43,16 @@ export default function DashboardPage() {
                     apoio de IA do PDF original ao material em Português L2,
                     pronto para o aluno surdo.
                   </p>
-                  <Button
-                    onClick={() => setActiveNav(2)}
-                    className="hidden md:flex bg-white text-[#1e3a5f] hover:bg-white/90 rounded-full font-bold px-3 gap-1.5 text-sm"
-                  >
-                    <MdAdd className="text-base" />
-                    Novo Material
-                  </Button>
+
+                  <div className="flex gap-3 flex-wrap mt-4 md:mt-0">
+                    <Button
+                      onClick={() => setModalAberto(true)}
+                      className="bg-white w-full sm:w-auto text-[#1e3a5f] hover:bg-white/90 rounded-full font-bold px-5 gap-1.5"
+                    >
+                      <MdAdd className="text-lg" />
+                      Novo Material
+                    </Button>
+                  </div>
                 </div>
               </div>
 
