@@ -1,21 +1,33 @@
 import { prisma } from "@/lib/prisma";
 
 export const authDbService = {
-  async registrarUsuario(email: string, name: string, role: string) {
+  async registrarUsuario(email: string, name: string, role: string, password?: string) {
     const tipoUsuario = role === "interprete" ? "INTERPRETE" : "ESTUDANTE";
+
+    const dadosCreate: any = {
+      email,
+      nome: name,
+      senha: "",
+      tipo_usuario: tipoUsuario,
+    };
+
+    if (password) {
+      dadosCreate.senha = hashPassword(password);
+    }
+
+    const dadosUpdate: any = {
+      nome: name,
+      tipo_usuario: tipoUsuario,
+    };
+
+    if (password) {
+      dadosUpdate.senha = hashPassword(password);
+    }
 
     return prisma.usuario.upsert({
       where: { email },
-      update: {
-        nome: name,
-        tipo_usuario: tipoUsuario,
-      },
-      create: {
-        email,
-        nome: name,
-        senha: "", // Gerenciado pelo Firebase
-        tipo_usuario: tipoUsuario,
-      },
+      update: dadosUpdate,
+      create: dadosCreate,
     });
   },
 

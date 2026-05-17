@@ -15,6 +15,7 @@ export default function NotLoggedPage() {
   const [tab, setTab] = useState<Tab>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -24,10 +25,31 @@ export default function NotLoggedPage() {
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    // client-side validation
+    const trimmedEmail = email.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setError("E-mail inválido.");
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    if (tab === "cadastro" && password !== confirmPassword) {
+      setError("As senhas não coincidem.");
+      return;
+    }
+
     setLoading(true);
     try {
-      await loginWithEmail(email, password);
-      // useAuth já redireciona para /Dashboard
+      if (tab === "login") {
+        await loginWithEmail(trimmedEmail, password);
+      } else {
+        await registerWithEmail(trimmedEmail, password, trimmedEmail.split("@")[0]);
+      }
     } catch (err) {
       setError(firebaseErrorMessage(err));
     } finally {
@@ -129,6 +151,17 @@ export default function NotLoggedPage() {
               disabled={loading}
               className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
             />
+            {tab === "cadastro" && (
+              <Input
+                type="password"
+                placeholder="Confirme a senha"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                disabled={loading}
+                className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
+              />
+            )}
 
             {error && (
               <p className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-lg px-3 py-2">

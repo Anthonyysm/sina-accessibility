@@ -79,7 +79,7 @@ export const signUpWithEmail = async (data: SignUpData) => {
     await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, name, role }),
+      body: JSON.stringify({ email, name, role, password }),
     });
 
     // Criar sessão

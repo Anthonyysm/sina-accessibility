@@ -3,7 +3,7 @@ import { authDbService } from "@/service/server/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, role } = await request.json();
+    const { email, name, role, password } = await request.json();
 
     if (!email || !role) {
       return NextResponse.json(
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const usuario = await authDbService.registrarUsuario(email, name, role);
+    const usuario = await authDbService.registrarUsuario(email, name, role, password);
 
     return NextResponse.json(
       {
