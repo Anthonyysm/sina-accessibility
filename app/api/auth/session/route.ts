@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setSessionCookie, clearSessionCookie } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { authDbService } from "@/service/server/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,16 +13,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let role = "ESTUDANTE"; // Default
-
-    if (email) {
-      const usuario = await prisma.usuario.findUnique({
-        where: { email }
-      });
-      if (usuario) {
-        role = usuario.tipo_usuario;
-      }
-    }
+    const role = await authDbService.obterCargoPorEmail(email);
 
     const response = NextResponse.json({ ok: true, role }, { status: 200 });
     setSessionCookie(response, idToken);
