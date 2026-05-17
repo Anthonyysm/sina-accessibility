@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { authDbService } from "@/service/server/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,22 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Mapeia o cargo para os valores do banco (INTERPRETE ou ESTUDANTE)
-    const tipoUsuario = role === "interprete" ? "INTERPRETE" : "ESTUDANTE";
-
-    const usuario = await prisma.usuario.upsert({
-      where: { email },
-      update: {
-        nome: name,
-        tipo_usuario: tipoUsuario,
-      },
-      create: {
-        email,
-        nome: name,
-        senha: "", // Gerenciado pelo Firebase
-        tipo_usuario: tipoUsuario,
-      },
-    });
+    const usuario = await authDbService.registrarUsuario(email, name, role);
 
     return NextResponse.json(
       {

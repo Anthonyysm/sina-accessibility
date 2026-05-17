@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { authDbService } from "@/service/server/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,25 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const trimmedName =
-      typeof name === "string" && name.trim().length > 0
-        ? name.trim().slice(0, 100)
-        : email.split("@")[0].slice(0, 100);
-
-    const tipoUsuario = role === "interprete" ? "INTERPRETE" : "ESTUDANTE";
-
-    const usuario = await prisma.usuario.upsert({
-      where: { email },
-      update: {
-        nome: trimmedName,
-      },
-      create: {
-        email,
-        nome: trimmedName,
-        senha: "",
-        tipo_usuario: tipoUsuario,
-      },
-    });
+    const usuario = await authDbService.registrarOuLogarGoogle(email, name, role);
 
     return NextResponse.json(
       {
