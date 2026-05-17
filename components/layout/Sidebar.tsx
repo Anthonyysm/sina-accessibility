@@ -40,7 +40,7 @@ function SidebarContent({
   onClose?: () => void;
 }) {
   return (
-    <div className="flex flex-col h-full bg-[#1e3a5f] text-white">
+    <div className="flex flex-col h-full bg-[#1e3a5f] text-white montserrat">
       {/* Logo */}
       <div className="px-6 pt-7 pb-5 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">

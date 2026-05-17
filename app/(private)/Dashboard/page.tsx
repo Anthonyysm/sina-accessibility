@@ -12,7 +12,7 @@ export default function DashboardPage() {
   const [activeNav, setActiveNav] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const titulos = ["Dashboard", "Revisão (IA)", "Publicações", "Visão do Aluno"];
+  const titulos = ["Dashboard", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
 
   return (
@@ -44,7 +44,7 @@ export default function DashboardPage() {
                   </h2>
                   <p className="text-white/70 text-xs sm:text-sm leading-relaxed max-w-lg mb-3">
                     Gerencie conteúdos adaptados e prepare mediações pedagógicas com
-                    apoio de IA — do PDF original ao material em Português L2,
+                    apoio de IA do PDF original ao material em Português L2,
                     pronto para o aluno surdo.
                   </p>
                   <Button
