@@ -227,7 +227,7 @@ export default function TranslatorContainer() {
               </p>
             </div>
           ) : (
-            <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto pr-2">
+            <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto pr-2 [scrollbar-width:thin] [scrollbar-color:rgba(30,58,95,0.30)_transparent]">
               {/* Seção GLOSA */}
               <div className="space-y-3">
                 <div className="flex w-fit items-center gap-2 rounded bg-[#1e3a5f]/5 px-2 py-0.5 text-[11px] font-black tracking-[0.2em] text-[#1e3a5f] uppercase">

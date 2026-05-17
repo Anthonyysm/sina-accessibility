@@ -21,9 +21,9 @@ const steps = [
   },
   {
     number: "3",
-    title: "",
+    title: "Conclua seus Estudos",
     description:
-      "",
+      "Marque suas atividades como feitas e organize suas pendências.",
   },
 ];
 
