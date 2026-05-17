@@ -11,6 +11,7 @@ declare global {
 export default function VLibras() {
   return (
     <>
+      {/* @ts-expect-error vw is a custom attribute required by VLibras */}
       <div vw="true" className="enabled">
         <div vw-access-button="true" className="active" />
 
