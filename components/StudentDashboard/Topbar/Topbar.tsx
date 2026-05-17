@@ -16,15 +16,15 @@ const FILTERS: Filter[] = ["todos", "pendentes", "concluídas"];
 export default function Topbar({ filter, onFilterChange, onLogout }: TopbarProps) {
   return (
     <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-sm border-b border-[#f0f4f9]">
-      <div className="max-w-[640px] mx-auto px-5 h-14 flex items-center justify-between gap-4">
+      <div className="max-w-[640px] mx-auto px-4 sm:px-5 h-14 flex items-center justify-between gap-3">
 
-        {/* Logo */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Logo — oculto em mobile, aparece a partir de sm */}
+        <div className="hidden sm:flex items-center gap-2 shrink-0">
           <div className="w-7 h-7 rounded-lg bg-[#1e3a5f] flex items-center justify-center">
             <Image
               src={logo_sina}
-              height={1000}
-              width={1000}
+              height={32}
+              width={32}
               alt="Logo SINA"
               className="invert object-cover"
             />
@@ -32,8 +32,8 @@ export default function Topbar({ filter, onFilterChange, onLogout }: TopbarProps
           <span className="font-bold text-sm text-[#1e3a5f] tracking-tight">SINA</span>
         </div>
 
-        {/* Filtros */}
-        <div className="flex gap-0.5 bg-[#f0f4f9] rounded-xl p-1 flex-1 max-w-[260px]">
+        {/* Filtros — flex-1 em mobile (ocupa todo o espaço), largura fixa em sm+ */}
+        <div className="flex gap-0.5 bg-[#f0f4f9] rounded-xl p-1 flex-1 sm:flex-none sm:w-[260px]">
           {FILTERS.map((f) => (
             <button
               key={f}

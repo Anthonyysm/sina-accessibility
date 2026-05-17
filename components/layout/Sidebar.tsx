@@ -13,6 +13,12 @@ import {
   MdEdit,
 } from "react-icons/md";
 
+const navItems = [
+  { icon: MdDashboard,     label: "Dashboard"      },
+  { icon: MdLibraryBooks,  label: "Publicações"     },
+  { icon: MdPersonOutline, label: "Visão do Aluno"  },
+];
+
 interface SidebarProps {
   activeNav: number;
   setActiveNav: (index: number) => void;
