@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,7 +23,6 @@ interface AuthDialogProps {
 }
 
 export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogProps) {
-  const router = useRouter();
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -77,9 +75,9 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       onOpenChange(false);
 
       if (result.role === "INTERPRETE") {
-        router.push("/Dashboard");
+        window.location.href = "/Dashboard";
       } else {
-        router.push("/StudentDashboard");
+        window.location.href = "/StudentDashboard";
       }
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao criar conta");
@@ -103,14 +101,14 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
         email: formData.email,
         password: formData.password
       });
-      
+
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
 
       if (result.role === "INTERPRETE") {
-        router.push("/Dashboard");
+        window.location.href = "/Dashboard";
       } else {
-        router.push("/StudentDashboard");
+        window.location.href = "/StudentDashboard";
       }
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao fazer login");
@@ -128,9 +126,9 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       onOpenChange(false);
 
       if (result.role === "INTERPRETE") {
-        router.push("/Dashboard");
+        window.location.href = "/Dashboard";
       } else {
-        router.push("/StudentDashboard");
+        window.location.href = "/StudentDashboard";
       }
     } catch (err: any) {
       setError(err.message || "Erro ao fazer login com Google");
