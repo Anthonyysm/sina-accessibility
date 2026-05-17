@@ -80,7 +80,7 @@ export const signUpWithEmail = async (data: SignUpData) => {
     const registerResult = await fetchJson("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, name, role }),
+      body: JSON.stringify({ email, name, role, password }),
     });
 
     const idToken = await user.getIdToken();
