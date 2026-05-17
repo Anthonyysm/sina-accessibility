@@ -35,14 +35,14 @@ export default function DashboardPage() {
           {activeNav === 0 && (
             <>
               {/* Welcome banner */}
-              <div className="bg-[#2b5784] relative rounded-2xl overflow-hidden p-3 md:p-5 flex items-end min-h-[180px] sm:min-h-[210px]">
+              <div className="bg-[#2b5784] relative rounded-2xl overflow-hidden p-5 flex items-end min-h-[180px] sm:min-h-[210px]">
                 <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-white/5 pointer-events-none" />
                 <div className="absolute top-4 right-24 w-32 h-32 rounded-full bg-white/5 pointer-events-none" />
                 <div className="relative z-10 w-full">
                   <h2 className="text-white font-extrabold text-base sm:text-lg tracking-tight mb-1">
                     Bem-vindo ao SINA
                   </h2>
-                  <p className="text-white/70 text-xs sm:text-sm leading-relaxed max-w-lg mb-1 md:mb-3 ">
+                  <p className="text-white/70 text-xs sm:text-sm leading-relaxed max-w-lg mb-3">
                     Gerencie conteúdos adaptados e prepare mediações pedagógicas com
                     apoio de IA — do PDF original ao material em Português L2,
                     pronto para o aluno surdo.
