@@ -19,6 +19,7 @@ model Usuario {
   senha        String   @db.VarChar(30)
   criado_em    DateTime @default(now()) @db.Timestamp(6)
   tipo_usuario String
+  ativado      Boolean  @default(true)
 
   atividades Atividade[]
   comentarios Estudante[]
