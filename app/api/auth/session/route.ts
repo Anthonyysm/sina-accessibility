@@ -13,10 +13,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const role = await authDbService.obterCargoPorEmail(email);
+    const usuarioDb = await authDbService.obterUsuarioPorEmail(email);
+    const role = usuarioDb?.tipo_usuario || "ESTUDANTE";
+    const userId = usuarioDb?.id_usuario ? String(usuarioDb.id_usuario) : undefined;
 
     const response = NextResponse.json({ ok: true, role }, { status: 200 });
-    setSessionCookie(response, idToken, role);
+    setSessionCookie(response, idToken, role, userId);
 
     return response;
   } catch (error) {
