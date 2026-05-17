@@ -11,7 +11,7 @@ const steps = [
     number: "1",
     title: "Crie sua conta",
     description:
-      "Escolha seu perfil professor, intérprete ou estudante e personalize seu espaço.",
+      "Escolha seu perfil de intérprete ou estudante e personalize seu espaço.",
   },
   {
     number: "2",

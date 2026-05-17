@@ -1,36 +1,55 @@
-import crypto from "crypto";
-
-// Chave secreta usada para assinar os cookies. Em produção, DEVE vir do .env
 const SECRET = process.env.SESSION_SECRET || "chave_super_secreta_fallback_dev_123!";
 
-/**
- * Assina um payload JSON retornando uma string no formato "base64url(payload).assinatura"
- */
-export async function signSessionToken(payload: any): Promise<string> {
-  const data = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  const signature = crypto.createHmac("sha256", SECRET).update(data).digest("base64url");
-  return `${data}.${signature}`;
+let _cachedKey: CryptoKey | null = null;
+
+async function getHmacKey(): Promise<CryptoKey> {
+  if (!_cachedKey) {
+    _cachedKey = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(SECRET),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign", "verify"]
+    );
+  }
+  return _cachedKey;
 }
 
-/**
- * Verifica a assinatura do token e retorna o payload se for válido
- */
-export async function verifySessionToken(token: string): Promise<any> {
+function toBase64Url(bytes: Uint8Array): string {
+  return btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+export interface SessionPayload {
+  userId?: string;
+  role: string;
+  idToken?: string;
+}
+
+export async function signSessionToken(payload: SessionPayload): Promise<string> {
+  const data = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const key = await getHmacKey();
+  const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(data));
+  return `${data}.${toBase64Url(new Uint8Array(signature))}`;
+}
+
+export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   if (!token) return null;
-  
+
   const parts = token.split(".");
   if (parts.length !== 2) return null;
-  
+
   const [data, signature] = parts;
-  const expectedSignature = crypto.createHmac("sha256", SECRET).update(data).digest("base64url");
-  
-  if (signature !== expectedSignature) {
-    return null; // Assinatura inválida
-  }
-  
+  const key = await getHmacKey();
+  const expected = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(data));
+
+  if (toBase64Url(new Uint8Array(expected)) !== signature) return null;
+
   try {
     return JSON.parse(Buffer.from(data, "base64url").toString("utf-8"));
-  } catch (err) {
+  } catch {
     return null;
   }
 }

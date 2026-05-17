@@ -1,72 +1,32 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { verifySessionToken } from "./jwt";
 
 export const SESSION_COOKIE = "sina_session";
 
-// Duração da sessão: 5 dias (em segundos)
+const COOKIE_OPTS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  path: "/",
+};
+
 const SESSION_MAX_AGE = 60 * 60 * 24 * 5;
 
-/**
- * Define um único cookie assinado contendo userId + role.
- * Limpa o cookie existente antes para evitar dados stale.
- */
 export function setSessionCookie(response: NextResponse, signedToken: string) {
-  const clearOpts = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
-    maxAge: 0,
-    path: "/",
-  };
-
-  response.cookies.set(SESSION_COOKIE, "", clearOpts);
-
-  const setOpts = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
-    maxAge: SESSION_MAX_AGE,
-    path: "/",
-  };
-
-  response.cookies.set(SESSION_COOKIE, signedToken, setOpts);
-
+  response.cookies.set(SESSION_COOKIE, "", { ...COOKIE_OPTS, maxAge: 0 });
+  response.cookies.set(SESSION_COOKIE, signedToken, { ...COOKIE_OPTS, maxAge: SESSION_MAX_AGE });
   return response;
 }
 
-/**
- * Remove o cookie de sessão (logout).
- */
 export function clearSessionCookie(response: NextResponse) {
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
-    maxAge: 0,
-    path: "/",
-  };
-
-  response.cookies.set(SESSION_COOKIE, "", options);
-
+  response.cookies.set(SESSION_COOKIE, "", { ...COOKIE_OPTS, maxAge: 0 });
   return response;
 }
 
-/**
- * Lê o cookie bruto (uso em Server Components).
- */
-export async function getSessionCookie(): Promise<string | undefined> {
-  const cookieStore = await cookies();
-  return cookieStore.get(SESSION_COOKIE)?.value;
-}
-
-import { verifySessionToken } from "./jwt";
-
-/**
- * Lê e verifica o token assinado.
- * Retorna { userId, role, idToken? } se válido, senão null.
- */
 export async function getSecureSession() {
-  const token = await getSessionCookie();
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
   if (!token) return null;
-  return await verifySessionToken(token);
+  return verifySessionToken(token);
 }
