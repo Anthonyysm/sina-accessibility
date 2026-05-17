@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +24,7 @@ interface AuthDialogProps {
 }
 
 export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogProps) {
+  const router = useRouter();
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -73,7 +75,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-      redirectByRole(result.role);
+      redirectByRole(result.role, router);
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao criar conta");
     } finally {
@@ -99,7 +101,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-      redirectByRole(result.role);
+      redirectByRole(result.role, router);
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao fazer login");
     } finally {
@@ -114,7 +116,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       const result = await signInWithGoogle(role);
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-      redirectByRole(result.role);
+      redirectByRole(result.role, router);
     } catch (err: any) {
       setError(authErrorMessage(err));
     } finally {
