@@ -116,38 +116,34 @@ export default function BeforeAfterSection() {
         <div className="how-header mb-16 text-center">
           <h2 className="mb-4 text-3xl leading-tight font-extrabold tracking-tight text-[#1a3a5c] md:text-4xl lg:text-[42px]">
             Uma entrada,{" "}
-            <span className="text-[#2563a8]">múltiplas formas</span> de chegar a
-            todos
+            <span className="text-[#2563a8]">múltiplas formas</span>
           </h2>
           <p className="text-lg leading-relaxed text-[#4a6a8a]">
-            O professor fala ou digita normalmente. A Sina traduz para todos ao
-            mesmo tempo.
+            O professor digita. O Sina traduz.
           </p>
         </div>
 
         {/* Imagem → Seta → Imagem */}
         <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-8">
-          <div className="baf-item flex flex-1 justify-center">
+          <div className="baf-item flex flex-2 justify-center bg-transparent">
             <Image
               src="/BeforePrompt.png"
               alt="Antes"
-              width={0}
-              height={0}
-              sizes="(max-width: 768px) 90vw, 45vw"
-              className="h-auto w-full max-w-sm md:max-w-none"
+              width={1000}
+              height={1000}
+              className="h-auto w-full max-w-sm md:max-w-none rounded-lg object-cover md:-rotate-4"
             />
           </div>
 
           <Arrow />
 
-          <div className="baf-item flex flex-1 justify-center">
+          <div className="baf-item flex flex-3 justify-center ">
             <Image
               src="/AfterPrompt.png"
               alt="Depois"
-              width={0}
-              height={0}
-              sizes="(max-width: 768px) 90vw, 65vw"
-              className="h-auto w-full max-w-sm md:max-w-none"
+              width={1000}
+              height={1000}
+              className="h-auto w-full max-w-sm md:max-w-none object-cover"
             />
           </div>
         </div>
