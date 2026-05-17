@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +23,7 @@ interface AuthDialogProps {
 }
 
 export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogProps) {
+  const router = useRouter();
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -63,7 +65,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
     try {
       setLoading(true);
-      await signUpWithEmail({
+      const result = await signUpWithEmail({
         name: formData.name,
         email: formData.email,
         password: formData.password,
@@ -72,6 +74,12 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
+
+      if (result.role === "INTERPRETE") {
+        router.push("/Dashboard");
+      } else {
+        router.push("/StudentDashboard");
+      }
     } catch (err: any) {
       setError(err.code === "auth/email-already-in-use" 
         ? "Email já cadastrado" 
@@ -92,13 +100,19 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
     try {
       setLoading(true);
-      await signInWithEmail({
+      const result = await signInWithEmail({
         email: formData.email,
         password: formData.password
       });
       
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
+
+      if (result.role === "INTERPRETE") {
+        router.push("/Dashboard");
+      } else {
+        router.push("/StudentDashboard");
+      }
     } catch (err: any) {
       setError(err.code === "auth/invalid-credential"
         ? "Email ou senha incorretos"
@@ -112,9 +126,15 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
     try {
       setLoading(true);
       setError("");
-      await signInWithGoogle();
+      const result = await signInWithGoogle(role);
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
+
+      if (result.role === "INTERPRETE") {
+        router.push("/Dashboard");
+      } else {
+        router.push("/StudentDashboard");
+      }
     } catch (err: any) {
       setError(err.message || "Erro ao fazer login com Google");
     } finally {
