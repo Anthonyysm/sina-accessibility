@@ -156,8 +156,8 @@ export default function TableContent() {
   }, []);
 
   return (
-    <Card className="rounded-2xl border-0 shadow-none bg-white">
-      <CardHeader className="px-6 flex flex-row items-start justify-between space-y-0 border-b border-[#f0f4f9]">
+    <Card className="rounded-2xl border-0 shadow-none bg-white overflow-hidden">
+      <CardHeader className="px-4 md:px-6 flex flex-row items-start justify-between space-y-0 border-b border-[#f0f4f9]">
         <div>
           <CardTitle className="text-base font-bold text-[#1e3a5f]">
             Materiais recentes
@@ -178,7 +178,7 @@ export default function TableContent() {
         <Table>
           <TableHeader>
             <TableRow className="border-b border-[#f0f4f9] hover:bg-transparent">
-              <TableHead className="px-6 py-3 text-[10px] font-bold tracking-widest uppercase text-[#9aadca] w-[38%]">
+              <TableHead className="px-4 md:px-6 py-3 text-[10px] font-bold tracking-widest uppercase text-[#9aadca] w-[38%] min-w-[200px]">
                 Título
               </TableHead>
               <TableHead className="py-3 text-[10px] font-bold tracking-widest uppercase text-[#9aadca]">
@@ -190,7 +190,7 @@ export default function TableContent() {
               <TableHead className="py-3 text-[10px] font-bold tracking-widest uppercase text-[#9aadca]">
                 Responsável
               </TableHead>
-              <TableHead className="py-3 pr-6 text-right text-[10px] font-bold tracking-widest uppercase text-[#9aadca]">
+              <TableHead className="py-3 pr-4 md:pr-6 text-right text-[10px] font-bold tracking-widest uppercase text-[#9aadca]">
                 Ações
               </TableHead>
             </TableRow>
@@ -220,7 +220,7 @@ export default function TableContent() {
                     key={m.id_atividade}
                     className="border-b border-[#f0f4f9] last:border-0 hover:bg-[#f8fafd] transition-colors"
                   >
-                    <TableCell className="px-6 py-4 text-sm text-[#1e3a5f] font-medium leading-snug">
+                    <TableCell className="px-4 md:px-6 py-4 text-sm text-[#1e3a5f] font-medium leading-snug">
                       {m.titulo}
                     </TableCell>
                     <TableCell className="py-4">
@@ -245,7 +245,7 @@ export default function TableContent() {
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="py-4 pr-6">
+                    <TableCell className="py-4 pr-4 md:pr-6">
                       <div className="flex items-center gap-2 justify-end">
                         <Button
                           variant="outline"

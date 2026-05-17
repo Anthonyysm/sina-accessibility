@@ -15,17 +15,23 @@ const USUARIO_ID_PLACEHOLDER = 1;
 export default function DashboardPage() {
   const [activeNav, setActiveNav] = useState(0);
   const [modalAberto, setModalAberto] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const titulos = ["Dashboard", "Revisão (IA)", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
 
   return (
     <div className="flex h-screen bg-[#f0f4f9] overflow-hidden montserrat">
-      <Sidebar activeNav={activeNav} setActiveNav={setActiveNav} />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <Sidebar 
+        activeNav={activeNav} 
+        setActiveNav={setActiveNav} 
+        mobileMenuOpen={mobileMenuOpen} 
+        setMobileMenuOpen={setMobileMenuOpen} 
+      />
+      <div className="flex-1 flex flex-col overflow-hidden w-full relative">
         {/* Topbar */}
-        <Topbar tituloPag={tituloPag} />
-        <main className="flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
+        <Topbar tituloPag={tituloPag} onMenuClick={() => setMobileMenuOpen(true)} />
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7 flex flex-col gap-6">
           {activeNav === 0 && (
             <>
               {/* Welcome banner */}
@@ -45,12 +51,12 @@ export default function DashboardPage() {
                     pronto para o aluno surdo.
                   </p>
 
-                  <div className="flex gap-3 flex-wrap">
+                  <div className="flex gap-3 flex-wrap mt-4 md:mt-0">
                     <Button
                       onClick={() => setModalAberto(true)}
-                      className="bg-white text-[#1e3a5f] hover:bg-white/90 rounded-full font-bold px-5 gap-1.5"
+                      className="bg-white w-full sm:w-auto text-[#1e3a5f] hover:bg-white/90 rounded-full font-bold px-5 gap-1.5"
                     >
-                      <MdAdd className="text-base" />
+                      <MdAdd className="text-lg" />
                       Novo Material
                     </Button>
                   </div>

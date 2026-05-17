@@ -13,16 +13,28 @@ import {
 interface SidebarProps {
   activeNav: number;
   setActiveNav: (index: number) => void;
+  mobileMenuOpen?: boolean;
+  setMobileMenuOpen?: (open: boolean) => void;
 }
 
-export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
+export default function Sidebar({ activeNav, setActiveNav, mobileMenuOpen, setMobileMenuOpen }: SidebarProps) {
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
     { icon: MdLibraryBooks, label: "Publicações" },
     { icon: MdPersonOutline, label: "Visão do Aluno" },
   ];
   return (
-    <aside className="w-[300px] shrink-0 bg-[#1e3a5f] flex flex-col text-white">
+    <>
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity" 
+          onClick={() => setMobileMenuOpen?.(false)} 
+        />
+      )}
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 w-[280px] md:w-[300px] shrink-0 bg-[#1e3a5f] flex flex-col text-white transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
       {/* Logo */}
       <div className="px-6 pt-7 pb-5 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
@@ -43,7 +55,10 @@ export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
             <Button
               key={item.label}
               variant="ghost"
-              onClick={() => setActiveNav(i)}
+              onClick={() => {
+                setActiveNav(i);
+                setMobileMenuOpen?.(false);
+              }}
               className={`w-full justify-start gap-3 px-4 py-2.5 h-auto rounded-xl text-sm font-medium transition-all ${isActive
                 ? "bg-white/15 text-white hover:bg-white/20"
                 : "text-white/55 hover:bg-white/[0.08] hover:text-white/85"
@@ -72,5 +87,6 @@ export default function Sidebar({ activeNav, setActiveNav }: SidebarProps) {
         </div>
       </div>
     </aside>
+    </>
   )
 }
