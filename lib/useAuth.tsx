@@ -20,15 +20,17 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 
-/** Envia o idToken para a API Route que cria o cookie httpOnly de sessão. */
-async function createSession(user: User): Promise<void> {
+/** Envia o idToken para a API Route que cria o cookie de sessão e retorna o cargo. */
+async function createSession(user: User): Promise<string> {
   const idToken = await user.getIdToken();
   const res = await fetch("/api/auth/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ idToken }),
+    body: JSON.stringify({ idToken, email: user.email }),
   });
   if (!res.ok) throw new Error("Falha ao criar sessão.");
+  const data = await res.json();
+  return data.role;
 }
 
 /** Remove o cookie de sessão via API Route. */
@@ -43,8 +45,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   // Sincroniza estado Firebase → cookie a cada carregamento da aplicação.
-  // Se o Firebase já tem sessão ativa (ex: token persistido no IndexedDB),
-  // recria o cookie para garantir que o middleware vai reconhecê-la.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
@@ -61,16 +61,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // ── Login com Google ──────────────────────────────────────────────────────
   async function loginWithGoogle(): Promise<void> {
-    const user = await signInWithGoogle();
-    await createSession(user);
-    router.push("/Dashboard");
+    const result = await signInWithGoogle();
+    // result agora é { user, role }, passamos result.user para o createSession
+    const role = await createSession(result.user);
+    
+    if (role === "INTERPRETE") {
+      router.push("/Dashboard");
+    } else {
+      router.push("/StudentDashboard");
+    }
   }
 
   // ── Login com e-mail/senha ────────────────────────────────────────────────
   async function loginWithEmail(email: string, password: string): Promise<void> {
     const credential = await signInWithEmailAndPassword(auth, email, password);
-    await createSession(credential.user);
-    router.push("/Dashboard");
+    const role = await createSession(credential.user);
+
+    if (role === "INTERPRETE") {
+      router.push("/Dashboard");
+    } else {
+      router.push("/StudentDashboard");
+    }
   }
 
   // ── Logout ────────────────────────────────────────────────────────────────

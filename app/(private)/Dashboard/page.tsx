@@ -7,9 +7,14 @@ import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
 import TableContent from "@/components/layout/TableContent";
 import TranslatorContainer from "@/components/Translator/Translator";
+import { NovaAtividadeModal } from "@/components/atividades/NovaAtividadeModal";
+
+// TODO: substituir pelo id real do usuário autenticado (via useAuth/session)
+const USUARIO_ID_PLACEHOLDER = 1;
 
 export default function DashboardPage() {
   const [activeNav, setActiveNav] = useState(0);
+  const [modalAberto, setModalAberto] = useState(false);
 
   const titulos = ["Dashboard", "Revisão (IA)", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
@@ -41,8 +46,8 @@ export default function DashboardPage() {
                   </p>
 
                   <div className="flex gap-3 flex-wrap">
-                    <Button 
-                      onClick={() => setActiveNav(2)}
+                    <Button
+                      onClick={() => setModalAberto(true)}
                       className="bg-white text-[#1e3a5f] hover:bg-white/90 rounded-full font-bold px-5 gap-1.5"
                     >
                       <MdAdd className="text-base" />
@@ -67,6 +72,17 @@ export default function DashboardPage() {
           )}
         </main>
       </div>
+
+      {/* Modal de nova atividade */}
+      <NovaAtividadeModal
+        open={modalAberto}
+        onOpenChange={setModalAberto}
+        criadoPor={USUARIO_ID_PLACEHOLDER}
+        onSuccess={() => {
+          // Aqui pode-se disparar um refresh na TableContent no futuro
+          console.log("Atividade criada com sucesso!");
+        }}
+      />
     </div>
   );
 }

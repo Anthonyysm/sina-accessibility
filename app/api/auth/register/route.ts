@@ -5,14 +5,14 @@ export async function POST(request: NextRequest) {
   try {
     const { email, name, role } = await request.json();
 
-    if (!email || typeof email !== "string") {
+    if (!email || !role) {
       return NextResponse.json(
-        { error: "Email inválido ou ausente." },
+        { error: "Email e cargo são obrigatórios." },
         { status: 400 }
       );
     }
 
-    const usuario = await authDbService.registrarOuLogarGoogle(email, name, role);
+    const usuario = await authDbService.registrarUsuario(email, name, role);
 
     return NextResponse.json(
       {
@@ -20,16 +20,15 @@ export async function POST(request: NextRequest) {
         user: {
           id: usuario.id_usuario,
           email: usuario.email,
-          nome: usuario.nome,
           role: usuario.tipo_usuario,
         },
       },
-      { status: 200 }
+      { status: 201 }
     );
   } catch (error) {
-    console.error("[POST /api/auth/google-signin]", error);
+    console.error("[POST /api/auth/register]", error);
     return NextResponse.json(
-      { error: "Erro interno ao salvar usuário Google." },
+      { error: "Erro interno ao registrar usuário." },
       { status: 500 }
     );
   }

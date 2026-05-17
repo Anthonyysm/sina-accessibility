@@ -16,7 +16,7 @@ const googleProvider = new GoogleAuthProvider();
 
 export type UserRole = "interprete" | "estudante";
 
-async function saveGoogleUserToDb(user: any) {
+async function saveGoogleUserToDb(user: any, role?: UserRole) {
   const email = user?.email;
   const name = user?.displayName ?? "";
 
@@ -27,7 +27,7 @@ async function saveGoogleUserToDb(user: any) {
   const response = await fetch("/api/auth/google-signin", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, name }),
+    body: JSON.stringify({ email, name, role }),
   });
 
   if (!response.ok) {
@@ -36,6 +36,8 @@ async function saveGoogleUserToDb(user: any) {
       payload?.error ?? "Falha ao salvar usuário Google no banco de dados."
     );
   }
+
+  return response.json();
 }
 
 export interface SignUpData {
@@ -64,7 +66,7 @@ export const signUpWithEmail = async (data: SignUpData) => {
 
     validatePassword(password);
 
-    // Criar usuário com email e senha
+    // Criar usuário com email e senha no Firebase
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const { user } = userCredential;
 
@@ -73,11 +75,23 @@ export const signUpWithEmail = async (data: SignUpData) => {
       displayName: name
     });
 
-    // Aqui você pode salvar dados adicionais no Firestore
-    // Por enquanto, o role pode ser armazenado em custom claims ou em um banco separado
-    console.log(`Usuário ${role} criado:`, user.uid);
+    // Salvar no banco de dados
+    await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, name, role }),
+    });
 
-    return { user, role };
+    // Criar sessão
+    const idToken = await user.getIdToken();
+    const sessionRes = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken, email }),
+    });
+    const sessionData = await sessionRes.json();
+
+    return { user, role: sessionData.role };
   } catch (error: any) {
     console.error("Erro ao criar conta:", error);
     throw error;
@@ -90,7 +104,18 @@ export const signInWithEmail = async (data: SignInData) => {
   try {
     const { email, password } = data;
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
+    const { user } = userCredential;
+
+    // Criar sessão e obter cargo
+    const idToken = await user.getIdToken();
+    const sessionRes = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken, email }),
+    });
+    const sessionData = await sessionRes.json();
+
+    return { user, role: sessionData.role };
   } catch (error: any) {
     console.error("Erro ao fazer login:", error);
     throw error;
@@ -99,14 +124,23 @@ export const signInWithEmail = async (data: SignInData) => {
 
 // ============= GOOGLE SIGN IN =============
 
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (role?: UserRole) => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const { user } = result;
 
-    await saveGoogleUserToDb(user);
+    await saveGoogleUserToDb(user, role);
 
-    return user;
+    // Criar sessão e obter cargo
+    const idToken = await user.getIdToken();
+    const sessionRes = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken, email: user.email }),
+    });
+    const sessionData = await sessionRes.json();
+
+    return { user, role: sessionData.role };
   } catch (error: any) {
     console.error("Erro ao fazer login com Google:", error);
     throw error;
