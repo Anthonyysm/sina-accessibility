@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { signUpWithEmail, signInWithEmail, signInWithGoogle } from "@/service/auth";
-import { authErrorMessage } from "@/lib/useAuth";
+import { authErrorMessage, redirectByRole } from "@/lib/useAuth";
 
 type UserRole = "interprete" | "estudante";
 type AuthMode = "signup" | "signin";
@@ -73,12 +73,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-
-      if (result.role === "INTERPRETE") {
-        window.location.href = "/Dashboard";
-      } else {
-        window.location.href = "/StudentDashboard";
-      }
+      redirectByRole(result.role);
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao criar conta");
     } finally {
@@ -104,12 +99,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-
-      if (result.role === "INTERPRETE") {
-        window.location.href = "/Dashboard";
-      } else {
-        window.location.href = "/StudentDashboard";
-      }
+      redirectByRole(result.role);
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao fazer login");
     } finally {
@@ -124,14 +114,9 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       const result = await signInWithGoogle(role);
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-
-      if (result.role === "INTERPRETE") {
-        window.location.href = "/Dashboard";
-      } else {
-        window.location.href = "/StudentDashboard";
-      }
+      redirectByRole(result.role);
     } catch (err: any) {
-      setError(err.message || "Erro ao fazer login com Google");
+      setError(authErrorMessage(err));
     } finally {
       setLoading(false);
     }

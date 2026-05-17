@@ -28,6 +28,10 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+export function redirectByRole(role: string) {
+  window.location.href = role === "INTERPRETE" ? "/Dashboard" : "/StudentDashboard";
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -56,22 +60,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function loginWithGoogle(): Promise<void> {
     const result = await signInWithGoogle();
-
-    if (result.role === "INTERPRETE") {
-      window.location.href = "/Dashboard";
-    } else {
-      window.location.href = "/StudentDashboard";
-    }
+    redirectByRole(result.role);
   }
 
   async function loginWithEmail(email: string, password: string): Promise<void> {
     const result = await signInWithEmail({ email, password });
-
-    if (result.role === "INTERPRETE") {
-      window.location.href = "/Dashboard";
-    } else {
-      window.location.href = "/StudentDashboard";
-    }
+    redirectByRole(result.role);
   }
 
   async function registerWithEmail(
@@ -86,12 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       name: name || email.split("@")[0],
       role: role as "interprete" | "estudante",
     });
-
-    if (result.role === "INTERPRETE") {
-      window.location.href = "/Dashboard";
-    } else {
-      window.location.href = "/StudentDashboard";
-    }
+    redirectByRole(result.role);
   }
 
   async function logout(): Promise<void> {
