@@ -2,6 +2,7 @@ import "@/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/lib/useAuth";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -24,6 +25,13 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             {children}
+            <Toaster
+              position="top-right"
+              richColors
+              closeButton
+              expand
+              duration={4000}
+            />
           </AuthProvider>
         </ThemeProvider>
       </body>
