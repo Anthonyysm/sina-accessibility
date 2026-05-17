@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { atividadeDbService } from "@/service/server/atividades";
-import { SESSION_COOKIE, USERID_COOKIE } from "@/lib/session";
+import { getSecureSession } from "@/lib/session";
 
 const atualizarAtividadeSchema = z.object({
   titulo: z.string().min(3).max(200).optional(),
@@ -16,10 +16,11 @@ type Params = { params: Promise<{ id: string }> };
 // GET /api/atividades/:id
 export async function GET(_: Request, { params }: Params) {
   try {
-    const cookieStore = await cookies();
-    if (!cookieStore.get(SESSION_COOKIE)?.value) {
+    const session = await getSecureSession();
+    if (!session || !session.userId) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
+    const { userId, role } = session;
 
     const { id } = await params;
     const numId = Number(id);
@@ -27,6 +28,10 @@ export async function GET(_: Request, { params }: Params) {
 
     if (!atividade) {
       return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
+    }
+
+    if (atividade.criado_por !== parseInt(String(userId), 10) && role !== "ADMIN") {
+      return NextResponse.json({ error: "Acesso Negado (Ownership)" }, { status: 403 });
     }
 
     return NextResponse.json(atividade);
@@ -42,13 +47,14 @@ export async function GET(_: Request, { params }: Params) {
 // PUT /api/atividades/:id
 export async function PUT(req: Request, { params }: Params) {
   try {
-    const cookieStore = await cookies();
-    const session = cookieStore.get(SESSION_COOKIE)?.value;
-    const userId = cookieStore.get(USERID_COOKIE)?.value;
+    const sessionData = await getSecureSession();
 
-    if (!session || !userId) {
+    if (!sessionData || !sessionData.userId) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
+    
+    const userId = sessionData.userId;
+    const role = sessionData.role;
 
     const { id } = await params;
     const numId = Number(id);
@@ -58,7 +64,7 @@ export async function PUT(req: Request, { params }: Params) {
     if (!atividade) {
       return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
     }
-    if (atividade.criado_por !== parseInt(userId, 10)) {
+    if (atividade.criado_por !== parseInt(String(userId), 10) && role !== "ADMIN") {
       return NextResponse.json({ error: "Acesso Negado (Ownership)" }, { status: 403 });
     }
 
@@ -87,13 +93,14 @@ export async function PUT(req: Request, { params }: Params) {
 // DELETE /api/atividades/:id
 export async function DELETE(_: Request, { params }: Params) {
   try {
-    const cookieStore = await cookies();
-    const session = cookieStore.get(SESSION_COOKIE)?.value;
-    const userId = cookieStore.get(USERID_COOKIE)?.value;
+    const sessionData = await getSecureSession();
 
-    if (!session || !userId) {
+    if (!sessionData || !sessionData.userId) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
+    
+    const userId = sessionData.userId;
+    const role = sessionData.role;
 
     const { id } = await params;
     const numId = Number(id);
@@ -103,7 +110,7 @@ export async function DELETE(_: Request, { params }: Params) {
     if (!atividade) {
       return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
     }
-    if (atividade.criado_por !== parseInt(userId, 10)) {
+    if (atividade.criado_por !== parseInt(String(userId), 10) && role !== "ADMIN") {
       return NextResponse.json({ error: "Acesso Negado (Ownership)" }, { status: 403 });
     }
 

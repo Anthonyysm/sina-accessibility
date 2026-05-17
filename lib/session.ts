@@ -70,3 +70,15 @@ export async function getSessionToken(): Promise<string | undefined> {
   const cookieStore = await cookies();
   return cookieStore.get(SESSION_COOKIE)?.value;
 }
+
+import { verifySessionToken } from "./jwt";
+
+/**
+ * Lê e verifica o token de sessão seguro.
+ * Retorna o payload contendo { userId, role, idToken } se válido, senão null.
+ */
+export async function getSecureSession() {
+  const token = await getSessionToken();
+  if (!token) return null;
+  return await verifySessionToken(token);
+}
