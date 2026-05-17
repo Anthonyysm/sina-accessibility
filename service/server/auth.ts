@@ -52,4 +52,11 @@ export const authDbService = {
     }
     return "ESTUDANTE"; // Padrão
   },
+
+  async obterUsuarioPorEmail(email?: string) {
+    if (!email) return null;
+    return prisma.usuario.findUnique({
+      where: { email },
+    });
+  },
 };

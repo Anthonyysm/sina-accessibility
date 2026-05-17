@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 export const SESSION_COOKIE = "sina_session";
 export const ROLE_COOKIE = "sina_role";
+export const USERID_COOKIE = "sina_userid";
 
 // Duração da sessão: 5 dias (em segundos)
 const SESSION_MAX_AGE = 60 * 60 * 24 * 5;
@@ -11,9 +12,9 @@ const SESSION_MAX_AGE = 60 * 60 * 24 * 5;
  * Salva o token de sessão Firebase em um cookie httpOnly seguro.
  * Chame isso após o login bem-sucedido na API Route.
  */
-export function setSessionCookie(response: NextResponse, token: string, role?: string) {
+export function setSessionCookie(response: NextResponse, token: string, role?: string, userId?: string) {
   response.cookies.set(SESSION_COOKIE, token, {
-    httpOnly: true,          // não acessível via JS no cliente
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: SESSION_MAX_AGE,
@@ -22,6 +23,16 @@ export function setSessionCookie(response: NextResponse, token: string, role?: s
 
   if (role) {
     response.cookies.set(ROLE_COOKIE, role, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: SESSION_MAX_AGE,
+      path: "/",
+    });
+  }
+
+  if (userId) {
+    response.cookies.set(USERID_COOKIE, userId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -47,6 +58,7 @@ export function clearSessionCookie(response: NextResponse) {
   
   response.cookies.set(SESSION_COOKIE, "", options);
   response.cookies.set(ROLE_COOKIE, "", options);
+  response.cookies.set(USERID_COOKIE, "", options);
   
   return response;
 }

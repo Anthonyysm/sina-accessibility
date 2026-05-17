@@ -25,8 +25,9 @@ O SINA resolve esse problema oferecendo uma plataforma que:
 | Next.js | 16.1.7 | Frontend e backend fullstack (App Router) |
 | React | 19.2.4 | Interface de usuário |
 | TypeScript | 5.9.3 | Tipagem estática |
-| Firebase (Firestore) | 12.13.0 (SDK) | Banco de dados NoSQL em tempo real |
-| Firebase Auth | 12.13.0 (SDK) | Autenticação de usuários |
+| PostgreSQL | 16+ | Banco de dados relacional principal |
+| Prisma ORM | 6.4.1 | Modelagem, migrações e consultas ao banco |
+| Firebase Auth | 12.13.0 (SDK) | Autenticação de usuários via Google e Email/Senha |
 | Firebase Storage | 12.13.0 (SDK) | Upload e armazenamento de arquivos |
 | Gemini API (Google AI) | gemini-1.5-flash | Simplificação textual e extração de palavras-chave |
 | VLibras | Widget v2 | Tradução automática de texto para Libras |
@@ -81,20 +82,23 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 GEMINI_API_KEY=
 ```
 
-### 4. Configure o Firebase
+### 4. Configure o Banco de Dados e Firebase
 
-No console do Firebase, ative:
-- **Authentication** → método E-mail/senha e google
-- **Firestore Database** → modo produção
-- **Storage** → modo produção
+Crie as variáveis de ambiente do PostgreSQL e do Prisma no `.env`:
 
-Publique as regras de segurança do Firestore:
+```env
+DATABASE_URL="postgresql://user:password@host:port/database"
+```
+
+Execute as migrações do Prisma para criar as tabelas:
 
 ```bash
-npm install -g firebase-tools
-firebase login
-firebase deploy --only firestore:rules
+npx prisma migrate dev
 ```
+
+No console do Firebase, ative:
+- **Authentication** → método E-mail/senha e Google
+- **Storage** → modo produção
 
 ### 5. Execute em desenvolvimento
 
@@ -115,28 +119,24 @@ npm start
 
 ## Diagrama do modelo lógico do banco de dados
 
-> Banco de dados: **Firebase Firestore (NoSQL orientado a documentos)**
+> Banco de dados: **PostgreSQL (Relacional) com Prisma ORM**
 
-O Firestore não usa tabelas relacionais. A estrutura é organizada em **coleções** (equivalente a tabelas) contendo **documentos** (equivalente a registros). Não existem JOINs — dados lidos juntos são mantidos no mesmo documento (denormalização controlada), e relacionamentos são representados por arrays de IDs ou campos de referência.
+A estrutura do banco de dados foi migrada para um modelo relacional robusto no PostgreSQL para garantir integridade referencial, consultas complexas eficientes e uma melhor separação entre a persistência dos dados e a autenticação do Firebase.
 
-![Diagrama NoSQL — SINA](./diagrama-sina.png)
+### Tabelas Principais
 
-### Coleções
-
-| Coleção | Descrição |
-|---|---|
-| `usuarios` | Professores, intérpretes e alunos. O campo `role` define o perfil e as permissões de acesso |
-| `escola` | Instituição de ensino à qual usuários e turmas pertencem |
-| `classes` | Turmas com arrays de IDs para professores, intérpretes e estudantes |
-| `conteudo` | Material didático com texto original, versão simplificada, resumo e palavras-chave gerados pela IA |
-| `content_files` | Arquivos anexados a um conteúdo (PDFs, imagens etc.), armazenados no Firebase Storage |
-| `interprete_notas` | Anotações privadas do intérprete vinculadas a um conteúdo específico |
+| Tabela | Descrição | Relacionamentos |
+|---|---|---|
+| `usuarios` | Armazena dados de Professores, Intérpretes e Estudantes. O campo `tipo_usuario` define o perfil e permissões. | 1:N com `atividades` e `estudante_comentario`. N:M com `usuarios` (vínculos entre Professor e Estudante). |
+| `atividades` | Representa os materiais didáticos. Contém o texto original e a versão simplificada (adaptada). | Pertence a um `usuario` (criador). 1:N com `estudante_comentario`. |
+| `estudante_comentario` | Comentários e interações feitas em uma atividade. | Pertence a uma `atividade` e a um `usuario`. |
+| `professor_estudante` | Tabela pivô que resolve a relação N:M entre professores/intérpretes e estudantes. | Conecta dois IDs de `usuarios`. |
 
 ### Decisões de modelagem
 
 | Decisão | Justificativa |
 |---|---|
-| `versaoSimplificada[]` como array em `conteudo` | Sempre lido junto com o documento principal; embutir evita leituras extras e mantém o histórico das últimas 3 versões geradas pela IA |
-| `interprete_notas` como coleção separada | Regras de segurança distintas — alunos não devem ter acesso; separar permite Firestore Rules granulares por perfil |
-| `professorId[]`, `interpreterId[]` e `estudanteId[]` em `classes` | Uma turma pode ter múltiplos professores ao longo do dia; arrays permitem query `array-contains` sem coleções intermediárias |
-| `resumo` e `palavrasChave[]` embutidos em `conteudo` | Gerados junto com a simplificação numa única chamada à Gemini API; lidos sempre no mesmo contexto, não justificam documento separado |
+| Adoção do **PostgreSQL + Prisma** | Um banco relacional oferece integridade de dados (foreign keys) forte, facilitando a vinculação estruturada de estudantes a professores e a cascata em exclusões (`onDelete: Cascade`). |
+| Separação do **Auth** (Firebase) do **Banco** (PostgreSQL) | Utilizar o Firebase apenas para a camada de autenticação (ID Tokens) delegou a segurança de login para a Google, enquanto as regras de negócio e os dados estruturados permanecem protegidos sob o backend (Next.js API Routes). O vínculo entre os sistemas ocorre através do campo `email`. |
+| Tabela Pivô `professor_estudante` | Em um contexto de inclusão, um professor de apoio (Intérprete) precisa acompanhar vários alunos, e um aluno pode ter múltiplos professores durante o dia. Esta tabela resolve as conexões M:N mantendo histórico (`vinculado_em`). |
+| Centralização de Serviços de Backend | Toda a lógica de banco (`prisma`) e regras de negócio foi movida para diretórios `service/server/`, transformando as rotas da API em controladores finos, aprimorando a manutenção e a escalabilidade arquitetural. |
