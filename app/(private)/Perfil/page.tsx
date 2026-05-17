@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
+import { useAuth } from "@/lib/useAuth";
 import {
   MdPerson, MdEmail, MdLock,
   MdSchool, MdGroups, MdCameraAlt,
@@ -25,16 +26,21 @@ import {
 type ProfileType = "interprete" | "professor" | "estudante" | "coordenador";
 type FeedbackState = "idle" | "success" | "error";
 
-// ─── Mock — substitua por useAuth() + Firestore ───────────────────────────────
-const mockUser = {
-  name:        "Marina Rocha",
-  email:       "marina@sina.edu.br",
-  profileType: "interprete" as ProfileType,
-  avatarColor: "#3b5fa0",
-  avatarUrl:   null as string | null,
-  subjects:    ["Libras", "Português"] as string[],
-  classes:     ["7º A", "8º B"]        as string[],
+const DB_TO_PROFILE: Record<string, ProfileType> = {
+  INTERPRETE: "interprete",
+  PROFESSOR: "professor",
+  ESTUDANTE: "estudante",
+  COORDENADOR: "coordenador",
 };
+
+const PROFILE_TO_DB: Record<ProfileType, string> = {
+  interprete: "INTERPRETE",
+  professor: "PROFESSOR",
+  estudante: "ESTUDANTE",
+  coordenador: "COORDENADOR",
+};
+
+const AVATAR_COLORS = ["#3b5fa0", "#5db5d8", "#6b8e6b", "#c47a4a", "#8b6baa"];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getInitials(n: string) {
@@ -129,16 +135,17 @@ function TagInput({ label, icon: Icon, tags, onChange, placeholder }: {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function PerfilPage() {
+  const { loading, user, updateUser } = useAuth();
   const [activeNav,      setActiveNav]      = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [name,            setName]            = useState(mockUser.name);
-  const [email,           setEmail]           = useState(mockUser.email);
-  const [profileType,     setProfileType]     = useState<ProfileType>(mockUser.profileType);
-  const [subjects,        setSubjects]        = useState<string[]>(mockUser.subjects);
-  const [classes,         setClasses]         = useState<string[]>(mockUser.classes);
-  const [avatarUrl,       setAvatarUrl]       = useState<string | null>(mockUser.avatarUrl);
+  const [name,            setName]            = useState("");
+  const [email,           setEmail]           = useState("");
+  const [profileType,     setProfileType]     = useState<ProfileType>("interprete");
+  const [subjects,        setSubjects]        = useState<string[]>([]);
+  const [classes,         setClasses]         = useState<string[]>([]);
+  const [avatarUrl,       setAvatarUrl]       = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword,     setNewPassword]     = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -147,6 +154,18 @@ export default function PerfilPage() {
   const [teachingFeedback, setTeachingFeedback] = useState<FeedbackState>("idle");
   const [passwordFeedback, setPasswordFeedback] = useState<FeedbackState>("idle");
   const [passwordMsg,      setPasswordMsg]      = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setName(user.nome);
+      setEmail(user.email);
+      setProfileType(DB_TO_PROFILE[user.tipo_usuario] ?? "estudante");
+    }
+  }, [user]);
+
+  const avatarColor = user
+    ? AVATAR_COLORS[user.id_usuario % AVATAR_COLORS.length]
+    : "#3b5fa0";
 
   function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -157,9 +176,14 @@ export default function PerfilPage() {
   }
 
   async function handleSaveProfile() {
-    // TODO: await updateDoc(doc(db, "users", uid), { name, email, profileType, avatarUrl })
-    setProfileFeedback("success");
-    setTimeout(() => setProfileFeedback("idle"), 3000);
+    try {
+      await updateUser({ nome: name, email, tipo_usuario: PROFILE_TO_DB[profileType] });
+      setProfileFeedback("success");
+      setTimeout(() => setProfileFeedback("idle"), 3000);
+    } catch {
+      setProfileFeedback("error");
+      setTimeout(() => setProfileFeedback("idle"), 3000);
+    }
   }
 
   async function handleSaveTeaching() {
@@ -188,6 +212,14 @@ export default function PerfilPage() {
     setTimeout(() => setPasswordFeedback("idle"), 3000);
   }
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#f0f4f9]">
+        <p className="text-sm text-[#9aadca]">Carregando perfil...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen bg-[#f0f4f9] overflow-hidden montserrat">
       <Sidebar
@@ -208,7 +240,7 @@ export default function PerfilPage() {
               <div className="relative">
                 <div
                   className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-2xl font-bold text-white select-none"
-                  style={{ backgroundColor: mockUser.avatarColor }}
+                  style={{ backgroundColor: avatarColor }}
                 >
                   {avatarUrl
                     ? <img src={avatarUrl} alt="foto" className="w-full h-full object-cover" />
