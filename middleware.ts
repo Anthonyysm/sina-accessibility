@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const session = request.cookies.get(SESSION_COOKIE)?.value;
+  const role = request.cookies.get("sina_role")?.value;
 
   const isPrivate = PRIVATE_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(prefix + "/")
@@ -33,14 +34,31 @@ export async function middleware(request: NextRequest) {
     (p) => pathname === p || pathname.startsWith(p + "/")
   );
 
-  // ── Rota privada sem sessão → /NotLogged ──────────────────────────────────
+  // 1. Rota privada sem sessão → redireciona para login
   if (isPrivate && !session) {
     return NextResponse.redirect(new URL("/Login", request.url));
   }
 
-  // ── Rota guest-only com sessão → /Dashboard ───────────────────────────────
-  if (isGuestOnly && session) {
-    return NextResponse.redirect(new URL("/Dashboard", request.url));
+  // 2. Com sessão, bloqueios por cargo:
+  if (session) {
+    // Se o Estudante tenta acessar o Dashboard do Professor
+    if (pathname.startsWith("/Dashboard") && role !== "INTERPRETE") {
+      return NextResponse.redirect(new URL("/StudentDashboard", request.url));
+    }
+    
+    // Se o Professor tenta acessar o Dashboard do Estudante
+    if (pathname.startsWith("/StudentDashboard") && role === "INTERPRETE") {
+      return NextResponse.redirect(new URL("/Dashboard", request.url));
+    }
+
+    // Se tenta acessar rota de convidado (ex: /Login) ou raiz (Landing Page)
+    if (isGuestOnly || pathname === "/") {
+      if (role === "INTERPRETE") {
+        return NextResponse.redirect(new URL("/Dashboard", request.url));
+      } else {
+        return NextResponse.redirect(new URL("/StudentDashboard", request.url));
+      }
+    }
   }
 
   return NextResponse.next();
