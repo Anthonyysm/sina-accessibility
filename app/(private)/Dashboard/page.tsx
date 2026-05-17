@@ -17,7 +17,7 @@ export default function DashboardPage() {
   const [modalAberto, setModalAberto] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const titulos = ["Dashboard", "Revisão (IA)", "Publicações", "Visão do Aluno"];
+  const titulos = ["Dashboard", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
 
   return (
