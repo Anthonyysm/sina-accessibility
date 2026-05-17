@@ -7,20 +7,24 @@ import FeaturesSection from "@/app/LandingPage/sections/FeaturesSection";
 import HowItWorksSection from "@/app/LandingPage/sections/HowItWorksSection";
 import BeforeAfterSection from "@/app/LandingPage/sections/BeforeAfter";
 import CTASection from "@/app/LandingPage/sections/CTASection";
+import VLibras from "@/components/VLibras/VLibras";
 
 export default function Homepage() {
   return (
     <div>
-      <Navbar />
       <div>
-        <HeroSection />
-        <ProblemSection />
-        <FeaturesSection />
-        <HowItWorksSection />
-        <BeforeAfterSection />
-        <CTASection />
-      </div>
-      <Footer />
-      <LibrasFAB />
-    </div >)
+        <Navbar />
+        <div>
+          <HeroSection />
+          <ProblemSection />
+          <FeaturesSection />
+          <HowItWorksSection />
+          <BeforeAfterSection />
+          <CTASection />
+        </div>
+        <Footer />
+      </div >
+      <VLibras />
+    </div>
+  )
 }
