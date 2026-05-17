@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useAuth, firebaseErrorMessage } from "@/lib/useAuth";
+import { useAuth, authErrorMessage } from "@/lib/useAuth";
 
 type Tab = "login" | "cadastro";
 
@@ -19,7 +19,7 @@ export default function NotLoggedPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { loginWithGoogle, loginWithEmail } = useAuth();
+  const { loginWithGoogle, loginWithEmail, registerWithEmail } = useAuth();
   const router = useRouter();
 
   async function handleEmailSubmit(e: React.FormEvent) {
@@ -51,7 +51,7 @@ export default function NotLoggedPage() {
         await registerWithEmail(trimmedEmail, password, trimmedEmail.split("@")[0]);
       }
     } catch (err) {
-      setError(firebaseErrorMessage(err));
+      setError(authErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ export default function NotLoggedPage() {
     try {
       await loginWithGoogle();
     } catch (err) {
-      setError(firebaseErrorMessage(err));
+      setError(authErrorMessage(err));
     } finally {
       setLoading(false);
     }

@@ -5,9 +5,9 @@ export async function POST(request: NextRequest) {
   try {
     const { email, name, role, password } = await request.json();
 
-    if (!email || !role) {
+    if (!email || !name || !role) {
       return NextResponse.json(
-        { error: "Email e cargo são obrigatórios." },
+        { error: "Email, nome e cargo são obrigatórios." },
         { status: 400 }
       );
     }
@@ -25,8 +25,15 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("[POST /api/auth/register]", error);
+    if (error?.code === "P2002" || error?.message?.includes("Unique constraint failed")) {
+      return NextResponse.json(
+        { error: "Email já cadastrado." },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Erro interno ao registrar usuário." },
       { status: 500 }
