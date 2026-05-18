@@ -8,6 +8,8 @@ import {
   MdAttachFile,
   MdSend,
   MdCalendarToday,
+  MdVisibility,
+  MdPictureAsPdf,
 } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { Activity, Comment } from "@/types/activity";
+import { PdfViewerModal } from "@/components/StudentDashboard/PdfViewerModal/PdfViewerModal";
 
 interface PostProps {
   activity: Activity;
@@ -30,6 +33,7 @@ interface PostProps {
 export default function Post({ activity, onToggleDone, onComment }: PostProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
 
   function handleComment() {
     if (!commentText.trim()) return;
@@ -38,6 +42,7 @@ export default function Post({ activity, onToggleDone, onComment }: PostProps) {
   }
 
   return (
+    <>
     <article className="bg-white border-b border-[#f0f4f9] px-4 sm:px-5 py-4 sm:py-5 hover:bg-[#fafbfd] transition-colors">
       <div className="flex items-start gap-3">
 
@@ -84,10 +89,14 @@ export default function Post({ activity, onToggleDone, onComment }: PostProps) {
           </p>
 
           {/* Anexo PDF */}
-          {activity.hasFile && (
-            <button className="flex items-center gap-2 text-xs font-medium text-[#2563a8] bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 hover:bg-blue-100 transition-colors mb-3 w-fit max-w-full">
-              <MdAttachFile className="text-sm shrink-0" />
-              <span className="truncate">Baixar material em PDF</span>
+          {activity.hasFile && activity.fileUrl && (
+            <button
+              onClick={() => setPdfViewerOpen(true)}
+              className="flex items-center gap-2 text-xs font-medium text-white bg-[#2b5784] rounded-xl px-3 py-2 hover:bg-[#1e3a5f] transition-colors mb-3 w-fit max-w-full cursor-pointer"
+            >
+              <MdPictureAsPdf className="text-sm shrink-0" />
+              <span className="truncate">Ver Atividade — {activity.fileName || "PDF"}</span>
+              <MdVisibility className="text-sm shrink-0" />
             </button>
           )}
 
@@ -199,7 +208,19 @@ export default function Post({ activity, onToggleDone, onComment }: PostProps) {
             <DropdownMenuItem>Copiar link</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
-    </article>
+        </div>
+      </article>
+
+      {/* PDF Viewer Modal */}
+      {activity.hasFile && activity.fileUrl && (
+        <PdfViewerModal
+          open={pdfViewerOpen}
+          onOpenChange={setPdfViewerOpen}
+          pdfUrl={activity.fileUrl}
+          title={activity.title}
+          fileName={activity.fileName}
+        />
+      )}
+    </>
   );
 }

@@ -1,41 +1,50 @@
-"use client";
+"use client"
 
-import { Separator } from "@/components/ui/separator";
-import logo_sina from "@/public/LogoSina.png";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/useAuth";
+import { Separator } from "@/components/ui/separator"
+import logo_sina from "@/public/LogoSina.png"
+import { Button } from "@/components/ui/button"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/useAuth"
 import {
   MdDashboard,
   MdLibraryBooks,
   MdPersonOutline,
   MdEdit,
-} from "react-icons/md";
+} from "react-icons/md"
 
 const navItems = [
-  { icon: MdDashboard,     label: "Dashboard"      },
-  { icon: MdLibraryBooks,  label: "Publicações"     },
-  { icon: MdPersonOutline, label: "Visão do Aluno"  },
-];
+  { icon: MdDashboard, label: "Dashboard" },
+  { icon: MdLibraryBooks, label: "Publicações" },
+  { icon: MdPersonOutline, label: "Tradutor de Glosa" },
+]
 
 interface SidebarProps {
-  activeNav: number;
-  setActiveNav: (index: number) => void;
-  mobileMenuOpen?: boolean;
-  setMobileMenuOpen?: (open: boolean) => void;
+  activeNav: number
+  setActiveNav: (index: number) => void
+  mobileMenuOpen?: boolean
+  setMobileMenuOpen?: (open: boolean) => void
 }
 
-const AVATAR_COLORS = ["#3b5fa0", "#5db5d8", "#6b8e6b", "#c47a4a", "#8b6baa"];
+const AVATAR_COLORS = ["#3b5fa0", "#5db5d8", "#6b8e6b", "#c47a4a", "#8b6baa"]
 const DB_TO_LABEL: Record<string, string> = {
   INTERPRETE: "Intérprete · Libras",
   PROFESSOR: "Professor",
   ESTUDANTE: "Estudante",
   COORDENADOR: "Coordenador",
-};
+}
 
 function getInitials(n: string) {
-  return n.trim().split(" ").filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase() || "?";
+  return (
+    n
+      .trim()
+      .split(" ")
+      .filter(Boolean)
+      .map((w) => w[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase() || "?"
+  )
 }
 
 export default function Sidebar({
@@ -44,105 +53,114 @@ export default function Sidebar({
   mobileMenuOpen,
   setMobileMenuOpen,
 }: SidebarProps) {
-  const router = useRouter();
-  const { user } = useAuth();
+  const router = useRouter()
+  const { user } = useAuth()
 
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
     { icon: MdLibraryBooks, label: "Publicações" },
-    { icon: MdPersonOutline, label: "Visão do Aluno" },
-  ];
+    { icon: MdPersonOutline, label: "Tradutor de Glosa" },
+  ]
 
-  const userName = user?.nome ?? "";
-  const userLabel = user ? (DB_TO_LABEL[user.tipo_usuario] ?? user.tipo_usuario) : "";
+  const userName = user?.nome ?? ""
+  const userLabel = user
+    ? (DB_TO_LABEL[user.tipo_usuario] ?? user.tipo_usuario)
+    : ""
   const avatarColor = user
     ? AVATAR_COLORS[user.id_usuario % AVATAR_COLORS.length]
-    : "#3b5fa0";
+    : "#3b5fa0"
 
   return (
     <>
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
           onClick={() => setMobileMenuOpen?.(false)}
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-[280px] md:w-[300px] shrink-0 bg-[#1e3a5f] flex flex-col text-white transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed inset-y-0 left-0 z-50 flex w-[280px] shrink-0 flex-col bg-[#1e3a5f] text-white transition-transform duration-300 ease-in-out md:relative md:w-[300px] md:translate-x-0 ${
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Logo */}
-        <div className="px-6 pt-7 pb-5 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-3 px-6 pt-7 pb-5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20">
             <Image
               src={logo_sina}
               height={1000}
               width={1000}
               alt="logo da aplicação"
-              className="invert object-cover"
+              className="object-cover invert"
             />
           </div>
           <div>
-            <p className="font-bold text-base leading-tight tracking-tight">SINA</p>
-            <p className="text-xs text-white/50 mt-0.5">Mediação Pedagógica</p>
+            <p className="text-base leading-tight font-bold tracking-tight">
+              SINA
+            </p>
+            <p className="mt-0.5 text-xs text-white/50">Mediação Pedagógica</p>
           </div>
         </div>
 
-        <Separator className="bg-white/10 mx-4 w-auto" />
+        <Separator className="mx-4 w-auto bg-white/10" />
 
         {/* Nav */}
-        <nav className="flex-1 px-4 py-5 flex flex-col gap-0.5">
+        <nav className="flex flex-1 flex-col gap-0.5 px-4 py-5">
           {navItems.map((item, i) => {
-            const Icon = item.icon;
-            const isActive = activeNav === i;
+            const Icon = item.icon
+            const isActive = activeNav === i
             return (
               <Button
                 key={item.label}
                 variant="ghost"
                 onClick={() => {
-                  setActiveNav(i);
-                  setMobileMenuOpen?.(false);
-                  router.push("/Dashboard");
+                  setActiveNav(i)
+                  setMobileMenuOpen?.(false)
+                  router.push("/Dashboard")
                 }}
-                className={`w-full justify-start gap-3 px-4 py-2.5 h-auto rounded-xl text-sm font-medium transition-all ${isActive
+                className={`h-auto w-full justify-start gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
+                  isActive
                     ? "bg-white/15 text-white hover:bg-white/20"
                     : "text-white/55 hover:bg-white/[0.08] hover:text-white/85"
-                  }`}
+                }`}
               >
-                <Icon className="text-lg shrink-0" />
+                <Icon className="shrink-0 text-lg" />
                 {item.label}
                 {isActive && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#5db5d8]" />
+                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#5db5d8]" />
                 )}
               </Button>
-            );
+            )
           })}
         </nav>
 
-        <Separator className="bg-white/10 mx-4 w-auto" />
+        <Separator className="mx-4 w-auto bg-white/10" />
 
         {/* User — clicável para editar perfil */}
         <button
           onClick={() => {
-            setMobileMenuOpen?.(false);
-            router.push("/Perfil");
+            setMobileMenuOpen?.(false)
+            router.push("/Perfil")
           }}
-          className="px-5 py-4 flex items-center gap-3 hover:bg-white/[0.06] transition-colors group w-full text-left"
+          className="group flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-white/[0.06]"
         >
-          <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
             style={{ backgroundColor: avatarColor }}
           >
             {getInitials(userName)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold leading-tight truncate">{userName}</p>
-            <p className="text-xs text-white/45 mt-0.5">{userLabel}</p>
+            <p className="truncate text-sm leading-tight font-semibold">
+              {userName}
+            </p>
+            <p className="mt-0.5 text-xs text-white/45">{userLabel}</p>
           </div>
-          <MdEdit className="text-white/30 group-hover:text-white/60 text-base shrink-0 transition-colors" />
+          <MdEdit className="shrink-0 text-base text-white/30 transition-colors group-hover:text-white/60" />
         </button>
       </aside>
     </>
-  );
+  )
 }

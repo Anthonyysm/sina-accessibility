@@ -21,12 +21,22 @@ export const atividadeDbService = {
     });
   },
 
-  async criar(data: { titulo: string; texto_original: string; criado_por: number }) {
+  async criar(data: {
+    titulo: string;
+    texto_original: string;
+    criado_por: number;
+    arquivo_url?: string;
+    arquivo_nome?: string;
+    arquivo_tipo?: string;
+  }) {
     return prisma.atividade.create({
       data: {
         titulo: data.titulo,
         texto_original: data.texto_original,
         criado_por: data.criado_por,
+        arquivo_url: data.arquivo_url ?? null,
+        arquivo_nome: data.arquivo_nome ?? null,
+        arquivo_tipo: data.arquivo_tipo ?? null,
       },
     });
   },

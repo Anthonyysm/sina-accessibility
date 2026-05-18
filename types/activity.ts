@@ -19,8 +19,11 @@ export interface Activity {
   dueDate: string;
   postedAt: string;
   hasFile: boolean;
+  fileUrl?: string;
+  fileName?: string;
   done: boolean;
   comments: Comment[];
+  textoOriginal?: string;
 }
 
 export type Filter = "todos" | "pendentes" | "concluídas";

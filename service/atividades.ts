@@ -14,6 +14,12 @@ export const atividadeService = {
       body: JSON.stringify(data),
     }).then(r => r.json()),
 
+  uploadWithFile: (formData: FormData) =>
+    fetch(`${BASE}/upload`, {
+      method: 'POST',
+      body: formData,
+    }).then(r => r.json()),
+
   atualizar: (id: number, data: object) =>
     fetch(`${BASE}/${id}`, {
       method: 'PUT',

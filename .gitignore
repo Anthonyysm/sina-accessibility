@@ -36,6 +36,9 @@ pnpm-debug.log*
 .env
 .env*.local
 
+# uploaded files
+/public/uploads/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

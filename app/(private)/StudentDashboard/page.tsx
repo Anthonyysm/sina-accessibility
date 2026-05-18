@@ -54,7 +54,9 @@ export default function StudentDashboard() {
               teacherColor: getAvatarColor(professorName),
               dueDate: dueDate,
               postedAt: postedAt,
-              hasFile: false, // Pode ser alterado depois se o banco suportar arquivos
+              hasFile: !!item.arquivo_url,
+              fileUrl: item.arquivo_url || undefined,
+              fileName: item.arquivo_nome || undefined,
               done: isDone,
               comments: Array.isArray(item.comentarios) ? item.comentarios.map((c: any) => ({
                 id: c.id_comentario,
@@ -63,7 +65,8 @@ export default function StudentDashboard() {
                 color: "#1a6b5a",
                 text: c.comentario,
                 time: new Date(c.criado_em).toLocaleDateString("pt-BR")
-              })) : []
+              })) : [],
+              textoOriginal: item.texto_original || undefined,
             };
           });
           setActivities(mappedActivities);

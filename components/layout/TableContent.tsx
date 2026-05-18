@@ -40,7 +40,10 @@ import {
   MdContentCopy,
   MdCheck,
   MdArticle,
+  MdAttachFile,
+  MdPictureAsPdf,
 } from "react-icons/md";
+import { PdfViewerModal } from "@/components/StudentDashboard/PdfViewerModal/PdfViewerModal";
 
 type Status = "pending" | "done" | string; // Baseado no schema
 
@@ -51,6 +54,8 @@ interface Atividade {
   texto_adaptado: string | null;
   status: string;
   criado_em: string;
+  arquivo_url: string | null;
+  arquivo_nome: string | null;
   usuario: {
     nome: string;
   };
@@ -121,7 +126,7 @@ function UserAvatar({
   );
 }
 
-export default function TableContent() {
+export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }) {
   const [materiais, setMateriais] = useState<Atividade[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -129,6 +134,7 @@ export default function TableContent() {
   const [selectedAtividade, setSelectedAtividade] = useState<Atividade | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
 
   const handleOpenVisualizar = (atividade: Atividade) => {
     setSelectedAtividade(atividade);
@@ -144,16 +150,15 @@ export default function TableContent() {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetch("/api/atividades")
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setMateriais(data);
-        }
+        if (Array.isArray(data)) setMateriais(data);
       })
       .catch((err) => console.error("Erro ao buscar atividades:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
 
   return (
     <Card className="rounded-2xl border-0 shadow-none bg-white overflow-hidden">
@@ -221,7 +226,23 @@ export default function TableContent() {
                     className="border-b border-[#f0f4f9] last:border-0 hover:bg-[#f8fafd] transition-colors"
                   >
                     <TableCell className="px-4 md:px-6 py-4 text-sm text-[#1e3a5f] font-medium leading-snug">
-                      {m.titulo}
+                      <div className="flex items-center gap-2">
+                        <span className="truncate">{m.titulo}</span>
+                        {m.arquivo_url && (
+                          <TooltipProvider delayDuration={200}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="shrink-0">
+                                  <MdAttachFile className="text-sm text-[#2563a8]" />
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="text-xs">
+                                PDF anexado
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="py-4">
                       <StatusBadge status={m.status} />
@@ -306,24 +327,35 @@ export default function TableContent() {
             <div className="px-6 py-5 max-h-[60vh] overflow-y-auto bg-slate-50">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-sm font-semibold text-slate-700">Texto Original</h3>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleCopy}
-                  className="rounded-full h-8 text-xs font-semibold gap-1.5"
-                >
-                  {copied ? (
-                    <>
-                      <MdCheck className="text-green-600" />
-                      <span className="text-green-600">Copiado!</span>
-                    </>
-                  ) : (
-                    <>
-                      <MdContentCopy />
-                      Copiar
-                    </>
+                <div className="flex gap-2">
+                  {selectedAtividade.arquivo_url && (
+                    <button
+                      onClick={() => setPdfViewerOpen(true)}
+                      className="inline-flex items-center gap-1.5 rounded-full h-8 px-3 text-xs font-semibold border border-blue-200 text-blue-700 hover:bg-blue-50 transition-colors"
+                    >
+                      <MdPictureAsPdf className="text-sm" />
+                      Ver PDF
+                    </button>
                   )}
-                </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleCopy}
+                    className="rounded-full h-8 text-xs font-semibold gap-1.5"
+                  >
+                    {copied ? (
+                      <>
+                        <MdCheck className="text-green-600" />
+                        <span className="text-green-600">Copiado!</span>
+                      </>
+                    ) : (
+                      <>
+                        <MdContentCopy />
+                        Copiar
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">
                 {selectedAtividade.texto_original}
@@ -331,6 +363,17 @@ export default function TableContent() {
             </div>
           </DialogContent>
         </Dialog>
+      )}
+
+      {/* PDF Viewer Modal */}
+      {selectedAtividade?.arquivo_url && (
+        <PdfViewerModal
+          open={pdfViewerOpen}
+          onOpenChange={setPdfViewerOpen}
+          pdfUrl={selectedAtividade.arquivo_url}
+          title={selectedAtividade.titulo}
+          fileName={selectedAtividade.arquivo_nome || undefined}
+        />
       )}
     </Card>
   )
