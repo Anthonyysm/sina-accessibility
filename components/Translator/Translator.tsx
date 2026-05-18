@@ -113,8 +113,7 @@ export default function TranslatorContainer() {
   return (
     <div className="flex h-full animate-in flex-col gap-6 duration-500 fade-in">
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold text-[#1e3a5f]">Publicações</h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 font-bold">
           Converta conteúdos didáticos para Glosa de Libras com apoio de IA.
         </p>
       </div>
