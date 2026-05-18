@@ -29,11 +29,13 @@ export type AggregateAtividade = {
 export type AtividadeAvgAggregateOutputType = {
   id_atividade: number | null
   criado_por: number | null
+  id_turma: number | null
 }
 
 export type AtividadeSumAggregateOutputType = {
   id_atividade: number | null
   criado_por: number | null
+  id_turma: number | null
 }
 
 export type AtividadeMinAggregateOutputType = {
@@ -43,10 +45,12 @@ export type AtividadeMinAggregateOutputType = {
   texto_adaptado: string | null
   status: string | null
   criado_em: Date | null
+  data_entrega: Date | null
   arquivo_url: string | null
   arquivo_nome: string | null
   arquivo_tipo: string | null
   criado_por: number | null
+  id_turma: number | null
 }
 
 export type AtividadeMaxAggregateOutputType = {
@@ -56,10 +60,12 @@ export type AtividadeMaxAggregateOutputType = {
   texto_adaptado: string | null
   status: string | null
   criado_em: Date | null
+  data_entrega: Date | null
   arquivo_url: string | null
   arquivo_nome: string | null
   arquivo_tipo: string | null
   criado_por: number | null
+  id_turma: number | null
 }
 
 export type AtividadeCountAggregateOutputType = {
@@ -69,10 +75,12 @@ export type AtividadeCountAggregateOutputType = {
   texto_adaptado: number
   status: number
   criado_em: number
+  data_entrega: number
   arquivo_url: number
   arquivo_nome: number
   arquivo_tipo: number
   criado_por: number
+  id_turma: number
   _all: number
 }
 
@@ -80,11 +88,13 @@ export type AtividadeCountAggregateOutputType = {
 export type AtividadeAvgAggregateInputType = {
   id_atividade?: true
   criado_por?: true
+  id_turma?: true
 }
 
 export type AtividadeSumAggregateInputType = {
   id_atividade?: true
   criado_por?: true
+  id_turma?: true
 }
 
 export type AtividadeMinAggregateInputType = {
@@ -94,10 +104,12 @@ export type AtividadeMinAggregateInputType = {
   texto_adaptado?: true
   status?: true
   criado_em?: true
+  data_entrega?: true
   arquivo_url?: true
   arquivo_nome?: true
   arquivo_tipo?: true
   criado_por?: true
+  id_turma?: true
 }
 
 export type AtividadeMaxAggregateInputType = {
@@ -107,10 +119,12 @@ export type AtividadeMaxAggregateInputType = {
   texto_adaptado?: true
   status?: true
   criado_em?: true
+  data_entrega?: true
   arquivo_url?: true
   arquivo_nome?: true
   arquivo_tipo?: true
   criado_por?: true
+  id_turma?: true
 }
 
 export type AtividadeCountAggregateInputType = {
@@ -120,10 +134,12 @@ export type AtividadeCountAggregateInputType = {
   texto_adaptado?: true
   status?: true
   criado_em?: true
+  data_entrega?: true
   arquivo_url?: true
   arquivo_nome?: true
   arquivo_tipo?: true
   criado_por?: true
+  id_turma?: true
   _all?: true
 }
 
@@ -220,10 +236,12 @@ export type AtividadeGroupByOutputType = {
   texto_adaptado: string | null
   status: string
   criado_em: Date
+  data_entrega: Date | null
   arquivo_url: string | null
   arquivo_nome: string | null
   arquivo_tipo: string | null
   criado_por: number
+  id_turma: number | null
   _count: AtividadeCountAggregateOutputType | null
   _avg: AtividadeAvgAggregateOutputType | null
   _sum: AtividadeSumAggregateOutputType | null
@@ -256,12 +274,16 @@ export type AtividadeWhereInput = {
   texto_adaptado?: Prisma.StringNullableFilter<"Atividade"> | string | null
   status?: Prisma.StringFilter<"Atividade"> | string
   criado_em?: Prisma.DateTimeFilter<"Atividade"> | Date | string
+  data_entrega?: Prisma.DateTimeNullableFilter<"Atividade"> | Date | string | null
   arquivo_url?: Prisma.StringNullableFilter<"Atividade"> | string | null
   arquivo_nome?: Prisma.StringNullableFilter<"Atividade"> | string | null
   arquivo_tipo?: Prisma.StringNullableFilter<"Atividade"> | string | null
   criado_por?: Prisma.IntFilter<"Atividade"> | number
+  id_turma?: Prisma.IntNullableFilter<"Atividade"> | number | null
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   comentarios?: Prisma.EstudanteListRelationFilter
+  turma?: Prisma.XOR<Prisma.TurmaNullableScalarRelationFilter, Prisma.TurmaWhereInput> | null
+  agendamentos?: Prisma.AgendamentoListRelationFilter
 }
 
 export type AtividadeOrderByWithRelationInput = {
@@ -271,12 +293,16 @@ export type AtividadeOrderByWithRelationInput = {
   texto_adaptado?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  data_entrega?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_url?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_tipo?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrderInput | Prisma.SortOrder
   usuario?: Prisma.UsuarioOrderByWithRelationInput
   comentarios?: Prisma.EstudanteOrderByRelationAggregateInput
+  turma?: Prisma.TurmaOrderByWithRelationInput
+  agendamentos?: Prisma.AgendamentoOrderByRelationAggregateInput
 }
 
 export type AtividadeWhereUniqueInput = Prisma.AtLeast<{
@@ -289,12 +315,16 @@ export type AtividadeWhereUniqueInput = Prisma.AtLeast<{
   texto_adaptado?: Prisma.StringNullableFilter<"Atividade"> | string | null
   status?: Prisma.StringFilter<"Atividade"> | string
   criado_em?: Prisma.DateTimeFilter<"Atividade"> | Date | string
+  data_entrega?: Prisma.DateTimeNullableFilter<"Atividade"> | Date | string | null
   arquivo_url?: Prisma.StringNullableFilter<"Atividade"> | string | null
   arquivo_nome?: Prisma.StringNullableFilter<"Atividade"> | string | null
   arquivo_tipo?: Prisma.StringNullableFilter<"Atividade"> | string | null
   criado_por?: Prisma.IntFilter<"Atividade"> | number
+  id_turma?: Prisma.IntNullableFilter<"Atividade"> | number | null
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   comentarios?: Prisma.EstudanteListRelationFilter
+  turma?: Prisma.XOR<Prisma.TurmaNullableScalarRelationFilter, Prisma.TurmaWhereInput> | null
+  agendamentos?: Prisma.AgendamentoListRelationFilter
 }, "id_atividade">
 
 export type AtividadeOrderByWithAggregationInput = {
@@ -304,10 +334,12 @@ export type AtividadeOrderByWithAggregationInput = {
   texto_adaptado?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  data_entrega?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_url?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_tipo?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AtividadeCountOrderByAggregateInput
   _avg?: Prisma.AtividadeAvgOrderByAggregateInput
   _max?: Prisma.AtividadeMaxOrderByAggregateInput
@@ -325,10 +357,12 @@ export type AtividadeScalarWhereWithAggregatesInput = {
   texto_adaptado?: Prisma.StringNullableWithAggregatesFilter<"Atividade"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"Atividade"> | string
   criado_em?: Prisma.DateTimeWithAggregatesFilter<"Atividade"> | Date | string
+  data_entrega?: Prisma.DateTimeNullableWithAggregatesFilter<"Atividade"> | Date | string | null
   arquivo_url?: Prisma.StringNullableWithAggregatesFilter<"Atividade"> | string | null
   arquivo_nome?: Prisma.StringNullableWithAggregatesFilter<"Atividade"> | string | null
   arquivo_tipo?: Prisma.StringNullableWithAggregatesFilter<"Atividade"> | string | null
   criado_por?: Prisma.IntWithAggregatesFilter<"Atividade"> | number
+  id_turma?: Prisma.IntNullableWithAggregatesFilter<"Atividade"> | number | null
 }
 
 export type AtividadeCreateInput = {
@@ -337,11 +371,14 @@ export type AtividadeCreateInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
   usuario: Prisma.UsuarioCreateNestedOneWithoutAtividadesInput
   comentarios?: Prisma.EstudanteCreateNestedManyWithoutAtividadeInput
+  turma?: Prisma.TurmaCreateNestedOneWithoutAtividadesInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutAtividadeInput
 }
 
 export type AtividadeUncheckedCreateInput = {
@@ -351,11 +388,14 @@ export type AtividadeUncheckedCreateInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
   criado_por: number
+  id_turma?: number | null
   comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutAtividadeInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutAtividadeInput
 }
 
 export type AtividadeUpdateInput = {
@@ -364,11 +404,14 @@ export type AtividadeUpdateInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutAtividadesNestedInput
   comentarios?: Prisma.EstudanteUpdateManyWithoutAtividadeNestedInput
+  turma?: Prisma.TurmaUpdateOneWithoutAtividadesNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutAtividadeNestedInput
 }
 
 export type AtividadeUncheckedUpdateInput = {
@@ -378,11 +421,14 @@ export type AtividadeUncheckedUpdateInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criado_por?: Prisma.IntFieldUpdateOperationsInput | number
+  id_turma?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutAtividadeNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutAtividadeNestedInput
 }
 
 export type AtividadeCreateManyInput = {
@@ -392,10 +438,12 @@ export type AtividadeCreateManyInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
   criado_por: number
+  id_turma?: number | null
 }
 
 export type AtividadeUpdateManyMutationInput = {
@@ -404,6 +452,7 @@ export type AtividadeUpdateManyMutationInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -416,10 +465,12 @@ export type AtividadeUncheckedUpdateManyInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criado_por?: Prisma.IntFieldUpdateOperationsInput | number
+  id_turma?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type AtividadeListRelationFilter = {
@@ -439,15 +490,18 @@ export type AtividadeCountOrderByAggregateInput = {
   texto_adaptado?: Prisma.SortOrder
   status?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  data_entrega?: Prisma.SortOrder
   arquivo_url?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrder
   arquivo_tipo?: Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrder
 }
 
 export type AtividadeAvgOrderByAggregateInput = {
   id_atividade?: Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrder
 }
 
 export type AtividadeMaxOrderByAggregateInput = {
@@ -457,10 +511,12 @@ export type AtividadeMaxOrderByAggregateInput = {
   texto_adaptado?: Prisma.SortOrder
   status?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  data_entrega?: Prisma.SortOrder
   arquivo_url?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrder
   arquivo_tipo?: Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrder
 }
 
 export type AtividadeMinOrderByAggregateInput = {
@@ -470,20 +526,28 @@ export type AtividadeMinOrderByAggregateInput = {
   texto_adaptado?: Prisma.SortOrder
   status?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  data_entrega?: Prisma.SortOrder
   arquivo_url?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrder
   arquivo_tipo?: Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrder
 }
 
 export type AtividadeSumOrderByAggregateInput = {
   id_atividade?: Prisma.SortOrder
   criado_por?: Prisma.SortOrder
+  id_turma?: Prisma.SortOrder
 }
 
 export type AtividadeScalarRelationFilter = {
   is?: Prisma.AtividadeWhereInput
   isNot?: Prisma.AtividadeWhereInput
+}
+
+export type AtividadeNullableScalarRelationFilter = {
+  is?: Prisma.AtividadeWhereInput | null
+  isNot?: Prisma.AtividadeWhereInput | null
 }
 
 export type AtividadeCreateNestedManyWithoutUsuarioInput = {
@@ -528,8 +592,58 @@ export type AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.AtividadeScalarWhereInput | Prisma.AtividadeScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type AtividadeCreateNestedManyWithoutTurmaInput = {
+  create?: Prisma.XOR<Prisma.AtividadeCreateWithoutTurmaInput, Prisma.AtividadeUncheckedCreateWithoutTurmaInput> | Prisma.AtividadeCreateWithoutTurmaInput[] | Prisma.AtividadeUncheckedCreateWithoutTurmaInput[]
+  connectOrCreate?: Prisma.AtividadeCreateOrConnectWithoutTurmaInput | Prisma.AtividadeCreateOrConnectWithoutTurmaInput[]
+  createMany?: Prisma.AtividadeCreateManyTurmaInputEnvelope
+  connect?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+}
+
+export type AtividadeUncheckedCreateNestedManyWithoutTurmaInput = {
+  create?: Prisma.XOR<Prisma.AtividadeCreateWithoutTurmaInput, Prisma.AtividadeUncheckedCreateWithoutTurmaInput> | Prisma.AtividadeCreateWithoutTurmaInput[] | Prisma.AtividadeUncheckedCreateWithoutTurmaInput[]
+  connectOrCreate?: Prisma.AtividadeCreateOrConnectWithoutTurmaInput | Prisma.AtividadeCreateOrConnectWithoutTurmaInput[]
+  createMany?: Prisma.AtividadeCreateManyTurmaInputEnvelope
+  connect?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+}
+
+export type AtividadeUpdateManyWithoutTurmaNestedInput = {
+  create?: Prisma.XOR<Prisma.AtividadeCreateWithoutTurmaInput, Prisma.AtividadeUncheckedCreateWithoutTurmaInput> | Prisma.AtividadeCreateWithoutTurmaInput[] | Prisma.AtividadeUncheckedCreateWithoutTurmaInput[]
+  connectOrCreate?: Prisma.AtividadeCreateOrConnectWithoutTurmaInput | Prisma.AtividadeCreateOrConnectWithoutTurmaInput[]
+  upsert?: Prisma.AtividadeUpsertWithWhereUniqueWithoutTurmaInput | Prisma.AtividadeUpsertWithWhereUniqueWithoutTurmaInput[]
+  createMany?: Prisma.AtividadeCreateManyTurmaInputEnvelope
+  set?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  disconnect?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  delete?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  connect?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  update?: Prisma.AtividadeUpdateWithWhereUniqueWithoutTurmaInput | Prisma.AtividadeUpdateWithWhereUniqueWithoutTurmaInput[]
+  updateMany?: Prisma.AtividadeUpdateManyWithWhereWithoutTurmaInput | Prisma.AtividadeUpdateManyWithWhereWithoutTurmaInput[]
+  deleteMany?: Prisma.AtividadeScalarWhereInput | Prisma.AtividadeScalarWhereInput[]
+}
+
+export type AtividadeUncheckedUpdateManyWithoutTurmaNestedInput = {
+  create?: Prisma.XOR<Prisma.AtividadeCreateWithoutTurmaInput, Prisma.AtividadeUncheckedCreateWithoutTurmaInput> | Prisma.AtividadeCreateWithoutTurmaInput[] | Prisma.AtividadeUncheckedCreateWithoutTurmaInput[]
+  connectOrCreate?: Prisma.AtividadeCreateOrConnectWithoutTurmaInput | Prisma.AtividadeCreateOrConnectWithoutTurmaInput[]
+  upsert?: Prisma.AtividadeUpsertWithWhereUniqueWithoutTurmaInput | Prisma.AtividadeUpsertWithWhereUniqueWithoutTurmaInput[]
+  createMany?: Prisma.AtividadeCreateManyTurmaInputEnvelope
+  set?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  disconnect?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  delete?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  connect?: Prisma.AtividadeWhereUniqueInput | Prisma.AtividadeWhereUniqueInput[]
+  update?: Prisma.AtividadeUpdateWithWhereUniqueWithoutTurmaInput | Prisma.AtividadeUpdateWithWhereUniqueWithoutTurmaInput[]
+  updateMany?: Prisma.AtividadeUpdateManyWithWhereWithoutTurmaInput | Prisma.AtividadeUpdateManyWithWhereWithoutTurmaInput[]
+  deleteMany?: Prisma.AtividadeScalarWhereInput | Prisma.AtividadeScalarWhereInput[]
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type AtividadeCreateNestedOneWithoutComentariosInput = {
@@ -546,16 +660,35 @@ export type AtividadeUpdateOneRequiredWithoutComentariosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AtividadeUpdateToOneWithWhereWithoutComentariosInput, Prisma.AtividadeUpdateWithoutComentariosInput>, Prisma.AtividadeUncheckedUpdateWithoutComentariosInput>
 }
 
+export type AtividadeCreateNestedOneWithoutAgendamentosInput = {
+  create?: Prisma.XOR<Prisma.AtividadeCreateWithoutAgendamentosInput, Prisma.AtividadeUncheckedCreateWithoutAgendamentosInput>
+  connectOrCreate?: Prisma.AtividadeCreateOrConnectWithoutAgendamentosInput
+  connect?: Prisma.AtividadeWhereUniqueInput
+}
+
+export type AtividadeUpdateOneWithoutAgendamentosNestedInput = {
+  create?: Prisma.XOR<Prisma.AtividadeCreateWithoutAgendamentosInput, Prisma.AtividadeUncheckedCreateWithoutAgendamentosInput>
+  connectOrCreate?: Prisma.AtividadeCreateOrConnectWithoutAgendamentosInput
+  upsert?: Prisma.AtividadeUpsertWithoutAgendamentosInput
+  disconnect?: Prisma.AtividadeWhereInput | boolean
+  delete?: Prisma.AtividadeWhereInput | boolean
+  connect?: Prisma.AtividadeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AtividadeUpdateToOneWithWhereWithoutAgendamentosInput, Prisma.AtividadeUpdateWithoutAgendamentosInput>, Prisma.AtividadeUncheckedUpdateWithoutAgendamentosInput>
+}
+
 export type AtividadeCreateWithoutUsuarioInput = {
   titulo: string
   texto_original: string
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
   comentarios?: Prisma.EstudanteCreateNestedManyWithoutAtividadeInput
+  turma?: Prisma.TurmaCreateNestedOneWithoutAtividadesInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutAtividadeInput
 }
 
 export type AtividadeUncheckedCreateWithoutUsuarioInput = {
@@ -565,10 +698,13 @@ export type AtividadeUncheckedCreateWithoutUsuarioInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
+  id_turma?: number | null
   comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutAtividadeInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutAtividadeInput
 }
 
 export type AtividadeCreateOrConnectWithoutUsuarioInput = {
@@ -607,10 +743,69 @@ export type AtividadeScalarWhereInput = {
   texto_adaptado?: Prisma.StringNullableFilter<"Atividade"> | string | null
   status?: Prisma.StringFilter<"Atividade"> | string
   criado_em?: Prisma.DateTimeFilter<"Atividade"> | Date | string
+  data_entrega?: Prisma.DateTimeNullableFilter<"Atividade"> | Date | string | null
   arquivo_url?: Prisma.StringNullableFilter<"Atividade"> | string | null
   arquivo_nome?: Prisma.StringNullableFilter<"Atividade"> | string | null
   arquivo_tipo?: Prisma.StringNullableFilter<"Atividade"> | string | null
   criado_por?: Prisma.IntFilter<"Atividade"> | number
+  id_turma?: Prisma.IntNullableFilter<"Atividade"> | number | null
+}
+
+export type AtividadeCreateWithoutTurmaInput = {
+  titulo: string
+  texto_original: string
+  texto_adaptado?: string | null
+  status?: string
+  criado_em?: Date | string
+  data_entrega?: Date | string | null
+  arquivo_url?: string | null
+  arquivo_nome?: string | null
+  arquivo_tipo?: string | null
+  usuario: Prisma.UsuarioCreateNestedOneWithoutAtividadesInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutAtividadeInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutAtividadeInput
+}
+
+export type AtividadeUncheckedCreateWithoutTurmaInput = {
+  id_atividade?: number
+  titulo: string
+  texto_original: string
+  texto_adaptado?: string | null
+  status?: string
+  criado_em?: Date | string
+  data_entrega?: Date | string | null
+  arquivo_url?: string | null
+  arquivo_nome?: string | null
+  arquivo_tipo?: string | null
+  criado_por: number
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutAtividadeInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutAtividadeInput
+}
+
+export type AtividadeCreateOrConnectWithoutTurmaInput = {
+  where: Prisma.AtividadeWhereUniqueInput
+  create: Prisma.XOR<Prisma.AtividadeCreateWithoutTurmaInput, Prisma.AtividadeUncheckedCreateWithoutTurmaInput>
+}
+
+export type AtividadeCreateManyTurmaInputEnvelope = {
+  data: Prisma.AtividadeCreateManyTurmaInput | Prisma.AtividadeCreateManyTurmaInput[]
+  skipDuplicates?: boolean
+}
+
+export type AtividadeUpsertWithWhereUniqueWithoutTurmaInput = {
+  where: Prisma.AtividadeWhereUniqueInput
+  update: Prisma.XOR<Prisma.AtividadeUpdateWithoutTurmaInput, Prisma.AtividadeUncheckedUpdateWithoutTurmaInput>
+  create: Prisma.XOR<Prisma.AtividadeCreateWithoutTurmaInput, Prisma.AtividadeUncheckedCreateWithoutTurmaInput>
+}
+
+export type AtividadeUpdateWithWhereUniqueWithoutTurmaInput = {
+  where: Prisma.AtividadeWhereUniqueInput
+  data: Prisma.XOR<Prisma.AtividadeUpdateWithoutTurmaInput, Prisma.AtividadeUncheckedUpdateWithoutTurmaInput>
+}
+
+export type AtividadeUpdateManyWithWhereWithoutTurmaInput = {
+  where: Prisma.AtividadeScalarWhereInput
+  data: Prisma.XOR<Prisma.AtividadeUpdateManyMutationInput, Prisma.AtividadeUncheckedUpdateManyWithoutTurmaInput>
 }
 
 export type AtividadeCreateWithoutComentariosInput = {
@@ -619,10 +814,13 @@ export type AtividadeCreateWithoutComentariosInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
   usuario: Prisma.UsuarioCreateNestedOneWithoutAtividadesInput
+  turma?: Prisma.TurmaCreateNestedOneWithoutAtividadesInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutAtividadeInput
 }
 
 export type AtividadeUncheckedCreateWithoutComentariosInput = {
@@ -632,10 +830,13 @@ export type AtividadeUncheckedCreateWithoutComentariosInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
   criado_por: number
+  id_turma?: number | null
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutAtividadeInput
 }
 
 export type AtividadeCreateOrConnectWithoutComentariosInput = {
@@ -660,10 +861,13 @@ export type AtividadeUpdateWithoutComentariosInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutAtividadesNestedInput
+  turma?: Prisma.TurmaUpdateOneWithoutAtividadesNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutAtividadeNestedInput
 }
 
 export type AtividadeUncheckedUpdateWithoutComentariosInput = {
@@ -673,10 +877,91 @@ export type AtividadeUncheckedUpdateWithoutComentariosInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criado_por?: Prisma.IntFieldUpdateOperationsInput | number
+  id_turma?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutAtividadeNestedInput
+}
+
+export type AtividadeCreateWithoutAgendamentosInput = {
+  titulo: string
+  texto_original: string
+  texto_adaptado?: string | null
+  status?: string
+  criado_em?: Date | string
+  data_entrega?: Date | string | null
+  arquivo_url?: string | null
+  arquivo_nome?: string | null
+  arquivo_tipo?: string | null
+  usuario: Prisma.UsuarioCreateNestedOneWithoutAtividadesInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutAtividadeInput
+  turma?: Prisma.TurmaCreateNestedOneWithoutAtividadesInput
+}
+
+export type AtividadeUncheckedCreateWithoutAgendamentosInput = {
+  id_atividade?: number
+  titulo: string
+  texto_original: string
+  texto_adaptado?: string | null
+  status?: string
+  criado_em?: Date | string
+  data_entrega?: Date | string | null
+  arquivo_url?: string | null
+  arquivo_nome?: string | null
+  arquivo_tipo?: string | null
+  criado_por: number
+  id_turma?: number | null
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutAtividadeInput
+}
+
+export type AtividadeCreateOrConnectWithoutAgendamentosInput = {
+  where: Prisma.AtividadeWhereUniqueInput
+  create: Prisma.XOR<Prisma.AtividadeCreateWithoutAgendamentosInput, Prisma.AtividadeUncheckedCreateWithoutAgendamentosInput>
+}
+
+export type AtividadeUpsertWithoutAgendamentosInput = {
+  update: Prisma.XOR<Prisma.AtividadeUpdateWithoutAgendamentosInput, Prisma.AtividadeUncheckedUpdateWithoutAgendamentosInput>
+  create: Prisma.XOR<Prisma.AtividadeCreateWithoutAgendamentosInput, Prisma.AtividadeUncheckedCreateWithoutAgendamentosInput>
+  where?: Prisma.AtividadeWhereInput
+}
+
+export type AtividadeUpdateToOneWithWhereWithoutAgendamentosInput = {
+  where?: Prisma.AtividadeWhereInput
+  data: Prisma.XOR<Prisma.AtividadeUpdateWithoutAgendamentosInput, Prisma.AtividadeUncheckedUpdateWithoutAgendamentosInput>
+}
+
+export type AtividadeUpdateWithoutAgendamentosInput = {
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_original?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutAtividadesNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutAtividadeNestedInput
+  turma?: Prisma.TurmaUpdateOneWithoutAtividadesNestedInput
+}
+
+export type AtividadeUncheckedUpdateWithoutAgendamentosInput = {
+  id_atividade?: Prisma.IntFieldUpdateOperationsInput | number
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_original?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_por?: Prisma.IntFieldUpdateOperationsInput | number
+  id_turma?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutAtividadeNestedInput
 }
 
 export type AtividadeCreateManyUsuarioInput = {
@@ -686,9 +971,11 @@ export type AtividadeCreateManyUsuarioInput = {
   texto_adaptado?: string | null
   status?: string
   criado_em?: Date | string
+  data_entrega?: Date | string | null
   arquivo_url?: string | null
   arquivo_nome?: string | null
   arquivo_tipo?: string | null
+  id_turma?: number | null
 }
 
 export type AtividadeUpdateWithoutUsuarioInput = {
@@ -697,10 +984,13 @@ export type AtividadeUpdateWithoutUsuarioInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   comentarios?: Prisma.EstudanteUpdateManyWithoutAtividadeNestedInput
+  turma?: Prisma.TurmaUpdateOneWithoutAtividadesNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutAtividadeNestedInput
 }
 
 export type AtividadeUncheckedUpdateWithoutUsuarioInput = {
@@ -710,10 +1000,13 @@ export type AtividadeUncheckedUpdateWithoutUsuarioInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id_turma?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutAtividadeNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutAtividadeNestedInput
 }
 
 export type AtividadeUncheckedUpdateManyWithoutUsuarioInput = {
@@ -723,9 +1016,70 @@ export type AtividadeUncheckedUpdateManyWithoutUsuarioInput = {
   texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id_turma?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type AtividadeCreateManyTurmaInput = {
+  id_atividade?: number
+  titulo: string
+  texto_original: string
+  texto_adaptado?: string | null
+  status?: string
+  criado_em?: Date | string
+  data_entrega?: Date | string | null
+  arquivo_url?: string | null
+  arquivo_nome?: string | null
+  arquivo_tipo?: string | null
+  criado_por: number
+}
+
+export type AtividadeUpdateWithoutTurmaInput = {
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_original?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutAtividadesNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutAtividadeNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutAtividadeNestedInput
+}
+
+export type AtividadeUncheckedUpdateWithoutTurmaInput = {
+  id_atividade?: Prisma.IntFieldUpdateOperationsInput | number
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_original?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_por?: Prisma.IntFieldUpdateOperationsInput | number
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutAtividadeNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutAtividadeNestedInput
+}
+
+export type AtividadeUncheckedUpdateManyWithoutTurmaInput = {
+  id_atividade?: Prisma.IntFieldUpdateOperationsInput | number
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_original?: Prisma.StringFieldUpdateOperationsInput | string
+  texto_adaptado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_entrega?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_por?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -735,10 +1089,12 @@ export type AtividadeUncheckedUpdateManyWithoutUsuarioInput = {
 
 export type AtividadeCountOutputType = {
   comentarios: number
+  agendamentos: number
 }
 
 export type AtividadeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comentarios?: boolean | AtividadeCountOutputTypeCountComentariosArgs
+  agendamentos?: boolean | AtividadeCountOutputTypeCountAgendamentosArgs
 }
 
 /**
@@ -758,6 +1114,13 @@ export type AtividadeCountOutputTypeCountComentariosArgs<ExtArgs extends runtime
   where?: Prisma.EstudanteWhereInput
 }
 
+/**
+ * AtividadeCountOutputType without action
+ */
+export type AtividadeCountOutputTypeCountAgendamentosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgendamentoWhereInput
+}
+
 
 export type AtividadeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_atividade?: boolean
@@ -766,12 +1129,16 @@ export type AtividadeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   texto_adaptado?: boolean
   status?: boolean
   criado_em?: boolean
+  data_entrega?: boolean
   arquivo_url?: boolean
   arquivo_nome?: boolean
   arquivo_tipo?: boolean
   criado_por?: boolean
+  id_turma?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   comentarios?: boolean | Prisma.Atividade$comentariosArgs<ExtArgs>
+  turma?: boolean | Prisma.Atividade$turmaArgs<ExtArgs>
+  agendamentos?: boolean | Prisma.Atividade$agendamentosArgs<ExtArgs>
   _count?: boolean | Prisma.AtividadeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["atividade"]>
 
@@ -782,11 +1149,14 @@ export type AtividadeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   texto_adaptado?: boolean
   status?: boolean
   criado_em?: boolean
+  data_entrega?: boolean
   arquivo_url?: boolean
   arquivo_nome?: boolean
   arquivo_tipo?: boolean
   criado_por?: boolean
+  id_turma?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
+  turma?: boolean | Prisma.Atividade$turmaArgs<ExtArgs>
 }, ExtArgs["result"]["atividade"]>
 
 export type AtividadeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -796,11 +1166,14 @@ export type AtividadeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   texto_adaptado?: boolean
   status?: boolean
   criado_em?: boolean
+  data_entrega?: boolean
   arquivo_url?: boolean
   arquivo_nome?: boolean
   arquivo_tipo?: boolean
   criado_por?: boolean
+  id_turma?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
+  turma?: boolean | Prisma.Atividade$turmaArgs<ExtArgs>
 }, ExtArgs["result"]["atividade"]>
 
 export type AtividadeSelectScalar = {
@@ -810,23 +1183,29 @@ export type AtividadeSelectScalar = {
   texto_adaptado?: boolean
   status?: boolean
   criado_em?: boolean
+  data_entrega?: boolean
   arquivo_url?: boolean
   arquivo_nome?: boolean
   arquivo_tipo?: boolean
   criado_por?: boolean
+  id_turma?: boolean
 }
 
-export type AtividadeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_atividade" | "titulo" | "texto_original" | "texto_adaptado" | "status" | "criado_em" | "arquivo_url" | "arquivo_nome" | "arquivo_tipo" | "criado_por", ExtArgs["result"]["atividade"]>
+export type AtividadeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_atividade" | "titulo" | "texto_original" | "texto_adaptado" | "status" | "criado_em" | "data_entrega" | "arquivo_url" | "arquivo_nome" | "arquivo_tipo" | "criado_por" | "id_turma", ExtArgs["result"]["atividade"]>
 export type AtividadeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   comentarios?: boolean | Prisma.Atividade$comentariosArgs<ExtArgs>
+  turma?: boolean | Prisma.Atividade$turmaArgs<ExtArgs>
+  agendamentos?: boolean | Prisma.Atividade$agendamentosArgs<ExtArgs>
   _count?: boolean | Prisma.AtividadeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AtividadeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
+  turma?: boolean | Prisma.Atividade$turmaArgs<ExtArgs>
 }
 export type AtividadeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
+  turma?: boolean | Prisma.Atividade$turmaArgs<ExtArgs>
 }
 
 export type $AtividadePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -834,6 +1213,8 @@ export type $AtividadePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     usuario: Prisma.$UsuarioPayload<ExtArgs>
     comentarios: Prisma.$EstudantePayload<ExtArgs>[]
+    turma: Prisma.$TurmaPayload<ExtArgs> | null
+    agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id_atividade: number
@@ -842,10 +1223,12 @@ export type $AtividadePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     texto_adaptado: string | null
     status: string
     criado_em: Date
+    data_entrega: Date | null
     arquivo_url: string | null
     arquivo_nome: string | null
     arquivo_tipo: string | null
     criado_por: number
+    id_turma: number | null
   }, ExtArgs["result"]["atividade"]>
   composites: {}
 }
@@ -1242,6 +1625,8 @@ export interface Prisma__AtividadeClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   usuario<T extends Prisma.UsuarioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioDefaultArgs<ExtArgs>>): Prisma.Prisma__UsuarioClient<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   comentarios<T extends Prisma.Atividade$comentariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Atividade$comentariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  turma<T extends Prisma.Atividade$turmaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Atividade$turmaArgs<ExtArgs>>): Prisma.Prisma__TurmaClient<runtime.Types.Result.GetResult<Prisma.$TurmaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  agendamentos<T extends Prisma.Atividade$agendamentosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Atividade$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1277,10 +1662,12 @@ export interface AtividadeFieldRefs {
   readonly texto_adaptado: Prisma.FieldRef<"Atividade", 'String'>
   readonly status: Prisma.FieldRef<"Atividade", 'String'>
   readonly criado_em: Prisma.FieldRef<"Atividade", 'DateTime'>
+  readonly data_entrega: Prisma.FieldRef<"Atividade", 'DateTime'>
   readonly arquivo_url: Prisma.FieldRef<"Atividade", 'String'>
   readonly arquivo_nome: Prisma.FieldRef<"Atividade", 'String'>
   readonly arquivo_tipo: Prisma.FieldRef<"Atividade", 'String'>
   readonly criado_por: Prisma.FieldRef<"Atividade", 'Int'>
+  readonly id_turma: Prisma.FieldRef<"Atividade", 'Int'>
 }
     
 
@@ -1703,6 +2090,49 @@ export type Atividade$comentariosArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.EstudanteScalarFieldEnum | Prisma.EstudanteScalarFieldEnum[]
+}
+
+/**
+ * Atividade.turma
+ */
+export type Atividade$turmaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Turma
+   */
+  select?: Prisma.TurmaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Turma
+   */
+  omit?: Prisma.TurmaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TurmaInclude<ExtArgs> | null
+  where?: Prisma.TurmaWhereInput
+}
+
+/**
+ * Atividade.agendamentos
+ */
+export type Atividade$agendamentosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Agendamento
+   */
+  select?: Prisma.AgendamentoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Agendamento
+   */
+  omit?: Prisma.AgendamentoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgendamentoInclude<ExtArgs> | null
+  where?: Prisma.AgendamentoWhereInput
+  orderBy?: Prisma.AgendamentoOrderByWithRelationInput | Prisma.AgendamentoOrderByWithRelationInput[]
+  cursor?: Prisma.AgendamentoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgendamentoScalarFieldEnum | Prisma.AgendamentoScalarFieldEnum[]
 }
 
 /**

@@ -3,14 +3,17 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 import { atividadeDbService } from "@/service/server/atividades";
 import { getSecureSession } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 
 const atividadeSchema = z.object({
   titulo: z.string().min(3).max(200),
   texto_original: z.string().min(5),
+  data_entrega: z.string().optional(),
+  id_turma: z.number().optional(),
 });
 
 // GET /api/atividades
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getSecureSession();
     if (!session || !session.userId) {
@@ -18,11 +21,45 @@ export async function GET() {
     }
 
     const { userId, role } = session;
+    const url = new URL(request.url);
+    const status = url.searchParams.get("status");
+    const turma = url.searchParams.get("turma");
+    const busca = url.searchParams.get("busca");
+    const estudante = url.searchParams.get("estudante");
 
-    const atividades = await atividadeDbService.listar();
+    let atividades = await atividadeDbService.listar();
     
-    // Filtro contra IDOR na listagem
-    const atividadesFiltradas = atividades.filter(a => a.criado_por === parseInt(String(userId), 10) || role === "ADMIN");
+    const uid = parseInt(String(userId), 10);
+
+    // Modo estudante: filtrar apenas atividades das turmas do aluno
+    if (estudante === "true") {
+      const turmasDoAluno = await prisma.turmaAluno.findMany({
+        where: { id_usuario: uid },
+        select: { id_turma: true },
+      });
+      const turmaIds = new Set(turmasDoAluno.map((t) => t.id_turma));
+      atividades = atividades.filter((a) => a.id_turma && turmaIds.has(a.id_turma));
+      return NextResponse.json(atividades);
+    }
+
+    // Modo professor: filtrar por criador ou ADMIN
+    let atividadesFiltradas = atividades.filter(a => a.criado_por === uid || role === "ADMIN");
+
+    // Filtro por status
+    if (status && status !== "todos") {
+      atividadesFiltradas = atividadesFiltradas.filter(a => a.status === status);
+    }
+
+    // Filtro por turma
+    if (turma) {
+      atividadesFiltradas = atividadesFiltradas.filter(a => a.id_turma === parseInt(turma, 10));
+    }
+
+    // Filtro por busca no título
+    if (busca) {
+      const termo = busca.toLowerCase();
+      atividadesFiltradas = atividadesFiltradas.filter(a => a.titulo.toLowerCase().includes(termo));
+    }
 
     return NextResponse.json(atividadesFiltradas);
   } catch (error) {
@@ -56,15 +93,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const { titulo, texto_original } = parsedData.data;
+    const { titulo, texto_original, data_entrega, id_turma } = parsedData.data;
 
-    // Pega o ID seguro vindo do cookie de sessão, ignorando qualquer 'criado_por' malicioso no body
     const criado_por = parseInt(userId, 10);
 
     const atividade = await atividadeDbService.criar({
       titulo,
       texto_original,
       criado_por,
+      data_entrega: data_entrega ? new Date(data_entrega) : null,
+      id_turma: id_turma || null,
     });
     return NextResponse.json(atividade, { status: 201 });
   } catch (error) {

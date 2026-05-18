@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/lib/useAuth";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import VLibras from "@/components/VLibras/VLibras";
 
 export default function RootLayout({
   children,
@@ -34,6 +35,7 @@ export default function RootLayout({
             />
           </AuthProvider>
         </ThemeProvider>
+        <VLibras />
       </body>
     </html>
   )

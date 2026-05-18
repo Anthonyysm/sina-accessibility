@@ -1,29 +1,24 @@
 "use client"
 
+import { usePathname, useRouter } from "next/navigation"
 import { Separator } from "@/components/ui/separator"
 import logo_sina from "@/public/LogoSina.png"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/useAuth"
 import {
   MdDashboard,
+  MdGroups,
+  MdSchool,
   MdLibraryBooks,
+  MdEvent,
   MdPersonOutline,
   MdEdit,
   MdClose,
   MdLogout,
 } from "react-icons/md"
 
-const navItems = [
-  { icon: MdDashboard, label: "Dashboard" },
-  { icon: MdLibraryBooks, label: "Publicações" },
-  { icon: MdPersonOutline, label: "Tradutor de Glosa" },
-]
-
 interface SidebarProps {
-  activeNav: number
-  setActiveNav: (index: number) => void
   mobileMenuOpen?: boolean
   setMobileMenuOpen?: (open: boolean) => void
 }
@@ -35,6 +30,15 @@ const DB_TO_LABEL: Record<string, string> = {
   ESTUDANTE: "Estudante",
   COORDENADOR: "Coordenador",
 }
+
+const NAV_ITEMS = [
+  { icon: MdDashboard, label: "Dashboard", path: "/Dashboard" },
+  { icon: MdGroups, label: "Turmas", path: "/Dashboard/turmas" },
+  { icon: MdSchool, label: "Alunos", path: "/Dashboard/alunos" },
+  { icon: MdLibraryBooks, label: "Publicações", path: "/Dashboard/publicacoes" },
+  { icon: MdEvent, label: "Agendamentos", path: "/Dashboard/agendamentos" },
+  { icon: MdPersonOutline, label: "Tradutor de Glosa", path: "/Dashboard/tradutor" },
+]
 
 function getInitials(n: string) {
   return (
@@ -50,19 +54,12 @@ function getInitials(n: string) {
 }
 
 export default function Sidebar({
-  activeNav,
-  setActiveNav,
   mobileMenuOpen,
   setMobileMenuOpen,
 }: SidebarProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const { user, logout } = useAuth()
-
-  const navItems = [
-    { icon: MdDashboard, label: "Dashboard" },
-    { icon: MdLibraryBooks, label: "Publicações" },
-    { icon: MdPersonOutline, label: "Tradutor de Glosa" },
-  ]
 
   const userName = user?.nome ?? ""
   const userLabel = user
@@ -71,6 +68,13 @@ export default function Sidebar({
   const avatarColor = user
     ? AVATAR_COLORS[user.id_usuario % AVATAR_COLORS.length]
     : "#3b5fa0"
+
+  function isActive(path: string) {
+    if (path === "/Dashboard") return pathname === "/Dashboard"
+    return pathname?.startsWith(path) ?? false
+  }
+
+  const isPerfil = pathname === "/Perfil"
 
   return (
     <>
@@ -119,27 +123,26 @@ export default function Sidebar({
 
         {/* Nav */}
         <nav className="flex flex-1 flex-col gap-0.5 px-4 py-5">
-          {navItems.map((item, i) => {
+          {NAV_ITEMS.map((item) => {
             const Icon = item.icon
-            const isActive = activeNav === i
+            const active = isActive(item.path)
             return (
               <Button
-                key={item.label}
+                key={item.path}
                 variant="ghost"
                 onClick={() => {
-                  setActiveNav(i)
+                  router.push(item.path)
                   setMobileMenuOpen?.(false)
-                  router.push("/Dashboard")
                 }}
                 className={`h-auto w-full justify-start gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
-                  isActive
+                  active
                     ? "bg-white/15 text-white hover:bg-white/20"
                     : "text-white/55 hover:bg-white/[0.08] hover:text-white/85"
                 }`}
               >
                 <Icon className="shrink-0 text-lg" />
                 {item.label}
-                {isActive && (
+                {active && (
                   <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#5db5d8]" />
                 )}
               </Button>
@@ -149,13 +152,15 @@ export default function Sidebar({
 
         <Separator className="mx-4 w-auto bg-white/10" />
 
-        {/* User — clicável para editar perfil */}
+        {/* User */}
         <button
           onClick={() => {
             setMobileMenuOpen?.(false)
             router.push("/Perfil")
           }}
-          className="group flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-white/[0.06]"
+          className={`group flex w-full items-center gap-3 px-5 py-4 text-left transition-colors ${
+            isPerfil ? "bg-white/15 text-white" : "hover:bg-white/[0.06]"
+          }`}
         >
           <div
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"

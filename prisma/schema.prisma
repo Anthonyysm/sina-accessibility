@@ -23,12 +23,43 @@ model Usuario {
   disciplinas  String[] @default([])
   turmas       String[] @default([])
 
-  atividades Atividade[]
-  comentarios Estudante[]
+  atividades   Atividade[]
+  comentarios  Estudante[]
 
-  estudantesVinculados ProfessorEstudante[] @relation("ProfessorToEstudante")
+  estudantesVinculados  ProfessorEstudante[] @relation("ProfessorToEstudante")
   professoresVinculados ProfessorEstudante[] @relation("EstudanteToProfessor")
+
+  turmasCriadas  Turma[]        @relation("TurmaProfessor")
+  alunosEmTurmas TurmaAluno[]
+  agendamentos   Agendamento[]  @relation("AgendamentoCriador")
+
   @@map("usuarios")
+}
+
+model Turma {
+  id_turma    Int        @id @default(autoincrement())
+  nome        String     @db.VarChar(100)
+  descricao   String?    @db.Text
+  criado_em   DateTime   @default(now())
+  criado_por  Int
+
+  professor   Usuario    @relation("TurmaProfessor", fields: [criado_por], references: [id_usuario])
+  alunos      TurmaAluno[]
+  atividades  Atividade[]
+
+  @@map("turmas")
+}
+
+model TurmaAluno {
+  id_turma      Int
+  id_usuario    Int
+  adicionado_em DateTime @default(now())
+
+  turma         Turma    @relation(fields: [id_turma], references: [id_turma], onDelete: Cascade)
+  usuario       Usuario  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+
+  @@id([id_turma, id_usuario])
+  @@map("turma_aluno")
 }
 
 model Atividade {
@@ -38,6 +69,7 @@ model Atividade {
   texto_adaptado      String?   @db.Text
   status              String    @default("pending")
   criado_em           DateTime  @default(now())
+  data_entrega        DateTime?
 
   arquivo_url         String?   @db.VarChar(500)
   arquivo_nome        String?   @db.VarChar(255)
@@ -45,25 +77,31 @@ model Atividade {
 
   criado_por          Int
   usuario             Usuario   @relation(fields: [criado_por], references: [id_usuario])
-  comentarios    Estudante[]
+  comentarios         Estudante[]
+
+  id_turma            Int?
+  turma               Turma?    @relation(fields: [id_turma], references: [id_turma])
+
+  agendamentos        Agendamento[]
+
   @@map("atividades")
 }
 
 model Estudante {
   id_comentario Int      @id @default(autoincrement())
   id_atividade  Int      @map("id_atividade")
-  id_usuario    Int      @map("id_usuario") 
+  id_usuario    Int      @map("id_usuario")
   comentario    String?
   criado_em     DateTime @default(now()) @map("criado_em")
 
   atividade Atividade @relation(fields: [id_atividade], references: [id_atividade], onDelete: Cascade)
-  usuario   Usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade) 
+  usuario   Usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
 
   @@map("estudante_comentario")
 }
 
 model ProfessorEstudante {
-  id_professor  Int      @map("id_professor") // Corrigido erro de digitação (profesor)
+  id_professor  Int      @map("id_professor")
   id_estudante  Int      @map("id_estudante")
   vinculado_em  DateTime @default(now()) @map("vinculado_em")
 
@@ -72,4 +110,19 @@ model ProfessorEstudante {
 
   @@id([id_professor, id_estudante])
   @@map("professor_estudante")
+}
+
+model Agendamento {
+  id_agendamento  Int       @id @default(autoincrement())
+  titulo          String    @db.VarChar(150)
+  descricao       String?   @db.Text
+  data            DateTime
+  criado_em       DateTime  @default(now())
+  criado_por      Int
+
+  criador         Usuario   @relation("AgendamentoCriador", fields: [criado_por], references: [id_usuario])
+  id_atividade    Int?
+  atividade       Atividade? @relation(fields: [id_atividade], references: [id_atividade], onDelete: SetNull)
+
+  @@map("agendamentos")
 }

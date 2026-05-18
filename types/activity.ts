@@ -24,6 +24,10 @@ export interface Activity {
   done: boolean;
   comments: Comment[];
   textoOriginal?: string;
+  turma?: string;
+  dataEntregaReal?: string;
+  isOverdue?: boolean;
+  isUrgent?: boolean;
 }
 
 export type Filter = "todos" | "pendentes" | "concluídas";

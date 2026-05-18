@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { MdAdd, MdClose, MdArticle, MdTextFields, MdUploadFile, MdDeleteOutline, MdCheckCircle } from "react-icons/md";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { MdAdd, MdClose, MdArticle, MdTextFields, MdUploadFile, MdDeleteOutline, MdCheckCircle, MdCalendarToday, MdGroups } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,14 +22,23 @@ interface NovaAtividadeModalProps {
 type FormState = {
   titulo: string;
   texto_original: string;
+  data_entrega: string;
+  id_turma: string;
 };
 
 const INITIAL_FORM: FormState = {
   titulo: "",
   texto_original: "",
+  data_entrega: "",
+  id_turma: "",
 };
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+interface TurmaOption {
+  id_turma: number;
+  nome: string;
+}
 
 export function NovaAtividadeModal({
   open,
@@ -44,10 +53,24 @@ export function NovaAtividadeModal({
   const [pdfExtracting, setPdfExtracting] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [pdfUploaded, setPdfUploaded] = useState(false);
+  const [turmas, setTurmas] = useState<TurmaOption[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (open) {
+      fetch(`/api/turmas?criado_por=${criadoPor}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setTurmas(data.map((t: any) => ({ id_turma: t.id_turma, nome: t.nome })));
+          }
+        })
+        .catch(() => setTurmas([]));
+    }
+  }, [open, criadoPor]);
+
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -86,6 +109,8 @@ export function NovaAtividadeModal({
     const formData = new FormData();
     formData.append("file", file);
     formData.append("titulo", form.titulo.trim() || "titulo-temporario");
+    if (form.data_entrega) formData.append("data_entrega", form.data_entrega);
+    if (form.id_turma) formData.append("id_turma", form.id_turma);
 
     try {
       const res = await fetch("/api/atividades/upload", {
@@ -113,7 +138,7 @@ export function NovaAtividadeModal({
     } finally {
       setPdfExtracting(false);
     }
-  }, [form.titulo]);
+  }, [form.titulo, form.data_entrega, form.id_turma]);
 
   function handleFileSelect(file: File | undefined) {
     if (file) processPdf(file);
@@ -182,14 +207,18 @@ export function NovaAtividadeModal({
         return;
       }
 
+      const body: Record<string, any> = {
+        titulo: form.titulo.trim(),
+        texto_original: form.texto_original.trim(),
+        criado_por: criadoPor,
+      };
+      if (form.data_entrega) body.data_entrega = form.data_entrega;
+      if (form.id_turma) body.id_turma = parseInt(form.id_turma, 10);
+
       const res = await fetch("/api/atividades", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          titulo: form.titulo.trim(),
-          texto_original: form.texto_original.trim(),
-          criado_por: criadoPor,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
@@ -215,7 +244,6 @@ export function NovaAtividadeModal({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden rounded-2xl border-0 shadow-2xl [&>button:last-child]:hidden">
-        {/* Header colorido */}
         <div className="bg-[#2b5784] px-6 pt-5 pb-5 relative overflow-hidden">
           <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute top-2 right-20 w-20 h-20 rounded-full bg-white/5 pointer-events-none" />
@@ -243,9 +271,7 @@ export function NovaAtividadeModal({
           </DialogHeader>
         </div>
 
-        {/* Corpo do formulário */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
-          {/* Erro global */}
           {error && (
             <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
               <MdClose className="mt-0.5 shrink-0 text-red-500" />
@@ -255,10 +281,7 @@ export function NovaAtividadeModal({
 
           {/* Título */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="titulo"
-              className="flex items-center gap-1.5 text-sm font-semibold text-slate-700"
-            >
+            <label htmlFor="titulo" className="flex items-center gap-1.5 text-sm font-semibold text-slate-700">
               <MdTextFields className="text-[#2b5784] text-base" />
               Título da Atividade
               <span className="text-red-500 ml-0.5">*</span>
@@ -275,9 +298,45 @@ export function NovaAtividadeModal({
               disabled={loading}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-[#2b5784] focus:bg-white focus:ring-2 focus:ring-[#2b5784]/10 disabled:opacity-60"
             />
-            <p className="text-xs text-slate-400 text-right">
-              {form.titulo.length}/120
-            </p>
+            <p className="text-xs text-slate-400 text-right">{form.titulo.length}/120</p>
+          </div>
+
+          {/* Data de Entrega + Turma */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label htmlFor="data_entrega" className="flex items-center gap-1.5 text-sm font-semibold text-slate-700">
+                <MdCalendarToday className="text-[#2b5784] text-base" />
+                Data de Entrega
+              </label>
+              <input
+                id="data_entrega"
+                name="data_entrega"
+                type="date"
+                value={form.data_entrega}
+                onChange={handleChange}
+                disabled={loading}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-800 outline-none transition focus:border-[#2b5784] focus:bg-white focus:ring-2 focus:ring-[#2b5784]/10 disabled:opacity-60"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label htmlFor="id_turma" className="flex items-center gap-1.5 text-sm font-semibold text-slate-700">
+                <MdGroups className="text-[#2b5784] text-base" />
+                Turma
+              </label>
+              <select
+                id="id_turma"
+                name="id_turma"
+                value={form.id_turma}
+                onChange={handleChange}
+                disabled={loading}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-800 outline-none transition focus:border-[#2b5784] focus:bg-white focus:ring-2 focus:ring-[#2b5784]/10 disabled:opacity-60"
+              >
+                <option value="">Sem turma</option>
+                {turmas.map((t) => (
+                  <option key={t.id_turma} value={t.id_turma}>{t.nome}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Upload de PDF */}
@@ -350,10 +409,7 @@ export function NovaAtividadeModal({
 
           {/* Texto Original */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="texto_original"
-              className="flex items-center gap-1.5 text-sm font-semibold text-slate-700"
-            >
+            <label htmlFor="texto_original" className="flex items-center gap-1.5 text-sm font-semibold text-slate-700">
               <MdArticle className="text-[#2b5784] text-base" />
               Texto Original
               {!pdfUploaded && <span className="text-red-500 ml-0.5">*</span>}
@@ -378,17 +434,13 @@ export function NovaAtividadeModal({
               <p className="text-xs text-slate-400">
                 {pdfUploaded ? "PDF enviado — o texto será extraído automaticamente" : "O texto será processado pela IA para adaptação."}
               </p>
-              <p
-                className={`text-xs ${
-                  charCount > 25000 ? "text-amber-500" : "text-slate-400"
-                }`}
-              >
+              <p className={`text-xs ${charCount > 25000 ? "text-amber-500" : "text-slate-400"}`}>
                 {charCount.toLocaleString("pt-BR")}/30.000
               </p>
             </div>
           </div>
 
-          {/* Rodapé com ações */}
+          {/* Rodapé */}
           <div className="flex justify-end gap-3 pt-1">
             <Button
               type="button"
@@ -405,15 +457,9 @@ export function NovaAtividadeModal({
               className="rounded-xl bg-[#2b5784] hover:bg-[#1e3a5f] text-white font-semibold px-6 gap-2 transition-all"
             >
               {loading ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                  Criando...
-                </>
+                <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />Criando...</>
               ) : (
-                <>
-                  <MdAdd className="text-lg" />
-                  Criar Atividade
-                </>
+                <><MdAdd className="text-lg" />Criar Atividade</>
               )}
             </Button>
           </div>

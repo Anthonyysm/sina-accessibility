@@ -9,7 +9,10 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Usuario'
+export type * from './models/Turma'
+export type * from './models/TurmaAluno'
 export type * from './models/Atividade'
 export type * from './models/Estudante'
 export type * from './models/ProfessorEstudante'
+export type * from './models/Agendamento'
 export type * from './commonInputTypes'

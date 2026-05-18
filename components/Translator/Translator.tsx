@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -12,6 +12,7 @@ import {
   MdMenuBook,
   MdRecordVoiceOver,
   MdPictureAsPdf,
+  MdRefresh,
 } from "react-icons/md"
 import { HiDotsVertical } from "react-icons/hi"
 import {
@@ -21,6 +22,48 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner"
+
+function AIStatusBadge() {
+  const [status, setStatus] = useState<"online" | "offline" | "checking">("checking")
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const check = useCallback(async () => {
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 5000)
+      const res = await fetch("/api/agents/agentglosa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto: "teste" }),
+        signal: controller.signal,
+      })
+      clearTimeout(timeout)
+      setStatus(res.ok ? "online" : "offline")
+    } catch {
+      setStatus("offline")
+    }
+  }, [])
+
+  useEffect(() => {
+    check()
+    intervalRef.current = setInterval(check, 60000)
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+  }, [check])
+
+  const dotColor = status === "online" ? "bg-green-400" : status === "offline" ? "bg-red-400" : "bg-amber-400 animate-pulse"
+
+  return (
+    <button
+      onClick={check}
+      className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white/60 hover:bg-white/15 hover:text-white/80 transition-colors"
+      title={status === "online" ? "IA Online" : status === "offline" ? "IA Indisponível" : "Verificando..."}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${dotColor}`} />
+      {status === "online" ? "IA Online" : status === "offline" ? "Indisponível" : "..."}
+      <MdRefresh className={`text-[10px] ${status === "checking" ? "animate-spin" : ""}`} />
+    </button>
+  )
+}
 
 export default function TranslatorContainer() {
   const [originalText, setOriginalText] = useState("")
@@ -112,10 +155,11 @@ export default function TranslatorContainer() {
 
   return (
     <div className="flex h-full animate-in flex-col gap-6 duration-500 fade-in">
-      <div className="flex flex-col gap-1">
+      <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500 font-bold">
           Converta conteúdos didáticos para Glosa de Libras com apoio de IA.
         </p>
+        <AIStatusBadge />
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-2">

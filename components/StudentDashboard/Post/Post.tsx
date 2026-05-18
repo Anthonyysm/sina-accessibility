@@ -68,6 +68,22 @@ export default function Post({ activity, onToggleDone, onComment }: PostProps) {
             >
               {activity.subject}
             </Badge>
+            {activity.isOverdue && !activity.done && (
+              <Badge
+                variant="outline"
+                className="text-[10px] font-semibold rounded-full px-2 py-0 h-4 bg-red-50 text-red-700 border-red-200"
+              >
+                Atrasada
+              </Badge>
+            )}
+            {activity.isUrgent && !activity.done && !activity.isOverdue && (
+              <Badge
+                variant="outline"
+                className="text-[10px] font-semibold rounded-full px-2 py-0 h-4 bg-amber-50 text-amber-700 border-amber-200"
+              >
+                Urgente
+              </Badge>
+            )}
             {activity.done && (
               <Badge
                 variant="outline"
@@ -102,9 +118,17 @@ export default function Post({ activity, onToggleDone, onComment }: PostProps) {
 
           {/* Data de entrega */}
           <div className="flex items-center gap-1.5 mb-3 sm:mb-4">
-            <MdCalendarToday className="text-sm text-[#c8d8e8] shrink-0" />
-            <span className="text-xs text-[#9aadca]">
-              Entrega: {activity.dueDate}
+            <MdCalendarToday className={`text-sm shrink-0 ${
+              activity.isOverdue && !activity.done ? "text-red-400" :
+              activity.isUrgent && !activity.done ? "text-amber-400" :
+              "text-[#c8d8e8]"
+            }`} />
+            <span className={`text-xs ${
+              activity.isOverdue && !activity.done ? "text-red-500 font-semibold" :
+              activity.isUrgent && !activity.done ? "text-amber-600 font-semibold" :
+              "text-[#9aadca]"
+            }`}>
+              {activity.dataEntregaReal ? `Entrega: ${activity.dueDate}` : activity.dueDate}
             </span>
           </div>
 

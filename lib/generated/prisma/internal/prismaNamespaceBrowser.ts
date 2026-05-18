@@ -52,9 +52,12 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Usuario: 'Usuario',
+  Turma: 'Turma',
+  TurmaAluno: 'TurmaAluno',
   Atividade: 'Atividade',
   Estudante: 'Estudante',
-  ProfessorEstudante: 'ProfessorEstudante'
+  ProfessorEstudante: 'ProfessorEstudante',
+  Agendamento: 'Agendamento'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -88,6 +91,26 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+export const TurmaScalarFieldEnum = {
+  id_turma: 'id_turma',
+  nome: 'nome',
+  descricao: 'descricao',
+  criado_em: 'criado_em',
+  criado_por: 'criado_por'
+} as const
+
+export type TurmaScalarFieldEnum = (typeof TurmaScalarFieldEnum)[keyof typeof TurmaScalarFieldEnum]
+
+
+export const TurmaAlunoScalarFieldEnum = {
+  id_turma: 'id_turma',
+  id_usuario: 'id_usuario',
+  adicionado_em: 'adicionado_em'
+} as const
+
+export type TurmaAlunoScalarFieldEnum = (typeof TurmaAlunoScalarFieldEnum)[keyof typeof TurmaAlunoScalarFieldEnum]
+
+
 export const AtividadeScalarFieldEnum = {
   id_atividade: 'id_atividade',
   titulo: 'titulo',
@@ -95,10 +118,12 @@ export const AtividadeScalarFieldEnum = {
   texto_adaptado: 'texto_adaptado',
   status: 'status',
   criado_em: 'criado_em',
+  data_entrega: 'data_entrega',
   arquivo_url: 'arquivo_url',
   arquivo_nome: 'arquivo_nome',
   arquivo_tipo: 'arquivo_tipo',
-  criado_por: 'criado_por'
+  criado_por: 'criado_por',
+  id_turma: 'id_turma'
 } as const
 
 export type AtividadeScalarFieldEnum = (typeof AtividadeScalarFieldEnum)[keyof typeof AtividadeScalarFieldEnum]
@@ -122,6 +147,19 @@ export const ProfessorEstudanteScalarFieldEnum = {
 } as const
 
 export type ProfessorEstudanteScalarFieldEnum = (typeof ProfessorEstudanteScalarFieldEnum)[keyof typeof ProfessorEstudanteScalarFieldEnum]
+
+
+export const AgendamentoScalarFieldEnum = {
+  id_agendamento: 'id_agendamento',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  data: 'data',
+  criado_em: 'criado_em',
+  criado_por: 'criado_por',
+  id_atividade: 'id_atividade'
+} as const
+
+export type AgendamentoScalarFieldEnum = (typeof AgendamentoScalarFieldEnum)[keyof typeof AgendamentoScalarFieldEnum]
 
 
 export const SortOrder = {

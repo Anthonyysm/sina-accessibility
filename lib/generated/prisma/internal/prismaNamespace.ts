@@ -385,9 +385,12 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Usuario: 'Usuario',
+  Turma: 'Turma',
+  TurmaAluno: 'TurmaAluno',
   Atividade: 'Atividade',
   Estudante: 'Estudante',
-  ProfessorEstudante: 'ProfessorEstudante'
+  ProfessorEstudante: 'ProfessorEstudante',
+  Agendamento: 'Agendamento'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "usuario" | "atividade" | "estudante" | "professorEstudante"
+    modelProps: "usuario" | "turma" | "turmaAluno" | "atividade" | "estudante" | "professorEstudante" | "agendamento"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +481,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UsuarioCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UsuarioCountAggregateOutputType> | number
+        }
+      }
+    }
+    Turma: {
+      payload: Prisma.$TurmaPayload<ExtArgs>
+      fields: Prisma.TurmaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TurmaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TurmaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>
+        }
+        findFirst: {
+          args: Prisma.TurmaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TurmaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>
+        }
+        findMany: {
+          args: Prisma.TurmaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>[]
+        }
+        create: {
+          args: Prisma.TurmaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>
+        }
+        createMany: {
+          args: Prisma.TurmaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TurmaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>[]
+        }
+        delete: {
+          args: Prisma.TurmaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>
+        }
+        update: {
+          args: Prisma.TurmaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>
+        }
+        deleteMany: {
+          args: Prisma.TurmaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TurmaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TurmaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>[]
+        }
+        upsert: {
+          args: Prisma.TurmaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaPayload>
+        }
+        aggregate: {
+          args: Prisma.TurmaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTurma>
+        }
+        groupBy: {
+          args: Prisma.TurmaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TurmaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TurmaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TurmaCountAggregateOutputType> | number
+        }
+      }
+    }
+    TurmaAluno: {
+      payload: Prisma.$TurmaAlunoPayload<ExtArgs>
+      fields: Prisma.TurmaAlunoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TurmaAlunoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TurmaAlunoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>
+        }
+        findFirst: {
+          args: Prisma.TurmaAlunoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TurmaAlunoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>
+        }
+        findMany: {
+          args: Prisma.TurmaAlunoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>[]
+        }
+        create: {
+          args: Prisma.TurmaAlunoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>
+        }
+        createMany: {
+          args: Prisma.TurmaAlunoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TurmaAlunoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>[]
+        }
+        delete: {
+          args: Prisma.TurmaAlunoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>
+        }
+        update: {
+          args: Prisma.TurmaAlunoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>
+        }
+        deleteMany: {
+          args: Prisma.TurmaAlunoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TurmaAlunoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TurmaAlunoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>[]
+        }
+        upsert: {
+          args: Prisma.TurmaAlunoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TurmaAlunoPayload>
+        }
+        aggregate: {
+          args: Prisma.TurmaAlunoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTurmaAluno>
+        }
+        groupBy: {
+          args: Prisma.TurmaAlunoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TurmaAlunoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TurmaAlunoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TurmaAlunoCountAggregateOutputType> | number
         }
       }
     }
@@ -703,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Agendamento: {
+      payload: Prisma.$AgendamentoPayload<ExtArgs>
+      fields: Prisma.AgendamentoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AgendamentoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AgendamentoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>
+        }
+        findFirst: {
+          args: Prisma.AgendamentoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AgendamentoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>
+        }
+        findMany: {
+          args: Prisma.AgendamentoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>[]
+        }
+        create: {
+          args: Prisma.AgendamentoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>
+        }
+        createMany: {
+          args: Prisma.AgendamentoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AgendamentoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>[]
+        }
+        delete: {
+          args: Prisma.AgendamentoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>
+        }
+        update: {
+          args: Prisma.AgendamentoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>
+        }
+        deleteMany: {
+          args: Prisma.AgendamentoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AgendamentoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AgendamentoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>[]
+        }
+        upsert: {
+          args: Prisma.AgendamentoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgendamentoPayload>
+        }
+        aggregate: {
+          args: Prisma.AgendamentoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAgendamento>
+        }
+        groupBy: {
+          args: Prisma.AgendamentoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgendamentoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AgendamentoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgendamentoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -757,6 +982,26 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+export const TurmaScalarFieldEnum = {
+  id_turma: 'id_turma',
+  nome: 'nome',
+  descricao: 'descricao',
+  criado_em: 'criado_em',
+  criado_por: 'criado_por'
+} as const
+
+export type TurmaScalarFieldEnum = (typeof TurmaScalarFieldEnum)[keyof typeof TurmaScalarFieldEnum]
+
+
+export const TurmaAlunoScalarFieldEnum = {
+  id_turma: 'id_turma',
+  id_usuario: 'id_usuario',
+  adicionado_em: 'adicionado_em'
+} as const
+
+export type TurmaAlunoScalarFieldEnum = (typeof TurmaAlunoScalarFieldEnum)[keyof typeof TurmaAlunoScalarFieldEnum]
+
+
 export const AtividadeScalarFieldEnum = {
   id_atividade: 'id_atividade',
   titulo: 'titulo',
@@ -764,10 +1009,12 @@ export const AtividadeScalarFieldEnum = {
   texto_adaptado: 'texto_adaptado',
   status: 'status',
   criado_em: 'criado_em',
+  data_entrega: 'data_entrega',
   arquivo_url: 'arquivo_url',
   arquivo_nome: 'arquivo_nome',
   arquivo_tipo: 'arquivo_tipo',
-  criado_por: 'criado_por'
+  criado_por: 'criado_por',
+  id_turma: 'id_turma'
 } as const
 
 export type AtividadeScalarFieldEnum = (typeof AtividadeScalarFieldEnum)[keyof typeof AtividadeScalarFieldEnum]
@@ -791,6 +1038,19 @@ export const ProfessorEstudanteScalarFieldEnum = {
 } as const
 
 export type ProfessorEstudanteScalarFieldEnum = (typeof ProfessorEstudanteScalarFieldEnum)[keyof typeof ProfessorEstudanteScalarFieldEnum]
+
+
+export const AgendamentoScalarFieldEnum = {
+  id_agendamento: 'id_agendamento',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  data: 'data',
+  criado_em: 'criado_em',
+  criado_por: 'criado_por',
+  id_atividade: 'id_atividade'
+} as const
+
+export type AgendamentoScalarFieldEnum = (typeof AgendamentoScalarFieldEnum)[keyof typeof AgendamentoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -996,9 +1256,12 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   usuario?: Prisma.UsuarioOmit
+  turma?: Prisma.TurmaOmit
+  turmaAluno?: Prisma.TurmaAlunoOmit
   atividade?: Prisma.AtividadeOmit
   estudante?: Prisma.EstudanteOmit
   professorEstudante?: Prisma.ProfessorEstudanteOmit
+  agendamento?: Prisma.AgendamentoOmit
 }
 
 /* Types for Logging */

@@ -17,6 +17,8 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const titulo = formData.get("titulo") as string | null;
+    const data_entrega = formData.get("data_entrega") as string | null;
+    const id_turma = formData.get("id_turma") as string | null;
 
     if (!file) {
       return NextResponse.json(
@@ -71,6 +73,8 @@ export async function POST(request: Request) {
       arquivo_url: storedFile.url,
       arquivo_nome: storedFile.name,
       arquivo_tipo: storedFile.type,
+      data_entrega: data_entrega ? new Date(data_entrega) : null,
+      id_turma: id_turma ? parseInt(id_turma, 10) : null,
     });
 
     return NextResponse.json(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -42,6 +42,7 @@ import {
   MdArticle,
   MdAttachFile,
   MdPictureAsPdf,
+  MdRefresh,
 } from "react-icons/md";
 import { PdfViewerModal } from "@/components/StudentDashboard/PdfViewerModal/PdfViewerModal";
 
@@ -54,8 +55,11 @@ interface Atividade {
   texto_adaptado: string | null;
   status: string;
   criado_em: string;
+  data_entrega: string | null;
   arquivo_url: string | null;
   arquivo_nome: string | null;
+  id_turma: number | null;
+  turma: { nome: string } | null;
   usuario: {
     nome: string;
   };
@@ -129,6 +133,12 @@ function UserAvatar({
 export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }) {
   const [materiais, setMateriais] = useState<Atividade[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState("todos");
+  const [busca, setBusca] = useState("");
+  const [turmaFilter, setTurmaFilter] = useState("");
+  const [turmas, setTurmas] = useState<{ id_turma: number; nome: string }[]>([]);
+  const [lastRefresh, setLastRefresh] = useState<string>("");
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
   // Estados do Modal de Visualização
   const [selectedAtividade, setSelectedAtividade] = useState<Atividade | null>(null);
@@ -149,16 +159,54 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
     }
   };
 
-  useEffect(() => {
-    setLoading(true);
-    fetch("/api/atividades")
+  const fetchMateriais = useCallback(() => {
+    const params = new URLSearchParams();
+    if (statusFilter !== "todos") params.set("status", statusFilter);
+    if (busca.trim()) params.set("busca", busca.trim());
+    if (turmaFilter) params.set("turma", turmaFilter);
+
+    fetch(`/api/atividades?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) setMateriais(data);
+        if (Array.isArray(data)) {
+          setMateriais(data);
+          setLastRefresh(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }));
+        }
       })
       .catch((err) => console.error("Erro ao buscar atividades:", err))
       .finally(() => setLoading(false));
-  }, [refreshKey]);
+  }, [statusFilter, busca, turmaFilter]);
+
+  useEffect(() => {
+    fetch("/api/turmas")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setTurmas(data.map((t: any) => ({ id_turma: t.id_turma, nome: t.nome })));
+      })
+      .catch(() => setTurmas([]));
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchMateriais();
+  }, [refreshKey, fetchMateriais]);
+
+  useEffect(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(fetchMateriais, 15000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [fetchMateriais]);
+
+  useEffect(() => {
+    const handler = () => {
+      setLoading(true);
+      fetchMateriais();
+    };
+    window.addEventListener("nova-atividade", handler);
+    return () => window.removeEventListener("nova-atividade", handler);
+  }, [fetchMateriais]);
 
   return (
     <Card className="rounded-2xl border-0 shadow-none bg-white overflow-hidden">
@@ -167,17 +215,64 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
           <CardTitle className="text-base font-bold text-[#1e3a5f]">
             Materiais recentes
           </CardTitle>
-          <CardDescription className="text-xs text-[#6b7fa3] mt-0.5">
+          <CardDescription className="text-xs text-[#6b7fa3] mt-0.5 flex items-center gap-1.5">
             Últimas adaptações e revisões da sua equipe
+            {lastRefresh && (
+              <span className="text-[10px] text-slate-400">· Atualizado às {lastRefresh}</span>
+            )}
           </CardDescription>
         </div>
-        <Button
-          variant="link"
-          className="text-xs font-semibold text-[#2563a8] p-0 h-auto hover:no-underline hover:text-[#1e3a5f]"
+        <button
+          onClick={() => { setLoading(true); fetchMateriais(); }}
+          className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-[#2b5784] transition-colors"
+          title="Atualizar lista"
         >
-          Ver todos
-        </Button>
+          <MdRefresh className={`text-base ${loading ? "animate-spin" : ""}`} />
+        </button>
       </CardHeader>
+
+      {/* Filtros */}
+      <div className="px-4 md:px-6 py-3 border-b border-[#f0f4f9] flex flex-wrap gap-2 items-center">
+        <input
+          type="text"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          placeholder="Buscar por título..."
+          className="flex-1 min-w-[150px] rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800 placeholder-slate-400 outline-none transition focus:border-[#2b5784] focus:bg-white"
+        />
+        <div className="flex gap-1">
+          {[
+            { value: "todos", label: "Todos" },
+            { value: "pending", label: "Pendentes" },
+            { value: "feito", label: "Feitos" },
+            { value: "done", label: "Concluídos" },
+          ].map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setStatusFilter(f.value)}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                statusFilter === f.value
+                  ? "bg-[#2b5784] text-white"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        {turmas.length > 0 && (
+          <select
+            value={turmaFilter}
+            onChange={(e) => setTurmaFilter(e.target.value)}
+            className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800 outline-none transition focus:border-[#2b5784]"
+          >
+            <option value="">Todas as turmas</option>
+            {turmas.map((t) => (
+              <option key={t.id_turma} value={t.id_turma}>{t.nome}</option>
+            ))}
+          </select>
+        )}
+      </div>
 
       <CardContent className="p-0">
         <Table>
@@ -242,17 +337,37 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
                             </Tooltip>
                           </TooltipProvider>
                         )}
+                        {m.turma && (
+                          <span className="shrink-0 text-[10px] font-semibold bg-blue-50 text-blue-700 rounded-full px-2 py-0.5">
+                            {m.turma.nome}
+                          </span>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="py-4">
                       <StatusBadge status={m.status} />
                     </TableCell>
-                    <TableCell className="py-4 text-xs text-[#6b7fa3] whitespace-nowrap">
-                      {new Date(m.criado_em).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
+                    <TableCell className="py-4">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-[#6b7fa3] whitespace-nowrap">
+                          {new Date(m.criado_em).toLocaleDateString("pt-BR", {
+                            day: "2-digit",
+                            month: "short",
+                          })}
+                        </span>
+                        {m.data_entrega && (
+                          <span className={`text-[10px] font-semibold whitespace-nowrap ${
+                            new Date(m.data_entrega) < new Date() && m.status !== "feito" && m.status !== "done"
+                              ? "text-red-500"
+                              : "text-green-600"
+                          }`}>
+                            Entrega: {new Date(m.data_entrega).toLocaleDateString("pt-BR", {
+                              day: "2-digit",
+                              month: "short",
+                            })}
+                          </span>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="py-4">
                       <div className="flex items-center gap-2">

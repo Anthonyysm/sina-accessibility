@@ -244,6 +244,9 @@ export type UsuarioWhereInput = {
   comentarios?: Prisma.EstudanteListRelationFilter
   estudantesVinculados?: Prisma.ProfessorEstudanteListRelationFilter
   professoresVinculados?: Prisma.ProfessorEstudanteListRelationFilter
+  turmasCriadas?: Prisma.TurmaListRelationFilter
+  alunosEmTurmas?: Prisma.TurmaAlunoListRelationFilter
+  agendamentos?: Prisma.AgendamentoListRelationFilter
 }
 
 export type UsuarioOrderByWithRelationInput = {
@@ -260,6 +263,9 @@ export type UsuarioOrderByWithRelationInput = {
   comentarios?: Prisma.EstudanteOrderByRelationAggregateInput
   estudantesVinculados?: Prisma.ProfessorEstudanteOrderByRelationAggregateInput
   professoresVinculados?: Prisma.ProfessorEstudanteOrderByRelationAggregateInput
+  turmasCriadas?: Prisma.TurmaOrderByRelationAggregateInput
+  alunosEmTurmas?: Prisma.TurmaAlunoOrderByRelationAggregateInput
+  agendamentos?: Prisma.AgendamentoOrderByRelationAggregateInput
 }
 
 export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -279,6 +285,9 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   comentarios?: Prisma.EstudanteListRelationFilter
   estudantesVinculados?: Prisma.ProfessorEstudanteListRelationFilter
   professoresVinculados?: Prisma.ProfessorEstudanteListRelationFilter
+  turmasCriadas?: Prisma.TurmaListRelationFilter
+  alunosEmTurmas?: Prisma.TurmaAlunoListRelationFilter
+  agendamentos?: Prisma.AgendamentoListRelationFilter
 }, "id_usuario" | "email">
 
 export type UsuarioOrderByWithAggregationInput = {
@@ -326,6 +335,9 @@ export type UsuarioCreateInput = {
   comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
   professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioUncheckedCreateInput = {
@@ -342,6 +354,9 @@ export type UsuarioUncheckedCreateInput = {
   comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioUpdateInput = {
@@ -357,6 +372,9 @@ export type UsuarioUpdateInput = {
   comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioUncheckedUpdateInput = {
@@ -373,6 +391,9 @@ export type UsuarioUncheckedUpdateInput = {
   comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioCreateManyInput = {
@@ -501,6 +522,34 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UsuarioCreateNestedOneWithoutTurmasCriadasInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTurmasCriadasInput, Prisma.UsuarioUncheckedCreateWithoutTurmasCriadasInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTurmasCriadasInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutTurmasCriadasNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTurmasCriadasInput, Prisma.UsuarioUncheckedCreateWithoutTurmasCriadasInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTurmasCriadasInput
+  upsert?: Prisma.UsuarioUpsertWithoutTurmasCriadasInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutTurmasCriadasInput, Prisma.UsuarioUpdateWithoutTurmasCriadasInput>, Prisma.UsuarioUncheckedUpdateWithoutTurmasCriadasInput>
+}
+
+export type UsuarioCreateNestedOneWithoutAlunosEmTurmasInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAlunosEmTurmasInput, Prisma.UsuarioUncheckedCreateWithoutAlunosEmTurmasInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAlunosEmTurmasInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutAlunosEmTurmasNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAlunosEmTurmasInput, Prisma.UsuarioUncheckedCreateWithoutAlunosEmTurmasInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAlunosEmTurmasInput
+  upsert?: Prisma.UsuarioUpsertWithoutAlunosEmTurmasInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutAlunosEmTurmasInput, Prisma.UsuarioUpdateWithoutAlunosEmTurmasInput>, Prisma.UsuarioUncheckedUpdateWithoutAlunosEmTurmasInput>
+}
+
 export type UsuarioCreateNestedOneWithoutAtividadesInput = {
   create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAtividadesInput, Prisma.UsuarioUncheckedCreateWithoutAtividadesInput>
   connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAtividadesInput
@@ -557,6 +606,192 @@ export type UsuarioUpdateOneRequiredWithoutProfessoresVinculadosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutProfessoresVinculadosInput, Prisma.UsuarioUpdateWithoutProfessoresVinculadosInput>, Prisma.UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput>
 }
 
+export type UsuarioCreateNestedOneWithoutAgendamentosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAgendamentosInput, Prisma.UsuarioUncheckedCreateWithoutAgendamentosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAgendamentosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutAgendamentosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAgendamentosInput, Prisma.UsuarioUncheckedCreateWithoutAgendamentosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAgendamentosInput
+  upsert?: Prisma.UsuarioUpsertWithoutAgendamentosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutAgendamentosInput, Prisma.UsuarioUpdateWithoutAgendamentosInput>, Prisma.UsuarioUncheckedUpdateWithoutAgendamentosInput>
+}
+
+export type UsuarioCreateWithoutTurmasCriadasInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  ativado?: boolean
+  disciplinas?: Prisma.UsuarioCreatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioCreateturmasInput | string[]
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
+}
+
+export type UsuarioUncheckedCreateWithoutTurmasCriadasInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  ativado?: boolean
+  disciplinas?: Prisma.UsuarioCreatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioCreateturmasInput | string[]
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
+}
+
+export type UsuarioCreateOrConnectWithoutTurmasCriadasInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutTurmasCriadasInput, Prisma.UsuarioUncheckedCreateWithoutTurmasCriadasInput>
+}
+
+export type UsuarioUpsertWithoutTurmasCriadasInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutTurmasCriadasInput, Prisma.UsuarioUncheckedUpdateWithoutTurmasCriadasInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutTurmasCriadasInput, Prisma.UsuarioUncheckedCreateWithoutTurmasCriadasInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutTurmasCriadasInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutTurmasCriadasInput, Prisma.UsuarioUncheckedUpdateWithoutTurmasCriadasInput>
+}
+
+export type UsuarioUpdateWithoutTurmasCriadasInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  ativado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  disciplinas?: Prisma.UsuarioUpdatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioUpdateturmasInput | string[]
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutTurmasCriadasInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  ativado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  disciplinas?: Prisma.UsuarioUpdatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioUpdateturmasInput | string[]
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
+}
+
+export type UsuarioCreateWithoutAlunosEmTurmasInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  ativado?: boolean
+  disciplinas?: Prisma.UsuarioCreatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioCreateturmasInput | string[]
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
+}
+
+export type UsuarioUncheckedCreateWithoutAlunosEmTurmasInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  ativado?: boolean
+  disciplinas?: Prisma.UsuarioCreatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioCreateturmasInput | string[]
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
+}
+
+export type UsuarioCreateOrConnectWithoutAlunosEmTurmasInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAlunosEmTurmasInput, Prisma.UsuarioUncheckedCreateWithoutAlunosEmTurmasInput>
+}
+
+export type UsuarioUpsertWithoutAlunosEmTurmasInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutAlunosEmTurmasInput, Prisma.UsuarioUncheckedUpdateWithoutAlunosEmTurmasInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAlunosEmTurmasInput, Prisma.UsuarioUncheckedCreateWithoutAlunosEmTurmasInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutAlunosEmTurmasInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutAlunosEmTurmasInput, Prisma.UsuarioUncheckedUpdateWithoutAlunosEmTurmasInput>
+}
+
+export type UsuarioUpdateWithoutAlunosEmTurmasInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  ativado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  disciplinas?: Prisma.UsuarioUpdatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioUpdateturmasInput | string[]
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutAlunosEmTurmasInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  ativado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  disciplinas?: Prisma.UsuarioUpdatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioUpdateturmasInput | string[]
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
+}
+
 export type UsuarioCreateWithoutAtividadesInput = {
   nome: string
   email: string
@@ -569,6 +804,9 @@ export type UsuarioCreateWithoutAtividadesInput = {
   comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
   professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioUncheckedCreateWithoutAtividadesInput = {
@@ -584,6 +822,9 @@ export type UsuarioUncheckedCreateWithoutAtividadesInput = {
   comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioCreateOrConnectWithoutAtividadesInput = {
@@ -614,6 +855,9 @@ export type UsuarioUpdateWithoutAtividadesInput = {
   comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioUncheckedUpdateWithoutAtividadesInput = {
@@ -629,6 +873,9 @@ export type UsuarioUncheckedUpdateWithoutAtividadesInput = {
   comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioCreateWithoutComentariosInput = {
@@ -643,6 +890,9 @@ export type UsuarioCreateWithoutComentariosInput = {
   atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
   professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioUncheckedCreateWithoutComentariosInput = {
@@ -658,6 +908,9 @@ export type UsuarioUncheckedCreateWithoutComentariosInput = {
   atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioCreateOrConnectWithoutComentariosInput = {
@@ -688,6 +941,9 @@ export type UsuarioUpdateWithoutComentariosInput = {
   atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioUncheckedUpdateWithoutComentariosInput = {
@@ -703,6 +959,9 @@ export type UsuarioUncheckedUpdateWithoutComentariosInput = {
   atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioCreateWithoutEstudantesVinculadosInput = {
@@ -717,6 +976,9 @@ export type UsuarioCreateWithoutEstudantesVinculadosInput = {
   atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
   comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
   professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioUncheckedCreateWithoutEstudantesVinculadosInput = {
@@ -732,6 +994,9 @@ export type UsuarioUncheckedCreateWithoutEstudantesVinculadosInput = {
   atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
   comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioCreateOrConnectWithoutEstudantesVinculadosInput = {
@@ -751,6 +1016,9 @@ export type UsuarioCreateWithoutProfessoresVinculadosInput = {
   atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
   comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioUncheckedCreateWithoutProfessoresVinculadosInput = {
@@ -766,6 +1034,9 @@ export type UsuarioUncheckedCreateWithoutProfessoresVinculadosInput = {
   atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
   comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadorInput
 }
 
 export type UsuarioCreateOrConnectWithoutProfessoresVinculadosInput = {
@@ -796,6 +1067,9 @@ export type UsuarioUpdateWithoutEstudantesVinculadosInput = {
   atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
   comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioUncheckedUpdateWithoutEstudantesVinculadosInput = {
@@ -811,6 +1085,9 @@ export type UsuarioUncheckedUpdateWithoutEstudantesVinculadosInput = {
   atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
   comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
   professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioUpsertWithoutProfessoresVinculadosInput = {
@@ -836,6 +1113,9 @@ export type UsuarioUpdateWithoutProfessoresVinculadosInput = {
   atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
   comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutCriadorNestedInput
 }
 
 export type UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput = {
@@ -851,6 +1131,95 @@ export type UsuarioUncheckedUpdateWithoutProfessoresVinculadosInput = {
   atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
   comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
   estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadorNestedInput
+}
+
+export type UsuarioCreateWithoutAgendamentosInput = {
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  ativado?: boolean
+  disciplinas?: Prisma.UsuarioCreatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioCreateturmasInput | string[]
+  atividades?: Prisma.AtividadeCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioUncheckedCreateWithoutAgendamentosInput = {
+  id_usuario?: number
+  nome: string
+  email: string
+  senha: string
+  criado_em?: Date | string
+  tipo_usuario: string
+  ativado?: boolean
+  disciplinas?: Prisma.UsuarioCreatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioCreateturmasInput | string[]
+  atividades?: Prisma.AtividadeUncheckedCreateNestedManyWithoutUsuarioInput
+  comentarios?: Prisma.EstudanteUncheckedCreateNestedManyWithoutUsuarioInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutProfessorInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedCreateNestedManyWithoutEstudanteInput
+  turmasCriadas?: Prisma.TurmaUncheckedCreateNestedManyWithoutProfessorInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioCreateOrConnectWithoutAgendamentosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAgendamentosInput, Prisma.UsuarioUncheckedCreateWithoutAgendamentosInput>
+}
+
+export type UsuarioUpsertWithoutAgendamentosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutAgendamentosInput, Prisma.UsuarioUncheckedUpdateWithoutAgendamentosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAgendamentosInput, Prisma.UsuarioUncheckedCreateWithoutAgendamentosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutAgendamentosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutAgendamentosInput, Prisma.UsuarioUncheckedUpdateWithoutAgendamentosInput>
+}
+
+export type UsuarioUpdateWithoutAgendamentosInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  ativado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  disciplinas?: Prisma.UsuarioUpdatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioUpdateturmasInput | string[]
+  atividades?: Prisma.AtividadeUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutAgendamentosInput = {
+  id_usuario?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipo_usuario?: Prisma.StringFieldUpdateOperationsInput | string
+  ativado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  disciplinas?: Prisma.UsuarioUpdatedisciplinasInput | string[]
+  turmas?: Prisma.UsuarioUpdateturmasInput | string[]
+  atividades?: Prisma.AtividadeUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentarios?: Prisma.EstudanteUncheckedUpdateManyWithoutUsuarioNestedInput
+  estudantesVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutProfessorNestedInput
+  professoresVinculados?: Prisma.ProfessorEstudanteUncheckedUpdateManyWithoutEstudanteNestedInput
+  turmasCriadas?: Prisma.TurmaUncheckedUpdateManyWithoutProfessorNestedInput
+  alunosEmTurmas?: Prisma.TurmaAlunoUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 
@@ -863,6 +1232,9 @@ export type UsuarioCountOutputType = {
   comentarios: number
   estudantesVinculados: number
   professoresVinculados: number
+  turmasCriadas: number
+  alunosEmTurmas: number
+  agendamentos: number
 }
 
 export type UsuarioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -870,6 +1242,9 @@ export type UsuarioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   comentarios?: boolean | UsuarioCountOutputTypeCountComentariosArgs
   estudantesVinculados?: boolean | UsuarioCountOutputTypeCountEstudantesVinculadosArgs
   professoresVinculados?: boolean | UsuarioCountOutputTypeCountProfessoresVinculadosArgs
+  turmasCriadas?: boolean | UsuarioCountOutputTypeCountTurmasCriadasArgs
+  alunosEmTurmas?: boolean | UsuarioCountOutputTypeCountAlunosEmTurmasArgs
+  agendamentos?: boolean | UsuarioCountOutputTypeCountAgendamentosArgs
 }
 
 /**
@@ -910,6 +1285,27 @@ export type UsuarioCountOutputTypeCountProfessoresVinculadosArgs<ExtArgs extends
   where?: Prisma.ProfessorEstudanteWhereInput
 }
 
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountTurmasCriadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TurmaWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountAlunosEmTurmasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TurmaAlunoWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountAgendamentosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgendamentoWhereInput
+}
+
 
 export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_usuario?: boolean
@@ -925,6 +1321,9 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   comentarios?: boolean | Prisma.Usuario$comentariosArgs<ExtArgs>
   estudantesVinculados?: boolean | Prisma.Usuario$estudantesVinculadosArgs<ExtArgs>
   professoresVinculados?: boolean | Prisma.Usuario$professoresVinculadosArgs<ExtArgs>
+  turmasCriadas?: boolean | Prisma.Usuario$turmasCriadasArgs<ExtArgs>
+  alunosEmTurmas?: boolean | Prisma.Usuario$alunosEmTurmasArgs<ExtArgs>
+  agendamentos?: boolean | Prisma.Usuario$agendamentosArgs<ExtArgs>
   _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
@@ -970,6 +1369,9 @@ export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   comentarios?: boolean | Prisma.Usuario$comentariosArgs<ExtArgs>
   estudantesVinculados?: boolean | Prisma.Usuario$estudantesVinculadosArgs<ExtArgs>
   professoresVinculados?: boolean | Prisma.Usuario$professoresVinculadosArgs<ExtArgs>
+  turmasCriadas?: boolean | Prisma.Usuario$turmasCriadasArgs<ExtArgs>
+  alunosEmTurmas?: boolean | Prisma.Usuario$alunosEmTurmasArgs<ExtArgs>
+  agendamentos?: boolean | Prisma.Usuario$agendamentosArgs<ExtArgs>
   _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -982,6 +1384,9 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     comentarios: Prisma.$EstudantePayload<ExtArgs>[]
     estudantesVinculados: Prisma.$ProfessorEstudantePayload<ExtArgs>[]
     professoresVinculados: Prisma.$ProfessorEstudantePayload<ExtArgs>[]
+    turmasCriadas: Prisma.$TurmaPayload<ExtArgs>[]
+    alunosEmTurmas: Prisma.$TurmaAlunoPayload<ExtArgs>[]
+    agendamentos: Prisma.$AgendamentoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id_usuario: number
@@ -1391,6 +1796,9 @@ export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.
   comentarios<T extends Prisma.Usuario$comentariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$comentariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   estudantesVinculados<T extends Prisma.Usuario$estudantesVinculadosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$estudantesVinculadosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfessorEstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   professoresVinculados<T extends Prisma.Usuario$professoresVinculadosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$professoresVinculadosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfessorEstudantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  turmasCriadas<T extends Prisma.Usuario$turmasCriadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$turmasCriadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TurmaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  alunosEmTurmas<T extends Prisma.Usuario$alunosEmTurmasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$alunosEmTurmasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TurmaAlunoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agendamentos<T extends Prisma.Usuario$agendamentosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$agendamentosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgendamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1915,6 +2323,78 @@ export type Usuario$professoresVinculadosArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.ProfessorEstudanteScalarFieldEnum | Prisma.ProfessorEstudanteScalarFieldEnum[]
+}
+
+/**
+ * Usuario.turmasCriadas
+ */
+export type Usuario$turmasCriadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Turma
+   */
+  select?: Prisma.TurmaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Turma
+   */
+  omit?: Prisma.TurmaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TurmaInclude<ExtArgs> | null
+  where?: Prisma.TurmaWhereInput
+  orderBy?: Prisma.TurmaOrderByWithRelationInput | Prisma.TurmaOrderByWithRelationInput[]
+  cursor?: Prisma.TurmaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TurmaScalarFieldEnum | Prisma.TurmaScalarFieldEnum[]
+}
+
+/**
+ * Usuario.alunosEmTurmas
+ */
+export type Usuario$alunosEmTurmasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TurmaAluno
+   */
+  select?: Prisma.TurmaAlunoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TurmaAluno
+   */
+  omit?: Prisma.TurmaAlunoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TurmaAlunoInclude<ExtArgs> | null
+  where?: Prisma.TurmaAlunoWhereInput
+  orderBy?: Prisma.TurmaAlunoOrderByWithRelationInput | Prisma.TurmaAlunoOrderByWithRelationInput[]
+  cursor?: Prisma.TurmaAlunoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TurmaAlunoScalarFieldEnum | Prisma.TurmaAlunoScalarFieldEnum[]
+}
+
+/**
+ * Usuario.agendamentos
+ */
+export type Usuario$agendamentosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Agendamento
+   */
+  select?: Prisma.AgendamentoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Agendamento
+   */
+  omit?: Prisma.AgendamentoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgendamentoInclude<ExtArgs> | null
+  where?: Prisma.AgendamentoWhereInput
+  orderBy?: Prisma.AgendamentoOrderByWithRelationInput | Prisma.AgendamentoOrderByWithRelationInput[]
+  cursor?: Prisma.AgendamentoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgendamentoScalarFieldEnum | Prisma.AgendamentoScalarFieldEnum[]
 }
 
 /**

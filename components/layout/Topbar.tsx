@@ -1,16 +1,21 @@
-"use client";
+"use client"
 
-import { MdLogout, MdMenu } from "react-icons/md";
-import { useAuth } from "@/lib/useAuth";
+import { MdLogout, MdMenu } from "react-icons/md"
+import { useAuth } from "@/lib/useAuth"
 
-export default function Topbar({ tituloPag, onMenuClick }: any) {
-  const { logout } = useAuth();
+interface TopbarProps {
+  tituloPag: string
+  onMenuClick: () => void
+}
+
+export default function Topbar({ tituloPag, onMenuClick }: TopbarProps) {
+  const { logout } = useAuth()
 
   return (
     <header className="h-14 sm:h-16 bg-white border-b border-[#e5eaf2] px-3 sm:px-4 md:px-8 flex items-center justify-between shrink-0">
       <div className="flex items-center gap-2 sm:gap-3">
-        <button 
-          onClick={onMenuClick} 
+        <button
+          onClick={onMenuClick}
           className="md:hidden text-[#1e3a5f] p-1.5 -ml-1.5 rounded-lg hover:bg-[#f0f4f9] shrink-0 active:bg-[#e5eaf2]"
         >
           <MdMenu className="text-xl sm:text-2xl" />
@@ -28,5 +33,5 @@ export default function Topbar({ tituloPag, onMenuClick }: any) {
         <MdLogout className="text-base sm:text-lg" />
       </button>
     </header>
-  );
+  )
 }

@@ -6,6 +6,7 @@ export const atividadeDbService = {
       include: {
         usuario: true,
         comentarios: true,
+        turma: { select: { id_turma: true, nome: true } },
       },
       orderBy: { criado_em: "desc" },
     });
@@ -28,6 +29,8 @@ export const atividadeDbService = {
     arquivo_url?: string;
     arquivo_nome?: string;
     arquivo_tipo?: string;
+    data_entrega?: Date | null;
+    id_turma?: number | null;
   }) {
     return prisma.atividade.create({
       data: {
@@ -37,6 +40,8 @@ export const atividadeDbService = {
         arquivo_url: data.arquivo_url ?? null,
         arquivo_nome: data.arquivo_nome ?? null,
         arquivo_tipo: data.arquivo_tipo ?? null,
+        data_entrega: data.data_entrega ?? null,
+        id_turma: data.id_turma ?? null,
       },
     });
   },
