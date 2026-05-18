@@ -187,7 +187,7 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-base font-bold text-[#1e3a5f]">Turmas</h2>
+          <h2 className="text-base font-bold text-[#1e3a5f]">Lista de Turmas</h2>
           <p className="text-xs text-[#6b7fa3] mt-0.5">Gerencie suas turmas e alunos</p>
         </div>
         <Button

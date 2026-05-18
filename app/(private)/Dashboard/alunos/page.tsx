@@ -9,7 +9,7 @@ export default function AlunosPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-base font-bold text-[#1e3a5f]">Alunos</h2>
+        <h2 className="text-base font-bold text-[#1e3a5f]">Lista de Alunos Vinculados</h2>
         <p className="text-xs text-[#6b7fa3] mt-0.5">Estudantes vinculados às suas turmas</p>
       </div>
       <AlunosList criadoPor={user?.id_usuario ?? 0} />
