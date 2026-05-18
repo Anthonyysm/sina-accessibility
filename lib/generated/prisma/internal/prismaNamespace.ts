@@ -748,7 +748,10 @@ export const UsuarioScalarFieldEnum = {
   email: 'email',
   senha: 'senha',
   criado_em: 'criado_em',
-  tipo_usuario: 'tipo_usuario'
+  tipo_usuario: 'tipo_usuario',
+  ativado: 'ativado',
+  disciplinas: 'disciplinas',
+  turmas: 'turmas'
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
@@ -856,6 +859,13 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

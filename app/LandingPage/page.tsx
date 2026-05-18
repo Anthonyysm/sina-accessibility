@@ -11,6 +11,7 @@ import VLibras from "@/components/VLibras/VLibras";
 export default function Homepage() {
   return (
     <div>
+      <VLibras />
       <div>
         <Navbar />
         <div>
@@ -22,8 +23,7 @@ export default function Homepage() {
           <CTASection />
         </div>
         <Footer />
-      </div >
-      <VLibras />
+      </div>
     </div>
   )
 }
