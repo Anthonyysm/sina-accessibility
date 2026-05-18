@@ -7,6 +7,14 @@ declare global {
   interface Window {
     VLibras: any;
   }
+
+  namespace JSX {
+    interface IntrinsicAttributes {
+      vw?: string;
+      "vw-access-button"?: string;
+      "vw-plugin-wrapper"?: string;
+    }
+  }
 }
 
 function VLibrasWidget() {
@@ -49,6 +57,7 @@ export default function VLibras() {
 
   return createPortal(
     <>
+      {/* @ts-expect-error vw attributes are required by VLibras */}
       <div vw="true" className="enabled">
         <div vw-access-button="true" className="active" />
         <div vw-plugin-wrapper="true">

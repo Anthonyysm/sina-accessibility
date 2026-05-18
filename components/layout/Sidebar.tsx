@@ -17,18 +17,18 @@ import {
   MdClose,
   MdLogout,
 } from "react-icons/md"
+import { AVATAR_COLORS, getInitials, DB_TO_PROFILE, PROFILE_TO_DB } from "@/lib/profile-constants"
 
 interface SidebarProps {
   mobileMenuOpen?: boolean
   setMobileMenuOpen?: (open: boolean) => void
 }
 
-const AVATAR_COLORS = ["#3b5fa0", "#5db5d8", "#6b8e6b", "#c47a4a", "#8b6baa"]
-const DB_TO_LABEL: Record<string, string> = {
-  INTERPRETE: "Intérprete · Libras",
-  PROFESSOR: "Professor",
-  ESTUDANTE: "Estudante",
-  COORDENADOR: "Coordenador",
+const PROFILE_LABELS: Record<string, string> = {
+  interprete: "Intérprete · Libras",
+  professor: "Professor",
+  estudante: "Estudante",
+  coordenador: "Coordenador",
 }
 
 const NAV_ITEMS = [
@@ -40,19 +40,6 @@ const NAV_ITEMS = [
   { icon: MdPersonOutline, label: "Tradutor de Glosa", path: "/Dashboard/tradutor" },
 ]
 
-function getInitials(n: string) {
-  return (
-    n
-      .trim()
-      .split(" ")
-      .filter(Boolean)
-      .map((w) => w[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase() || "?"
-  )
-}
-
 export default function Sidebar({
   mobileMenuOpen,
   setMobileMenuOpen,
@@ -63,7 +50,7 @@ export default function Sidebar({
 
   const userName = user?.nome ?? ""
   const userLabel = user
-    ? (DB_TO_LABEL[user.tipo_usuario] ?? user.tipo_usuario)
+    ? PROFILE_LABELS[DB_TO_PROFILE[user.tipo_usuario] ?? "estudante"] ?? user.tipo_usuario
     : ""
   const avatarColor = user
     ? AVATAR_COLORS[user.id_usuario % AVATAR_COLORS.length]

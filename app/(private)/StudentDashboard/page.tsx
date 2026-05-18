@@ -7,29 +7,13 @@ import Topbar from "@/components/StudentDashboard/Topbar/Topbar";
 import ProgressBar from "@/components/StudentDashboard/ProgressBar/ProgressBar";
 import Feed from "@/components/StudentDashboard/Feed/Feed";
 import StudentStats from "@/components/StudentDashboard/StudentStats/StudentStats";
+import { getInitials, getAvatarColor } from "@/lib/profile-constants";
 
 export default function StudentDashboard() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("todos");
   const { logout } = useAuth();
-
-  const cores = ["#3b5fa0", "#1a6b5a", "#5a3fa0", "#a0503b", "#b26f20"];
-  function getAvatarColor(name: string) {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return cores[Math.abs(hash) % cores.length];
-  }
-
-  function getInitials(name: string) {
-    const parts = name.trim().split(" ");
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    }
-    return (name[0] || "?").toUpperCase();
-  }
 
   function getPreview(text: string, maxLen = 120) {
     if (!text) return "Leia o material e conclua a atividade.";

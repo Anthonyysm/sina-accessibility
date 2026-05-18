@@ -14,8 +14,7 @@ import {
   DialogDescription, DialogFooter, DialogSecondaryAction,
   DialogDestructiveAction,
 } from "@/components/ui/dialog";
-import Sidebar from "@/components/layout/Sidebar";
-import Topbar from "@/components/layout/Topbar";
+import { PrivateShell } from "@/components/layout/PrivateShell";
 import TagInput from "@/components/profile/TagInput";
 import ProfileSection from "@/components/profile/ProfileSection";
 import { useProfileForm } from "@/hooks/useProfileForm";
@@ -44,7 +43,6 @@ export default function PerfilPage() {
   } = useProfileForm();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (loading) {
     return (
@@ -74,17 +72,8 @@ export default function PerfilPage() {
   }
 
   return (
-    <div className="flex h-screen bg-[#f0f4f9] overflow-hidden montserrat">
-      <Sidebar
-        mobileMenuOpen={mobileMenuOpen}
-        setMobileMenuOpen={setMobileMenuOpen}
-      />
-
-      <div className="flex-1 flex flex-col overflow-hidden w-full relative">
-        <Topbar tituloPag="Editar perfil" onMenuClick={() => setMobileMenuOpen(true)} />
-
-        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7">
-          <div className="max-w-[640px] mx-auto flex flex-col gap-6">
+    <PrivateShell tituloPag="Editar perfil">
+      <div className="max-w-[640px] mx-auto flex flex-col gap-6">
 
             {/* Avatar */}
             <div className="rounded-2xl bg-white shadow-[0_2px_12px_-4px_rgba(30,58,95,0.08)] p-6">
@@ -276,56 +265,54 @@ export default function PerfilPage() {
             </div>
 
           </div>
-        </main>
-      </div>
 
-      {/* Delete Account Dialog */}
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-2">
-              <MdDeleteOutline className="text-red-500 text-2xl" />
+        {/* Delete Account Dialog */}
+        <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-2">
+                <MdDeleteOutline className="text-red-500 text-2xl" />
+              </div>
+              <DialogTitle className="text-center">Excluir conta permanentemente</DialogTitle>
+              <DialogDescription className="text-center">
+                Esta ação não pode ser desfeita. Todos os seus dados, atividades e vínculos serão removidos permanentemente.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="flex flex-col gap-3 py-2">
+              <Label className="text-xs font-semibold text-[#3a5070]">
+                Digite <span className="text-red-500 font-bold">&ldquo;excluir minha conta&rdquo;</span> para confirmar
+              </Label>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="excluir minha conta"
+                className="h-10 rounded-xl border-red-200 text-[#1e3a5f] text-sm focus-visible:ring-red-400 px-3"
+                autoFocus
+              />
             </div>
-            <DialogTitle className="text-center">Excluir conta permanentemente</DialogTitle>
-            <DialogDescription className="text-center">
-              Esta ação não pode ser desfeita. Todos os seus dados, atividades e vínculos serão removidos permanentemente.
-            </DialogDescription>
-          </DialogHeader>
 
-          <div className="flex flex-col gap-3 py-2">
-            <Label className="text-xs font-semibold text-[#3a5070]">
-              Digite <span className="text-red-500 font-bold">&ldquo;excluir minha conta&rdquo;</span> para confirmar
-            </Label>
-            <Input
-              value={deleteConfirmText}
-              onChange={(e) => setDeleteConfirmText(e.target.value)}
-              placeholder="excluir minha conta"
-              className="h-10 rounded-xl border-red-200 text-[#1e3a5f] text-sm focus-visible:ring-red-400 px-3"
-              autoFocus
-            />
-          </div>
-
-          <DialogFooter>
-            <DialogSecondaryAction onClick={() => setShowDeleteDialog(false)}>
-              Cancelar
-            </DialogSecondaryAction>
-            <DialogDestructiveAction
-              onClick={handleDeleteAccount}
-              disabled={!canDelete || deletingAccount}
-              className="disabled:opacity-50"
-            >
-              {deletingAccount ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Excluindo...
-                </span>
-              ) : (
-                "Excluir minha conta"
-              )}
-            </DialogDestructiveAction>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+            <DialogFooter>
+              <DialogSecondaryAction onClick={() => setShowDeleteDialog(false)}>
+                Cancelar
+              </DialogSecondaryAction>
+              <DialogDestructiveAction
+                onClick={handleDeleteAccount}
+                disabled={!canDelete || deletingAccount}
+                className="disabled:opacity-50"
+              >
+                {deletingAccount ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Excluindo...
+                  </span>
+                ) : (
+                  "Excluir minha conta"
+                )}
+              </DialogDestructiveAction>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </PrivateShell>
   );
 }

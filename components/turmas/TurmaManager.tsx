@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { MdAdd, MdClose, MdGroups, MdDeleteOutline, MdEdit, MdPersonAdd, MdCheck, MdCheckCircle } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { MdAdd, MdClose, MdGroups, MdDeleteOutline, MdPersonAdd, MdCheck, MdCheckCircle } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import { ModalHeader } from "@/components/ui/ModalHeader";
 import {
   Tooltip,
   TooltipContent,
@@ -18,15 +17,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { useApiFetch } from "@/lib/useApiFetch";
 
 interface Turma {
   id_turma: number;
   nome: string;
   descricao: string | null;
   criado_em: string;
-  professor: { nome: string };
-  alunos: { id_usuario: number; usuario: { nome: string; email: string } }[];
-  _count: { alunos: number; atividades: number };
+  id_criador: number;
+  alunos: { id_usuario: number; nome: string; email: string }[];
 }
 
 interface Estudante {
@@ -41,8 +40,10 @@ interface TurmaManagerProps {
 }
 
 export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
-  const [turmas, setTurmas] = useState<Turma[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: turmasData, loading, refetch: refetchTurmas } = useApiFetch<Turma[]>(
+    `/api/turmas?criado_por=${criadoPor}`
+  );
+  const turmas = turmasData ?? [];
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [alunosModalOpen, setAlunosModalOpen] = useState(false);
@@ -54,17 +55,6 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
   const [selectedAlunos, setSelectedAlunos] = useState<Set<number>>(new Set());
   const [addingBulk, setAddingBulk] = useState(false);
 
-  function fetchTurmas() {
-    setLoading(true);
-    fetch(`/api/turmas?criado_por=${criadoPor}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setTurmas(data);
-      })
-      .catch((err) => console.error("Erro ao buscar turmas:", err))
-      .finally(() => setLoading(false));
-  }
-
   function fetchEstudantes() {
     fetch("/api/usuarios/estudantes")
       .then((res) => res.json())
@@ -74,7 +64,7 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       .catch((err) => console.error("Erro ao buscar estudantes:", err));
   }
 
-  useEffect(() => { fetchTurmas(); }, []);
+  useEffect(() => { fetchEstudantes(); }, []);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -91,7 +81,7 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       setNome("");
       setDescricao("");
       setModalOpen(false);
-      fetchTurmas();
+      refetchTurmas();
       onSuccess?.();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao criar turma");
@@ -106,7 +96,7 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       const res = await fetch(`/api/turmas/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Erro ao excluir turma");
       toast.success("Turma excluída com sucesso");
-      fetchTurmas();
+      refetchTurmas();
       onSuccess?.();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao excluir turma");
@@ -137,7 +127,7 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
     if (successCount > 0) toast.success(`${successCount} aluno(s) adicionado(s)`);
     if (errorCount > 0) toast.error(`${errorCount} erro(s) ao adicionar`);
     setSelectedAlunos(new Set());
-    fetchTurmas();
+    refetchTurmas();
     setAddingBulk(false);
   }
 
@@ -170,7 +160,7 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       });
       if (!res.ok) throw new Error("Erro ao remover aluno");
       toast.success("Aluno removido com sucesso");
-      fetchTurmas();
+      refetchTurmas();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao remover aluno");
     }
@@ -260,21 +250,11 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       {/* Nova Turma Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden rounded-2xl border-0 shadow-2xl [&>button:last-child]:hidden">
-          <div className="bg-[#2b5784] px-6 pt-5 pb-4 relative overflow-hidden">
-            <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
-            <DialogClose className="absolute right-4 top-4 z-20 rounded-lg p-1 text-white/70 transition-colors hover:bg-white/20 hover:text-white focus:outline-none" aria-label="Fechar">
-              <MdClose className="text-xl" />
-            </DialogClose>
-            <DialogHeader className="relative z-10 pr-8">
-              <div className="flex items-center gap-3 mb-1">
-                <div className="bg-white/20 rounded-xl p-2">
-                  <MdGroups className="text-white text-xl" />
-                </div>
-                <DialogTitle className="text-white font-bold text-lg">Nova Turma</DialogTitle>
-              </div>
-              <DialogDescription className="text-white/70 text-sm">Crie uma nova turma para organizar seus alunos</DialogDescription>
-            </DialogHeader>
-          </div>
+          <ModalHeader
+            icon={<MdGroups className="text-white text-xl" />}
+            title="Nova Turma"
+            description="Crie uma nova turma para organizar seus alunos"
+          />
           <form onSubmit={handleCreate} className="px-6 py-5 space-y-4">
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-slate-700">Nome da Turma</label>
@@ -316,23 +296,11 @@ export function TurmaManager({ criadoPor, onSuccess }: TurmaManagerProps) {
       {/* Gerenciar Alunos Modal */}
       <Dialog open={alunosModalOpen} onOpenChange={setAlunosModalOpen}>
         <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden rounded-2xl border-0 shadow-2xl [&>button:last-child]:hidden max-h-[80vh] flex flex-col">
-          <div className="bg-[#2b5784] px-6 pt-5 pb-4 relative overflow-hidden shrink-0">
-            <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
-            <DialogClose className="absolute right-4 top-4 z-20 rounded-lg p-1 text-white/70 transition-colors hover:bg-white/20 hover:text-white focus:outline-none" aria-label="Fechar">
-              <MdClose className="text-xl" />
-            </DialogClose>
-            <DialogHeader className="relative z-10 pr-8">
-              <div className="flex items-center gap-3 mb-1">
-                <div className="bg-white/20 rounded-xl p-2">
-                  <MdPersonAdd className="text-white text-xl" />
-                </div>
-                <DialogTitle className="text-white font-bold text-lg">
-                  Alunos — {selectedTurma?.nome}
-                </DialogTitle>
-              </div>
-              <DialogDescription className="text-white/70 text-sm">Adicione ou remova alunos da turma</DialogDescription>
-            </DialogHeader>
-          </div>
+          <ModalHeader
+            icon={<MdPersonAdd className="text-white text-xl" />}
+            title={`Alunos — ${selectedTurma?.nome}`}
+            description="Adicione ou remova alunos da turma"
+          />
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {/* Bulk add */}
             <div className="space-y-3">

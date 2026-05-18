@@ -1,26 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MdAdd, MdClose, MdEvent, MdDeleteOutline, MdEdit } from "react-icons/md";
+import { MdAdd, MdClose, MdEvent, MdDeleteOutline } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import { ModalHeader } from "@/components/ui/ModalHeader";
 import { toast } from "sonner";
+import { useApiFetch } from "@/lib/useApiFetch";
 
 interface Agendamento {
   id_agendamento: number;
   titulo: string;
   descricao: string | null;
   data: string;
-  criado_em: string;
-  criador: { nome: string };
-  atividade: { id_atividade: number; titulo: string } | null;
+  atividade?: { titulo: string } | null;
 }
 
 interface Atividade {
@@ -33,9 +31,11 @@ interface AgendamentoManagerProps {
 }
 
 export function AgendamentoManager({ criadoPor }: AgendamentoManagerProps) {
-  const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
+  const { data: agendamentosData, loading, refetch: refetchAgendamentos } = useApiFetch<Agendamento[]>(
+    `/api/agendamentos?criado_por=${criadoPor}`
+  );
+  const agendamentos = agendamentosData ?? [];
   const [atividades, setAtividades] = useState<Atividade[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -43,17 +43,6 @@ export function AgendamentoManager({ criadoPor }: AgendamentoManagerProps) {
   const [hora, setHora] = useState("08:00");
   const [idAtividade, setIdAtividade] = useState("");
   const [saving, setSaving] = useState(false);
-
-  function fetchAgendamentos() {
-    setLoading(true);
-    fetch(`/api/agendamentos?criado_por=${criadoPor}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setAgendamentos(data);
-      })
-      .catch((err) => console.error("Erro ao buscar agendamentos:", err))
-      .finally(() => setLoading(false));
-  }
 
   function fetchAtividades() {
     fetch("/api/atividades")
@@ -64,7 +53,7 @@ export function AgendamentoManager({ criadoPor }: AgendamentoManagerProps) {
       .catch((err) => console.error("Erro ao buscar atividades:", err));
   }
 
-  useEffect(() => { fetchAgendamentos(); }, []);
+  useEffect(() => { fetchAtividades(); }, []);
 
   function resetForm() {
     setTitulo("");
@@ -94,7 +83,7 @@ export function AgendamentoManager({ criadoPor }: AgendamentoManagerProps) {
       toast.success("Agendamento criado com sucesso");
       resetForm();
       setModalOpen(false);
-      fetchAgendamentos();
+      refetchAgendamentos();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao criar agendamento");
     } finally {
@@ -108,7 +97,7 @@ export function AgendamentoManager({ criadoPor }: AgendamentoManagerProps) {
       const res = await fetch(`/api/agendamentos/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Erro ao excluir agendamento");
       toast.success("Agendamento excluído com sucesso");
-      fetchAgendamentos();
+      refetchAgendamentos();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao excluir agendamento");
     }
@@ -194,21 +183,11 @@ export function AgendamentoManager({ criadoPor }: AgendamentoManagerProps) {
       {/* Novo Agendamento Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden rounded-2xl border-0 shadow-2xl [&>button:last-child]:hidden">
-          <div className="bg-[#2b5784] px-6 pt-5 pb-4 relative overflow-hidden">
-            <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
-            <DialogClose className="absolute right-4 top-4 z-20 rounded-lg p-1 text-white/70 transition-colors hover:bg-white/20 hover:text-white focus:outline-none" aria-label="Fechar">
-              <MdClose className="text-xl" />
-            </DialogClose>
-            <DialogHeader className="relative z-10 pr-8">
-              <div className="flex items-center gap-3 mb-1">
-                <div className="bg-white/20 rounded-xl p-2">
-                  <MdEvent className="text-white text-xl" />
-                </div>
-                <DialogTitle className="text-white font-bold text-lg">Novo Agendamento</DialogTitle>
-              </div>
-              <DialogDescription className="text-white/70 text-sm">Agende uma atividade ou evento</DialogDescription>
-            </DialogHeader>
-          </div>
+          <ModalHeader
+            icon={<MdEvent className="text-white text-xl" />}
+            title="Novo Agendamento"
+            description="Agende uma atividade ou evento"
+          />
           <form onSubmit={handleCreate} className="px-6 py-5 space-y-4">
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-slate-700">Título</label>

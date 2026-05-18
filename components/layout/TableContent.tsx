@@ -11,11 +11,10 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import { ModalHeader } from "@/components/ui/ModalHeader";
 import {
   Table,
   TableBody,
@@ -65,23 +64,7 @@ interface Atividade {
   };
 }
 
-// Helpers para cor do avatar
-const cores = ["#3b5fa0", "#1a6b5a", "#5a3fa0", "#a0503b", "#b26f20"];
-function getAvatarColor(name: string) {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return cores[Math.abs(hash) % cores.length];
-}
-
-function getInitials(name: string) {
-  const parts = name.trim().split(" ");
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  }
-  return (name[0] || "?").toUpperCase();
-}
+import { getInitials, getAvatarColor } from "@/lib/profile-constants";
 
 
 function StatusBadge({ status }: { status: string }) {
@@ -413,31 +396,12 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
       {selectedAtividade && (
         <Dialog open={modalOpen} onOpenChange={setModalOpen}>
           <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden rounded-2xl border-0 shadow-2xl [&>button:last-child]:hidden">
-            <div className="bg-[#2b5784] px-6 pt-5 pb-5 relative overflow-hidden">
-              <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
-              <div className="absolute top-2 right-20 w-20 h-20 rounded-full bg-white/5 pointer-events-none" />
-
-              <DialogClose
-                className="absolute right-4 top-4 z-20 rounded-lg p-1 text-white/70 transition-colors hover:bg-white/20 hover:text-white focus:outline-none"
-                aria-label="Fechar"
-              >
-                <MdClose className="text-xl" />
-              </DialogClose>
-
-              <DialogHeader className="relative z-10 pr-8">
-                <div className="flex items-center gap-3 mb-1">
-                  <div className="bg-white/20 rounded-xl p-2">
-                    <MdArticle className="text-white text-xl" />
-                  </div>
-                  <DialogTitle className="text-white font-bold text-lg leading-tight">
-                    Visualizar Atividade
-                  </DialogTitle>
-                </div>
-                <DialogDescription className="text-white/70 text-sm">
-                  {selectedAtividade.titulo}
-                </DialogDescription>
-              </DialogHeader>
-            </div>
+            <ModalHeader
+              icon={<MdArticle className="text-white text-xl" />}
+              title="Visualizar Atividade"
+              description={selectedAtividade.titulo}
+              extraDecorativeCircle
+            />
             
             <div className="px-6 py-5 max-h-[60vh] overflow-y-auto bg-slate-50">
               <div className="flex justify-between items-center mb-3">
