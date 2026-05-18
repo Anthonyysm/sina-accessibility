@@ -7,8 +7,11 @@ import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
 import TableContent from "@/components/layout/TableContent";
 import TranslatorContainer from "@/components/Translator/Translator";
+import { NovaAtividadeModal } from "@/components/atividades/NovaAtividadeModal";
+import { useAuth } from "@/lib/useAuth";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [activeNav, setActiveNav] = useState(0);
   const [modalAberto, setModalAberto] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -69,6 +72,12 @@ export default function DashboardPage() {
           )}
         </main>
       </div>
+
+      <NovaAtividadeModal
+        open={modalAberto}
+        onOpenChange={setModalAberto}
+        criadoPor={user?.id_usuario ?? 0}
+      />
     </div>
   );
 }
