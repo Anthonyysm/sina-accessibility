@@ -7,11 +7,15 @@ import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
 import TableContent from "@/components/layout/TableContent";
 import TranslatorContainer from "@/components/Translator/Translator";
+import { NovaAtividadeModal } from "@/components/atividades/NovaAtividadeModal";
+import { useAuth } from "@/lib/useAuth";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [activeNav, setActiveNav] = useState(0);
   const [modalAberto, setModalAberto] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const titulos = ["Dashboard", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
@@ -56,7 +60,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <TableContent />
+              <TableContent refreshKey={refreshKey} />
             </>
           )}
 
@@ -69,6 +73,12 @@ export default function DashboardPage() {
           )}
         </main>
       </div>
+      <NovaAtividadeModal
+        open={modalAberto}
+        onOpenChange={setModalAberto}
+        criadoPor={user?.id_usuario ?? 0}
+        onSuccess={() => setRefreshKey((k) => k + 1)}
+      />
     </div>
   );
 }
