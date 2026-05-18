@@ -9,6 +9,7 @@ import TableContent from "@/components/layout/TableContent";
 import TranslatorContainer from "@/components/Translator/Translator";
 import { NovaAtividadeModal } from "@/components/atividades/NovaAtividadeModal";
 import { useAuth } from "@/lib/useAuth";
+import PublicacoesContent from "@/components/layout/PublicacoesContent";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -64,9 +65,11 @@ export default function DashboardPage() {
             </>
           )}
 
+          {activeNav === 1 && <PublicacoesContent refreshKey={refreshKey} />}
+
           {activeNav === 2 && <TranslatorContainer />}
 
-          {(activeNav === 1 || activeNav === 3) && (
+          {activeNav === 3 && (
             <div className="flex flex-1 items-center justify-center text-slate-400 italic text-sm">
               Em breve: {tituloPag}
             </div>
