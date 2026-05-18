@@ -23,6 +23,7 @@ export interface Activity {
   fileName?: string;
   done: boolean;
   comments: Comment[];
+  textoOriginal?: string;
 }
 
 export type Filter = "todos" | "pendentes" | "concluídas";

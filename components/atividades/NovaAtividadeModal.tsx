@@ -43,6 +43,7 @@ export function NovaAtividadeModal({
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfExtracting, setPdfExtracting] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [pdfUploaded, setPdfUploaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleChange(
@@ -62,6 +63,7 @@ export function NovaAtividadeModal({
         setPdfFile(null);
         setPdfExtracting(false);
         setDragActive(false);
+        setPdfUploaded(false);
       }
     }
   }
@@ -97,11 +99,13 @@ export function NovaAtividadeModal({
         throw new Error(data.error ?? "Erro ao processar o PDF.");
       }
 
+      setPdfUploaded(true);
       setForm((prev) => ({
         ...prev,
-        texto_original: data.extractedText,
         titulo: prev.titulo || data.atividade.titulo,
       }));
+      onSuccess?.();
+      onOpenChange(false);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erro ao processar o PDF.";
       setError(message);
@@ -142,6 +146,7 @@ export function NovaAtividadeModal({
 
   function removePdf() {
     setPdfFile(null);
+    setPdfUploaded(false);
     setForm((prev) => ({ ...prev, texto_original: "" }));
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
@@ -155,8 +160,8 @@ export function NovaAtividadeModal({
       return;
     }
 
-    if (!form.texto_original.trim()) {
-      setError("O texto original é obrigatório.");
+    if (!form.texto_original.trim() && !pdfUploaded) {
+      setError("Texto original ou PDF obrigatório.");
       return;
     }
 
@@ -167,6 +172,15 @@ export function NovaAtividadeModal({
 
     try {
       setLoading(true);
+
+      if (pdfUploaded) {
+        setForm(INITIAL_FORM);
+        setPdfFile(null);
+        setPdfUploaded(false);
+        onOpenChange(false);
+        onSuccess?.();
+        return;
+      }
 
       const res = await fetch("/api/atividades", {
         method: "POST",
@@ -196,7 +210,7 @@ export function NovaAtividadeModal({
   }
 
   const charCount = form.texto_original.length;
-  const isDisabled = loading || !form.titulo.trim() || !form.texto_original.trim();
+  const isDisabled = loading || !form.titulo.trim() || (!form.texto_original.trim() && !pdfUploaded);
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -270,7 +284,8 @@ export function NovaAtividadeModal({
           <div className="space-y-1.5">
             <label className="flex items-center gap-1.5 text-sm font-semibold text-slate-700">
               <MdUploadFile className="text-[#2b5784] text-base" />
-              Enviar PDF (opcional)
+              Enviar PDF
+              {!form.texto_original.trim() && <span className="text-red-500 ml-0.5">*</span>}
             </label>
 
             {pdfFile ? (
@@ -279,7 +294,7 @@ export function NovaAtividadeModal({
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-green-800 truncate">{pdfFile.name}</p>
                   <p className="text-xs text-green-600">
-                    {(pdfFile.size / 1024).toFixed(0)} KB — Texto extraído com sucesso
+                    {(pdfFile.size / 1024).toFixed(0)} KB — PDF enviado com sucesso
                   </p>
                 </div>
                 <button
@@ -341,22 +356,27 @@ export function NovaAtividadeModal({
             >
               <MdArticle className="text-[#2b5784] text-base" />
               Texto Original
-              <span className="text-red-500 ml-0.5">*</span>
+              {!pdfUploaded && <span className="text-red-500 ml-0.5">*</span>}
             </label>
             <textarea
               id="texto_original"
               name="texto_original"
               value={form.texto_original}
               onChange={handleChange}
-              placeholder="Cole ou escreva aqui o texto que será adaptado para Português L2..."
+              placeholder={pdfUploaded ? "O texto do PDF será renderizado na visualização da atividade" : "Cole ou escreva aqui o texto que será adaptado para Português L2..."}
               rows={7}
               maxLength={30000}
-              disabled={loading}
-              className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-[#2b5784] focus:bg-white focus:ring-2 focus:ring-[#2b5784]/10 disabled:opacity-60"
+              disabled={loading || pdfUploaded}
+              readOnly={pdfUploaded}
+              className={`w-full resize-none rounded-xl border px-4 py-2.5 text-sm placeholder-slate-400 outline-none transition disabled:opacity-60 ${
+                pdfUploaded
+                  ? "border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed"
+                  : "border-slate-200 bg-slate-50 text-slate-800 focus:border-[#2b5784] focus:bg-white focus:ring-2 focus:ring-[#2b5784]/10"
+              }`}
             />
             <div className="flex justify-between items-center">
               <p className="text-xs text-slate-400">
-                {pdfFile ? "Extraído do PDF — editável" : "O texto será processado pela IA para adaptação."}
+                {pdfUploaded ? "PDF enviado — o texto será extraído automaticamente" : "O texto será processado pela IA para adaptação."}
               </p>
               <p
                 className={`text-xs ${

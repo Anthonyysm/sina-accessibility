@@ -41,7 +41,9 @@ import {
   MdCheck,
   MdArticle,
   MdAttachFile,
+  MdPictureAsPdf,
 } from "react-icons/md";
+import { PdfViewerModal } from "@/components/StudentDashboard/PdfViewerModal/PdfViewerModal";
 
 type Status = "pending" | "done" | string; // Baseado no schema
 
@@ -132,6 +134,7 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
   const [selectedAtividade, setSelectedAtividade] = useState<Atividade | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
 
   const handleOpenVisualizar = (atividade: Atividade) => {
     setSelectedAtividade(atividade);
@@ -326,15 +329,13 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
                 <h3 className="text-sm font-semibold text-slate-700">Texto Original</h3>
                 <div className="flex gap-2">
                   {selectedAtividade.arquivo_url && (
-                    <a
-                      href={selectedAtividade.arquivo_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => setPdfViewerOpen(true)}
                       className="inline-flex items-center gap-1.5 rounded-full h-8 px-3 text-xs font-semibold border border-blue-200 text-blue-700 hover:bg-blue-50 transition-colors"
                     >
-                      <MdAttachFile className="text-sm" />
-                      Abrir PDF
-                    </a>
+                      <MdPictureAsPdf className="text-sm" />
+                      Ver PDF
+                    </button>
                   )}
                   <Button 
                     variant="outline" 
@@ -362,6 +363,17 @@ export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }
             </div>
           </DialogContent>
         </Dialog>
+      )}
+
+      {/* PDF Viewer Modal */}
+      {selectedAtividade?.arquivo_url && (
+        <PdfViewerModal
+          open={pdfViewerOpen}
+          onOpenChange={setPdfViewerOpen}
+          pdfUrl={selectedAtividade.arquivo_url}
+          title={selectedAtividade.titulo}
+          fileName={selectedAtividade.arquivo_nome || undefined}
+        />
       )}
     </Card>
   )

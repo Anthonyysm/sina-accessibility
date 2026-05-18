@@ -65,7 +65,8 @@ export default function StudentDashboard() {
                 color: "#1a6b5a",
                 text: c.comentario,
                 time: new Date(c.criado_em).toLocaleDateString("pt-BR")
-              })) : []
+              })) : [],
+              textoOriginal: item.texto_original || undefined,
             };
           });
           setActivities(mappedActivities);
