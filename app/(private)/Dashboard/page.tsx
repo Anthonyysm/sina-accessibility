@@ -15,6 +15,7 @@ export default function DashboardPage() {
   const [activeNav, setActiveNav] = useState(0);
   const [modalAberto, setModalAberto] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const titulos = ["Dashboard", "Publicações", "Visão do Aluno"];
   const tituloPag = titulos[activeNav];
@@ -59,7 +60,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <TableContent />
+              <TableContent refreshKey={refreshKey} />
             </>
           )}
 
@@ -72,11 +73,11 @@ export default function DashboardPage() {
           )}
         </main>
       </div>
-
       <NovaAtividadeModal
         open={modalAberto}
         onOpenChange={setModalAberto}
         criadoPor={user?.id_usuario ?? 0}
+        onSuccess={() => setRefreshKey((k) => k + 1)}
       />
     </div>
   );
