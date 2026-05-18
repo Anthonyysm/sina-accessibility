@@ -2,14 +2,18 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdAccessibility, MdArrowBack } from "react-icons/md";
+import { MdArrowBack } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth, authErrorMessage } from "@/lib/useAuth";
+import Image from "next/image";
+import logo_sina from "@/public/LogoSina.png"
 
 type Tab = "login" | "cadastro";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function NotLoggedPage() {
   const [tab, setTab] = useState<Tab>("login");
@@ -18,6 +22,11 @@ export default function NotLoggedPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
 
   const { loginWithGoogle, loginWithEmail, registerWithEmail } = useAuth();
   const router = useRouter();
@@ -25,24 +34,24 @@ export default function NotLoggedPage() {
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    // client-side validation
+
     const trimmedEmail = email.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmedEmail)) {
-      setError("E-mail inválido.");
+    const errors: typeof fieldErrors = {};
+
+    if (!trimmedEmail) errors.email = "E-mail é obrigatório.";
+    else if (!EMAIL_REGEX.test(trimmedEmail)) errors.email = "E-mail inválido.";
+
+    if (!password) errors.password = "Senha é obrigatória.";
+    else if (password.includes(" ")) errors.password = "A senha não pode conter espaços.";
+    else if (password.length < 6) errors.password = "A senha deve ter pelo menos 6 caracteres.";
+
+    if (tab === "cadastro" && password && password !== confirmPassword) errors.confirmPassword = "As senhas não coincidem.";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
-
-    if (!password || password.length < 6) {
-      setError("A senha deve ter pelo menos 6 caracteres.");
-      return;
-    }
-
-    if (tab === "cadastro" && password !== confirmPassword) {
-      setError("As senhas não coincidem.");
-      return;
-    }
-
+    setFieldErrors({});
     setLoading(true);
     try {
       if (tab === "login") {
@@ -76,7 +85,7 @@ export default function NotLoggedPage() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <div className="w-10 h-10 rounded-xl bg-[#1e3a5f] flex items-center justify-center">
-            <MdAccessibility className="text-white text-xl" />
+            <Image src={logo_sina} height={1000} width={1000} alt="logo da aplicação" className="invert object-cover"/>
           </div>
           <span className="font-bold text-xl text-[#1e3a5f] tracking-tight">SINA</span>
         </div>
@@ -101,7 +110,7 @@ export default function NotLoggedPage() {
             {(["login", "cadastro"] as Tab[]).map((t) => (
               <button
                 key={t}
-                onClick={() => { setTab(t); setError(""); }}
+                onClick={() => { setTab(t); setError(""); setConfirmPassword(""); setFieldErrors({}); }}
                 className={`flex-1 text-sm font-semibold py-2 rounded-lg transition-all capitalize ${
                   tab === t
                     ? "bg-white text-[#1e3a5f] shadow-sm"
@@ -133,34 +142,45 @@ export default function NotLoggedPage() {
 
           {/* Form */}
           <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
-            <Input
-              type="email"
-              placeholder="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-              className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
-            />
-            <Input
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={loading}
-              className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
-            />
-            {tab === "cadastro" && (
+            <div className="flex flex-col gap-1">
               <Input
-                type="password"
-                placeholder="Confirme a senha"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                type="email"
+                placeholder="E-mail"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setFieldErrors(p => ({ ...p, email: undefined })); }}
                 required
                 disabled={loading}
-                className="h-11 rounded-xl border-[#dde5f0] text-[#1e3a5f] placeholder:text-[#9aadca] focus-visible:ring-[#5db5d8]"
+                className={`h-11 rounded-xl text-[#1e3a5f] placeholder:text-[#9aadca] pl-2 ${fieldErrors.email ? "border-red-400 focus-visible:ring-red-300" : "border-[#dde5f0] focus-visible:ring-[#5db5d8]"}`}
               />
+              {fieldErrors.email && <p className="text-xs text-red-500 pl-1">{fieldErrors.email}</p>}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <Input
+                type="password"
+                placeholder="Senha"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setFieldErrors(p => ({ ...p, password: undefined })); }}
+                required
+                disabled={loading}
+                className={`h-11 rounded-xl text-[#1e3a5f] placeholder:text-[#9aadca] pl-2 ${fieldErrors.password ? "border-red-400 focus-visible:ring-red-300" : "border-[#dde5f0] focus-visible:ring-[#5db5d8]"}`}
+              />
+              {fieldErrors.password && <p className="text-xs text-red-500 pl-1">{fieldErrors.password}</p>}
+            </div>
+
+            {tab === "cadastro" && (
+              <div className="flex flex-col gap-1">
+                <Input
+                  type="password"
+                  placeholder="Confirme a senha"
+                  value={confirmPassword}
+                  onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors(p => ({ ...p, confirmPassword: undefined })); }}
+                  required
+                  disabled={loading}
+                  className={`h-11 rounded-xl text-[#1e3a5f] placeholder:text-[#9aadca] pl-2 ${fieldErrors.confirmPassword ? "border-red-400 focus-visible:ring-red-300" : "border-[#dde5f0] focus-visible:ring-[#5db5d8]"}`}
+                />
+                {fieldErrors.confirmPassword && <p className="text-xs text-red-500 pl-1">{fieldErrors.confirmPassword}</p>}
+              </div>
             )}
 
             {error && (

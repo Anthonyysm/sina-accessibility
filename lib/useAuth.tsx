@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, createContext, useContext } from "react";
+import { useRouter } from "next/navigation";
 import {
   signInWithEmail,
   signUpWithEmail,
@@ -28,7 +29,12 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+export function redirectByRole(role: string, router: ReturnType<typeof useRouter>) {
+  router.push(role === "INTERPRETE" ? "/Dashboard" : "/StudentDashboard");
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<UserProfile | null>(null);
 
@@ -56,22 +62,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function loginWithGoogle(): Promise<void> {
     const result = await signInWithGoogle();
-
-    if (result.role === "INTERPRETE") {
-      window.location.href = "/Dashboard";
-    } else {
-      window.location.href = "/StudentDashboard";
-    }
+    redirectByRole(result.role, router);
   }
 
   async function loginWithEmail(email: string, password: string): Promise<void> {
     const result = await signInWithEmail({ email, password });
-
-    if (result.role === "INTERPRETE") {
-      window.location.href = "/Dashboard";
-    } else {
-      window.location.href = "/StudentDashboard";
-    }
+    redirectByRole(result.role, router);
   }
 
   async function registerWithEmail(
@@ -86,18 +82,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       name: name || email.split("@")[0],
       role: role as "interprete" | "estudante",
     });
-
-    if (result.role === "INTERPRETE") {
-      window.location.href = "/Dashboard";
-    } else {
-      window.location.href = "/StudentDashboard";
-    }
+    redirectByRole(result.role, router);
   }
 
   async function logout(): Promise<void> {
     setUser(null);
     await fetch("/api/auth/session", { method: "DELETE" });
-    window.location.href = "/";
+    router.push("/");
   }
 
   return (

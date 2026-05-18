@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,10 +11,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { signUpWithEmail, signInWithEmail, signInWithGoogle } from "@/service/auth";
-import { authErrorMessage } from "@/lib/useAuth";
+import { authErrorMessage, redirectByRole } from "@/lib/useAuth";
 
 type UserRole = "interprete" | "estudante";
 type AuthMode = "signup" | "signin";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface AuthDialogProps {
   open: boolean;
@@ -23,9 +26,16 @@ interface AuthDialogProps {
 }
 
 export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogProps) {
+  const router = useRouter();
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{
+    name?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,29 +48,32 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError("Todos os campos são obrigatórios");
-      return;
-    }
+    const errors: typeof fieldErrors = {};
+    const trimmedName = formData.name.trim();
+    if (!trimmedName) errors.name = "Nome é obrigatório.";
+    else if (trimmedName.length < 2) errors.name = "Nome deve ter pelo menos 2 caracteres.";
+    else if (/\d/.test(trimmedName)) errors.name = "Nome não pode conter números.";
 
-    if (formData.password.length < 6) {
-      setError("A senha deve ter pelo menos 6 caracteres");
-      return;
-    }
+    const trimmedEmail = formData.email.trim();
+    if (!trimmedEmail) errors.email = "E-mail é obrigatório.";
+    else if (!EMAIL_REGEX.test(trimmedEmail)) errors.email = "E-mail inválido.";
 
-    if (!/[A-Z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
-      setError("A senha deve conter pelo menos uma letra maiúscula e um número");
-      return;
-    }
+    if (!formData.password) errors.password = "Senha é obrigatória.";
+    else if (formData.password.includes(" ")) errors.password = "A senha não pode conter espaços.";
+    else if (formData.password.length < 6) errors.password = "A senha deve ter pelo menos 6 caracteres.";
+    else if (!/[A-Z]/.test(formData.password) || !/[0-9]/.test(formData.password)) errors.password = "A senha deve conter pelo menos uma letra maiúscula e um número.";
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não coincidem");
+    if (formData.password && formData.password !== formData.confirmPassword) errors.confirmPassword = "As senhas não coincidem.";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
+    setFieldErrors({});
 
     try {
       setLoading(true);
@@ -73,12 +86,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-
-      if (result.role === "INTERPRETE") {
-        window.location.href = "/Dashboard";
-      } else {
-        window.location.href = "/StudentDashboard";
-      }
+      redirectByRole(result.role, router);
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao criar conta");
     } finally {
@@ -86,14 +94,22 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
     }
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    if (!formData.email || !formData.password) {
-      setError("Email e senha são obrigatórios");
+    const errors: typeof fieldErrors = {};
+    const trimmedEmail = formData.email.trim();
+    if (!trimmedEmail) errors.email = "E-mail é obrigatório.";
+    else if (!EMAIL_REGEX.test(trimmedEmail)) errors.email = "E-mail inválido.";
+
+    if (!formData.password) errors.password = "Senha é obrigatória.";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
+    setFieldErrors({});
 
     try {
       setLoading(true);
@@ -104,12 +120,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-
-      if (result.role === "INTERPRETE") {
-        window.location.href = "/Dashboard";
-      } else {
-        window.location.href = "/StudentDashboard";
-      }
+      redirectByRole(result.role, router);
     } catch (err: any) {
       setError(authErrorMessage(err) || err.message || "Erro ao fazer login");
     } finally {
@@ -124,14 +135,9 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
       const result = await signInWithGoogle(role);
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       onOpenChange(false);
-
-      if (result.role === "INTERPRETE") {
-        window.location.href = "/Dashboard";
-      } else {
-        window.location.href = "/StudentDashboard";
-      }
+      redirectByRole(result.role, router);
     } catch (err: any) {
-      setError(err.message || "Erro ao fazer login com Google");
+      setError(authErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -158,6 +164,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
               onClick={() => {
                 setAuthMode("signup");
                 setError("");
+                setFieldErrors({});
               }}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 authMode === "signup"
@@ -171,6 +178,7 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
               onClick={() => {
                 setAuthMode("signin");
                 setError("");
+                setFieldErrors({});
               }}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 authMode === "signin"
@@ -184,62 +192,66 @@ export function AuthDialog({ open, onOpenChange, role, roleLabel }: AuthDialogPr
 
           <form onSubmit={authMode === "signup" ? handleSignUp : handleSignIn} className="space-y-3">
             {authMode === "signup" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium text-gray-700">
                   Nome Completo
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
-                  onChange={handleChange}
+                  onChange={(e) => { handleChange(e); setFieldErrors(p => ({ ...p, name: undefined })); }}
                   placeholder="Digite seu nome"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#1a3a5c] focus:outline-none"
+                  className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none ${fieldErrors.name ? "border-red-400 focus:border-red-400" : "border-gray-300 focus:border-[#1a3a5c]"}`}
                 />
+                {fieldErrors.name && <p className="text-xs text-red-500">{fieldErrors.name}</p>}
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="flex flex-col gap-1">
+              <label className="block text-sm font-medium text-gray-700">
                 Email
               </label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(e) => { handleChange(e); setFieldErrors(p => ({ ...p, email: undefined })); }}
                 placeholder="seu@email.com"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#1a3a5c] focus:outline-none"
+                className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none ${fieldErrors.email ? "border-red-400 focus:border-red-400" : "border-gray-300 focus:border-[#1a3a5c]"}`}
               />
+              {fieldErrors.email && <p className="text-xs text-red-500">{fieldErrors.email}</p>}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="flex flex-col gap-1">
+              <label className="block text-sm font-medium text-gray-700">
                 Senha
               </label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
-                onChange={handleChange}
+                onChange={(e) => { handleChange(e); setFieldErrors(p => ({ ...p, password: undefined })); }}
                 placeholder="••••••••"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#1a3a5c] focus:outline-none"
+                className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none ${fieldErrors.password ? "border-red-400 focus:border-red-400" : "border-gray-300 focus:border-[#1a3a5c]"}`}
               />
+              {fieldErrors.password && <p className="text-xs text-red-500">{fieldErrors.password}</p>}
             </div>
 
             {authMode === "signup" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium text-gray-700">
                   Confirmar Senha
                 </label>
                 <input
                   type="password"
                   name="confirmPassword"
                   value={formData.confirmPassword}
-                  onChange={handleChange}
+                  onChange={(e) => { handleChange(e); setFieldErrors(p => ({ ...p, confirmPassword: undefined })); }}
                   placeholder="••••••••"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#1a3a5c] focus:outline-none"
+                  className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none ${fieldErrors.confirmPassword ? "border-red-400 focus:border-red-400" : "border-gray-300 focus:border-[#1a3a5c]"}`}
                 />
+                {fieldErrors.confirmPassword && <p className="text-xs text-red-500">{fieldErrors.confirmPassword}</p>}
               </div>
             )}
 

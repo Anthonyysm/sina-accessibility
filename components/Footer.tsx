@@ -1,12 +1,18 @@
+"use client";
+
 import Image from "next/image";
-import { MdAccessibility, MdEmail, MdLocationOn } from "react-icons/md";
+import { MdEmail, MdLocationOn } from "react-icons/md";
 import logo_sina from "@/public/LogoSina.png";
 
 const platformLinks = [
-  { label: "Recursos", href: "#recursos" },
-  { label: "Como funciona", href: "#como-funciona" },
-  { label: "Começar", href: "#cta" },
+  { label: "Recursos", id: "recursos" },
+  { label: "Como funciona", id: "como-funciona" },
+  { label: "Começar", id: "cta" },
 ];
+
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
 
 export default function Footer() {
   return (
@@ -15,14 +21,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-10 md:gap-16 mb-10">
           {/* Brand */}
           <div>
-            <a href="#hero" className="flex items-center gap-2.5 mb-4 group w-fit">
+            <button onClick={() => scrollToSection("hero")} className="flex items-center gap-2.5 mb-4 group w-fit">
               <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
                 <Image src={logo_sina} height={1000} width={1000} alt="logo da aplicação" className="invert object-cover"/>
               </div>
               <span className="font-bold text-lg text-white tracking-tight">
                 Sina
               </span>
-            </a>
+            </button>
             <p className="text-sm text-white/60 leading-relaxed max-w-xs">
               Educação acessível em Libras para professores, intérpretes e
               estudantes surdos em todo o Brasil.
@@ -36,13 +42,13 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5">
               {platformLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
+                <li key={link.id}>
+                  <button
+                    onClick={() => scrollToSection(link.id)}
                     className="text-sm text-white/70 hover:text-white transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>

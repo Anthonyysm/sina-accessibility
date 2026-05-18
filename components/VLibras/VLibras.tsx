@@ -12,7 +12,7 @@ export default function VLibras() {
   return (
     <>
       {/* @ts-expect-error vw is a custom attribute required by VLibras */}
-      <div vw="true" className="enabled">
+      <div vw="true">
         <div vw-access-button="true" className="active" />
 
         <div vw-plugin-wrapper="true">
@@ -25,26 +25,10 @@ export default function VLibras() {
         strategy="afterInteractive"
         onLoad={() => {
           if (window.VLibras) {
-            new window.VLibras.Widget(
-              "https://vlibras.gov.br/app"
-            );
+            new window.VLibras.Widget("https://vlibras.gov.br/app");
           }
         }}
       />
-
-      <style jsx global>{`
-        /* garante que fique acima da UI */
-        [vw] {
-          z-index: 99999;
-        }
-
-        /* esconde no mobile */
-        @media (max-width: 768px) {
-          [vw] {
-            display: none !important;
-          }
-        }
-      `}</style>
     </>
   );
 }
