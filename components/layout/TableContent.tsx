@@ -124,7 +124,7 @@ function UserAvatar({
   );
 }
 
-export default function TableContent() {
+export default function TableContent({ refreshKey = 0 }: { refreshKey?: number }) {
   const [materiais, setMateriais] = useState<Atividade[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -147,16 +147,15 @@ export default function TableContent() {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetch("/api/atividades")
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setMateriais(data);
-        }
+        if (Array.isArray(data)) setMateriais(data);
       })
       .catch((err) => console.error("Erro ao buscar atividades:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
 
   return (
     <Card className="rounded-2xl border-0 shadow-none bg-white overflow-hidden">
