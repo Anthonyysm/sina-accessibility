@@ -11,6 +11,8 @@ import {
   MdLibraryBooks,
   MdPersonOutline,
   MdEdit,
+  MdClose,
+  MdLogout,
 } from "react-icons/md"
 
 const navItems = [
@@ -54,7 +56,7 @@ export default function Sidebar({
   setMobileMenuOpen,
 }: SidebarProps) {
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   const navItems = [
     { icon: MdDashboard, label: "Dashboard" },
@@ -85,23 +87,32 @@ export default function Sidebar({
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Logo */}
-        <div className="flex items-center gap-3 px-6 pt-7 pb-5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20">
-            <Image
-              src={logo_sina}
-              height={1000}
-              width={1000}
-              alt="logo da aplicação"
-              className="object-cover invert"
-            />
+        {/* Header com Logo e botão fechar (mobile) */}
+        <div className="flex items-center justify-between px-6 pt-7 pb-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20">
+              <Image
+                src={logo_sina}
+                height={1000}
+                width={1000}
+                alt="logo da aplicação"
+                className="object-cover invert"
+              />
+            </div>
+            <div>
+              <p className="text-base leading-tight font-bold tracking-tight">
+                SINA
+              </p>
+              <p className="mt-0.5 text-xs text-white/50">Mediação Pedagógica</p>
+            </div>
           </div>
-          <div>
-            <p className="text-base leading-tight font-bold tracking-tight">
-              SINA
-            </p>
-            <p className="mt-0.5 text-xs text-white/50">Mediação Pedagógica</p>
-          </div>
+          <button
+            onClick={() => setMobileMenuOpen?.(false)}
+            className="md:hidden rounded-lg p-1.5 text-white/70 transition-colors hover:bg-white/20 hover:text-white"
+            aria-label="Fechar menu"
+          >
+            <MdClose className="text-xl" />
+          </button>
         </div>
 
         <Separator className="mx-4 w-auto bg-white/10" />
@@ -159,6 +170,18 @@ export default function Sidebar({
             <p className="mt-0.5 text-xs text-white/45">{userLabel}</p>
           </div>
           <MdEdit className="shrink-0 text-base text-white/30 transition-colors group-hover:text-white/60" />
+        </button>
+
+        {/* Logout */}
+        <button
+          onClick={() => {
+            setMobileMenuOpen?.(false)
+            logout()
+          }}
+          className="flex w-full items-center gap-3 px-5 py-3 text-left text-sm text-white/45 transition-colors hover:bg-white/[0.06] hover:text-white/80"
+        >
+          <MdLogout className="shrink-0 text-lg" />
+          Sair
         </button>
       </aside>
     </>

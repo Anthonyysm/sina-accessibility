@@ -15,7 +15,6 @@ import {
   DialogDestructiveAction,
 } from "@/components/ui/dialog";
 import Sidebar from "@/components/layout/Sidebar";
-import Topbar from "@/components/layout/Topbar";
 import TagInput from "@/components/profile/TagInput";
 import ProfileSection from "@/components/profile/ProfileSection";
 import { useProfileForm } from "@/hooks/useProfileForm";
@@ -25,10 +24,12 @@ import {
   MdPerson, MdEmail, MdLock,
   MdSchool, MdGroups, MdCameraAlt,
   MdDeleteOutline, MdSave,
-  MdError,
+  MdError, MdClose,
 } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 export default function PerfilPage() {
+  const router = useRouter();
   const {
     loading, user,
     name, setName, email, setEmail, profileType, setProfileType,
@@ -84,7 +85,30 @@ export default function PerfilPage() {
       />
 
       <div className="flex-1 flex flex-col overflow-hidden w-full relative">
-        <Topbar tituloPag="Editar perfil" onMenuClick={() => setMobileMenuOpen(true)} />
+        {/* Header com título e botão Sair */}
+        <div className="h-14 sm:h-16 bg-white border-b border-[#e5eaf2] px-3 sm:px-4 md:px-8 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="md:hidden text-[#1e3a5f] p-1.5 -ml-1.5 rounded-lg hover:bg-[#f0f4f9] shrink-0 active:bg-[#e5eaf2]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <h1 className="font-bold text-[#1e3a5f] text-lg sm:text-xl tracking-tight truncate">
+              Editar perfil
+            </h1>
+          </div>
+          <button
+            onClick={() => router.push("/Dashboard")}
+            className="flex items-center gap-1.5 text-[#9aadca] hover:text-red-500 p-1.5 sm:p-2 rounded-lg hover:bg-red-50 transition-colors shrink-0 active:bg-red-100 group"
+            title="Sair e voltar ao Dashboard"
+          >
+            <MdClose className="text-base sm:text-lg transition-transform group-hover:rotate-90" />
+            <span className="text-xs sm:text-sm font-semibold hidden sm:inline">Sair</span>
+          </button>
+        </div>
 
         <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7">
           <div className="max-w-[640px] mx-auto flex flex-col gap-6">

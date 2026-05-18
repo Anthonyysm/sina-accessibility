@@ -34,13 +34,13 @@ export default function DashboardPage() {
           tituloPag={tituloPag}
           onMenuClick={() => setMobileMenuOpen(true)}
         />
-        <main className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 py-5 md:px-8 md:py-7">
+        <main className="flex flex-1 flex-col gap-4 overflow-y-auto px-3 py-4 sm:px-4 sm:py-5 md:px-8 md:py-7 md:gap-6">
           {activeNav === 0 && (
             <>
               {/* Welcome banner */}
-              <div className="relative flex min-h-[180px] items-end overflow-hidden rounded-2xl bg-[#2b5784] p-5 sm:min-h-[210px]">
-                <div className="pointer-events-none absolute -top-10 -right-10 h-56 w-56 rounded-full bg-white/5" />
-                <div className="pointer-events-none absolute top-4 right-24 h-32 w-32 rounded-full bg-white/5" />
+              <div className="relative flex min-h-[160px] items-end overflow-hidden rounded-2xl bg-[#2b5784] p-4 sm:min-h-[180px] sm:p-5">
+                <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full bg-white/5 sm:h-56 sm:w-56" />
+                <div className="pointer-events-none absolute top-4 right-20 h-24 w-24 rounded-full bg-white/5 sm:top-4 sm:right-24 sm:h-32 sm:w-32" />
                 <div className="relative z-10 w-full">
                   <h2 className="mb-1 text-base font-extrabold tracking-tight text-white sm:text-lg">
                     Bem-vindo ao SINA
@@ -51,10 +51,10 @@ export default function DashboardPage() {
                     pronto para o aluno surdo.
                   </p>
 
-                  <div className="mt-4 flex flex-wrap gap-3 md:mt-0">
+                  <div className="mt-3 flex flex-wrap gap-2 sm:mt-4 sm:gap-3">
                     <Button
                       onClick={() => setModalAberto(true)}
-                      className="w-full gap-1.5 rounded-full bg-white px-5 font-bold text-[#1e3a5f] hover:bg-white/90 sm:w-auto"
+                      className="w-full gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#1e3a5f] hover:bg-white/90 sm:w-auto"
                     >
                       <MdAdd className="text-lg" />
                       Novo Material
