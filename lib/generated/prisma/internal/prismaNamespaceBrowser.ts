@@ -95,6 +95,9 @@ export const AtividadeScalarFieldEnum = {
   texto_adaptado: 'texto_adaptado',
   status: 'status',
   criado_em: 'criado_em',
+  arquivo_url: 'arquivo_url',
+  arquivo_nome: 'arquivo_nome',
+  arquivo_tipo: 'arquivo_tipo',
   criado_por: 'criado_por'
 } as const
 

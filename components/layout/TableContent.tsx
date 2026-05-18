@@ -40,6 +40,7 @@ import {
   MdContentCopy,
   MdCheck,
   MdArticle,
+  MdAttachFile,
 } from "react-icons/md";
 
 type Status = "pending" | "done" | string; // Baseado no schema
@@ -51,6 +52,8 @@ interface Atividade {
   texto_adaptado: string | null;
   status: string;
   criado_em: string;
+  arquivo_url: string | null;
+  arquivo_nome: string | null;
   usuario: {
     nome: string;
   };
@@ -221,7 +224,23 @@ export default function TableContent() {
                     className="border-b border-[#f0f4f9] last:border-0 hover:bg-[#f8fafd] transition-colors"
                   >
                     <TableCell className="px-4 md:px-6 py-4 text-sm text-[#1e3a5f] font-medium leading-snug">
-                      {m.titulo}
+                      <div className="flex items-center gap-2">
+                        <span className="truncate">{m.titulo}</span>
+                        {m.arquivo_url && (
+                          <TooltipProvider delayDuration={200}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="shrink-0">
+                                  <MdAttachFile className="text-sm text-[#2563a8]" />
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="text-xs">
+                                PDF anexado
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="py-4">
                       <StatusBadge status={m.status} />
@@ -306,24 +325,37 @@ export default function TableContent() {
             <div className="px-6 py-5 max-h-[60vh] overflow-y-auto bg-slate-50">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-sm font-semibold text-slate-700">Texto Original</h3>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleCopy}
-                  className="rounded-full h-8 text-xs font-semibold gap-1.5"
-                >
-                  {copied ? (
-                    <>
-                      <MdCheck className="text-green-600" />
-                      <span className="text-green-600">Copiado!</span>
-                    </>
-                  ) : (
-                    <>
-                      <MdContentCopy />
-                      Copiar
-                    </>
+                <div className="flex gap-2">
+                  {selectedAtividade.arquivo_url && (
+                    <a
+                      href={selectedAtividade.arquivo_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full h-8 px-3 text-xs font-semibold border border-blue-200 text-blue-700 hover:bg-blue-50 transition-colors"
+                    >
+                      <MdAttachFile className="text-sm" />
+                      Abrir PDF
+                    </a>
                   )}
-                </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleCopy}
+                    className="rounded-full h-8 text-xs font-semibold gap-1.5"
+                  >
+                    {copied ? (
+                      <>
+                        <MdCheck className="text-green-600" />
+                        <span className="text-green-600">Copiado!</span>
+                      </>
+                    ) : (
+                      <>
+                        <MdContentCopy />
+                        Copiar
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">
                 {selectedAtividade.texto_original}

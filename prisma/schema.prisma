@@ -39,6 +39,10 @@ model Atividade {
   status              String    @default("pending")
   criado_em           DateTime  @default(now())
 
+  arquivo_url         String?   @db.VarChar(500)
+  arquivo_nome        String?   @db.VarChar(255)
+  arquivo_tipo        String?   @db.VarChar(50)
+
   criado_por          Int
   usuario             Usuario   @relation(fields: [criado_por], references: [id_usuario])
   comentarios    Estudante[]

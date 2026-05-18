@@ -84,11 +84,16 @@ export default function Post({ activity, onToggleDone, onComment }: PostProps) {
           </p>
 
           {/* Anexo PDF */}
-          {activity.hasFile && (
-            <button className="flex items-center gap-2 text-xs font-medium text-[#2563a8] bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 hover:bg-blue-100 transition-colors mb-3 w-fit max-w-full">
+          {activity.hasFile && activity.fileUrl && (
+            <a
+              href={activity.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-xs font-medium text-[#2563a8] bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 hover:bg-blue-100 transition-colors mb-3 w-fit max-w-full cursor-pointer"
+            >
               <MdAttachFile className="text-sm shrink-0" />
-              <span className="truncate">Baixar material em PDF</span>
-            </button>
+              <span className="truncate">{activity.fileName || "Abrir PDF no navegador"}</span>
+            </a>
           )}
 
           {/* Data de entrega */}
