@@ -25,7 +25,17 @@ interface Turma {
   descricao: string | null;
   criado_em: string;
   id_criador: number;
-  alunos: { id_usuario: number; nome: string; email: string }[];
+  _count?: {
+    alunos?: number;
+    atividades?: number;
+  };
+  alunos: {
+    id_usuario: number;
+    usuario: {
+      nome: string;
+      email: string;
+    };
+  }[];
 }
 
 interface Estudante {
